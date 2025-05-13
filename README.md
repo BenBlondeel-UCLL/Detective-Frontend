@@ -1,6 +1,8 @@
-# Detective
+Detective
+=========
 
 
-## Python ##
--maak een venv in de backend folder. py -m venv venv 
--update de venv met de requirements.txt. py -m pip install -r requirements.txt
+### Python ###
+To run this project you have to install pipenv with ```py -m pip install pipenv``` 
+To install the necessary dependencies you have to run ```pipenv install``` in the Backend folder.
+To run the project you have to run ```pipenv run fastapi dev main.py```
