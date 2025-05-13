@@ -1,4 +1,5 @@
 import 'package:detective/feature/input_field.dart';
+import 'package:detective/feature/http_client.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -55,6 +56,14 @@ class _MyHomePageState extends State<MyHomePage> {
              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
              child: InputField(),
            ),
+           ElevatedButton(
+             onPressed: () async {
+               final client = HttpClient();
+               final response = await client.getHttp();
+               print(response);
+             },
+             child: const Text('Press Me'),
+           )
           ],
         ),
       ),
