@@ -1,3 +1,4 @@
+import 'package:detective/feature/analyse_button.dart';
 import 'package:detective/feature/input_field.dart';
 import 'package:detective/feature/http_client.dart';
 import 'package:flutter/material.dart';
@@ -31,14 +32,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     
@@ -54,7 +47,15 @@ class _MyHomePageState extends State<MyHomePage> {
           children: [
            Padding(
              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-             child: InputField(),
+             child: Column(
+               children: [
+                 InputField(),
+                 SizedBox(
+                   height: 20,
+                 ),
+                 AnalyseButton()
+               ],
+             ),
            ),
            ElevatedButton(
              onPressed: () async {
@@ -66,11 +67,6 @@ class _MyHomePageState extends State<MyHomePage> {
            )
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
