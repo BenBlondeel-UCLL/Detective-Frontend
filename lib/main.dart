@@ -1,4 +1,5 @@
 import 'package:detective/feature/analyse_button.dart';
+import 'package:detective/feature/header.dart';
 import 'package:detective/feature/input_field.dart';
 import 'package:detective/feature/http_client.dart';
 import 'package:flutter/material.dart';
@@ -34,17 +35,13 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           spacing: 30,
           children: [
+            const Header(),
            Padding(
              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
              child: Column(
