@@ -1,7 +1,7 @@
-import 'package:detective/feature/analyse_button.dart';
-import 'package:detective/feature/header.dart';
-import 'package:detective/feature/input_field.dart';
-import 'package:detective/feature/http_client.dart';
+import 'package:detective/features/analyse_button.dart';
+import 'package:detective/features/header.dart';
+import 'package:detective/features/input_field.dart';
+import 'package:detective/features/http_client.dart';
 import 'package:flutter/material.dart';
 
 void main() {
