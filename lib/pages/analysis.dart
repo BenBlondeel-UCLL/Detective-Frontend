@@ -25,9 +25,10 @@ class Analysis extends StatelessWidget {
                       ),
                       child: SingleChildScrollView(
                         padding: const EdgeInsets.all(16),
-                        child: Text(
-                          // TODO: Change to dynamic text from news article
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                        child: RichText(
+                            text: TextSpan(
+                                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                            )
                         ),
                       ),
                     ),
@@ -56,34 +57,10 @@ class Analysis extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 16),
-
-                              // TODO: Change entire Row() to analysis data from backend
-                              Row(
-                                children: [
-                                  const Icon(
-                                    Icons.bar_chart,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 8),
-                                  Expanded(
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          height: 10,
-                                          margin: const EdgeInsets.only(
-                                            bottom: 8,
-                                          ),
-                                          color: Colors.grey[400],
-                                        ),
-                                        Container(
-                                          height: 10,
-                                          color: Colors.grey[400],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
+                              RichText(
+                                  text: TextSpan(
+                                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // TODO: Change to analysis
+                                  )
                               ),
                             ],
                           ),
@@ -99,43 +76,39 @@ class Analysis extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                // TODO: Change to first quote from news article (if applicable)
-                                'sales of pencil cases rose by 17%',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
+                              RichText(
+                                  text: TextSpan(
+                                    text: 'sales of pencil cases rose by 17%', // TODO: Change to first quote from news article (if applicable)
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                              ),
+                              const SizedBox(height: 16),
+                              RichText(
+                                  text: TextSpan(
+                                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // TODO: Change to first quote analysis
+                                  )
+                              ),
+                              const SizedBox(height: 16),
+                              RichText(
+                                text: TextSpan(
+                                  text: '"The pencil case is being reimagined", says Andrea Chen', // TODO: Change to second quote from news article
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                               const SizedBox(height: 16),
-                              // TODO: Change for loop to first quote analysis
-                              for (int i = 0; i < 12; i++)
-                                Container(
-                                  height: 8,
-                                  margin: const EdgeInsets.only(bottom: 8),
-                                  width: double.infinity,
-                                  color: Colors.grey[400],
-                                ),
-                              const SizedBox(height: 16),
-                              const Text(
-                                // TODO: Change to second quote from news article (if applicable)
-                                '"The pencil case is being reimagined," says Andrea Chen',
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
+                              RichText(
+                                  text: TextSpan(
+                                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // TODO: Change to second quote analysis
+                                  )
                               ),
-                              const SizedBox(height: 16),
-                              // TODO: Change for loop to second quote analysis
-                              for (int i = 0; i < 9; i++)
-                                Container(
-                                  height: 8,
-                                  margin: const EdgeInsets.only(bottom: 8),
-                                  width: double.infinity,
-                                  color: Colors.grey[400],
-                                ),
                             ],
                           ),
                         ),
