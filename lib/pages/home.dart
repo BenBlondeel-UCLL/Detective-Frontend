@@ -1,4 +1,3 @@
-import 'package:detective/features/button.dart';
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
 import 'package:detective/features/http_client.dart';
@@ -19,14 +18,35 @@ class Home extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
               child: Column(
-                children: [InputField(), SizedBox(height: 20), Button(label: "Analyse", onPressed: () { Navigator.pushNamed(context, '/analysis'); })],
+                children: [
+                  InputField(),
+                  SizedBox(height: 20),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.2,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // TODO: Implement analysis button logic
+                        Navigator.pushNamed(context, '/analysis');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(2.0),
+                        ),
+                      ),
+                      child: Text("Analyse"),
+                    ),
+                  ),
+                ],
               ),
             ),
-            Button(label: "Press Me", onPressed: () async {
-              final client = HttpClient();
-              final response = await client.getHttp();
-              print(response);
-            }),
+            ElevatedButton(
+              onPressed: () async {
+                final client = HttpClient();
+                final response = await client.getHttp();
+                print(response);
+              },
+              child: Text("Press Me"),
+            ),
           ],
         ),
       ),
