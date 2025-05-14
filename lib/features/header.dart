@@ -18,7 +18,7 @@ class Header extends StatelessWidget {
           children: [
             IconButton(
               alignment: FractionalOffset.centerLeft,
-              onPressed: () { /* TODO: Implement HOME button logic */ },
+              onPressed: () { Navigator.pushNamed(context, '/'); },
               icon: const Icon(Icons.home_outlined, color: Colors.grey),
             ),
             const Expanded(

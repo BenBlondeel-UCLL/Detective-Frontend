@@ -8,7 +8,10 @@ class AnalyseButton extends StatelessWidget {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.2,
       child: ElevatedButton(
-        onPressed: () { /*TODO: Implement analysis button logic*/ },
+        onPressed: () {
+          /*TODO: Implement analysis button logic*/
+          Navigator.pushNamed(context, '/analysis');
+        },
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(2.0),

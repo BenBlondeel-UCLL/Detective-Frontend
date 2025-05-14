@@ -9,27 +9,29 @@ class Home extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        spacing: 30,
-        children: [
-          const Header(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-            child: Column(
-              children: [InputField(), SizedBox(height: 20), AnalyseButton()],
+    return Scaffold(
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 30,
+          children: [
+            const Header(),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+              child: Column(
+                children: [InputField(), SizedBox(height: 20), AnalyseButton()],
+              ),
             ),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final client = HttpClient();
-              final response = await client.getHttp();
-              print(response);
-            },
-            child: const Text('Press Me'),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: () async {
+                final client = HttpClient();
+                final response = await client.getHttp();
+                print(response);
+              },
+              child: const Text('Press Me'),
+            ),
+          ],
+        ),
       ),
     );
   }
