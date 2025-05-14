@@ -31,7 +31,6 @@ class Analysis extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 16),
-
                 Expanded(
                   flex: 3,
                   child: Column(
@@ -105,8 +104,6 @@ class Analysis extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
-
-                            // Bar chart visualization
                             for (int i = 0; i < 12; i++)
                               Container(
                                 height: 8,
@@ -114,20 +111,7 @@ class Analysis extends StatelessWidget {
                                 width: double.infinity,
                                 color: Colors.grey[400],
                               ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 16),
-                      Container(
-                        width: double.infinity,
-                        padding: const EdgeInsets.all(16),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[600],
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                            const SizedBox(height: 16),
                             const Text(
                               '"The pencil case is being reimagined," says Andrea Chen',
                               style: TextStyle(
@@ -137,8 +121,6 @@ class Analysis extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(height: 16),
-
-                            // Bar chart visualization
                             for (int i = 0; i < 9; i++)
                               Container(
                                 height: 8,
