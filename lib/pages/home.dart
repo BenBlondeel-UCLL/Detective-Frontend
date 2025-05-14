@@ -1,4 +1,4 @@
-import 'package:detective/features/analyse_button.dart';
+import 'package:detective/features/button.dart';
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
 import 'package:detective/features/http_client.dart';
@@ -19,17 +19,14 @@ class Home extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
               child: Column(
-                children: [InputField(), SizedBox(height: 20), AnalyseButton()],
+                children: [InputField(), SizedBox(height: 20), Button(label: "Analyse", onPressed: () { Navigator.pushNamed(context, '/analysis'); })],
               ),
             ),
-            ElevatedButton(
-              onPressed: () async {
-                final client = HttpClient();
-                final response = await client.getHttp();
-                print(response);
-              },
-              child: const Text('Press Me'),
-            ),
+            Button(label: "Press Me", onPressed: () async {
+              final client = HttpClient();
+              final response = await client.getHttp();
+              print(response);
+            }),
           ],
         ),
       ),
