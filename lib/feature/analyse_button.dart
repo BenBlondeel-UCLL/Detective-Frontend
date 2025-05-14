@@ -5,18 +5,17 @@ class AnalyseButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return 
-        SizedBox(
-          width: MediaQuery.of(context).size.width * 0.2,
-          child: ElevatedButton(
-            onPressed: () {},
-            style: ElevatedButton.styleFrom(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(2.0),
-              )
-            ),
-            child: const Text('Analyse'),
+    return SizedBox(
+      width: MediaQuery.of(context).size.width * 0.2,
+      child: ElevatedButton(
+        onPressed: () { /*TODO: Implement analysis button logic*/ },
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2.0),
           ),
-        );
+        ),
+        child: const Text('Analyse'),
+      ),
+    );
   }
 }
