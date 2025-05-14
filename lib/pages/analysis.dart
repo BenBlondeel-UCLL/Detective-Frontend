@@ -9,7 +9,7 @@ class Analysis extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          const Header(),
+          const Header(title: "Analysis"),
           Expanded(
             child: Padding(
               padding: const EdgeInsets.all(16),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
-  const Header({super.key});
+  final String title;
+  const Header({super.key, required this.title});
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +22,11 @@ class Header extends StatelessWidget {
               onPressed: () { Navigator.pushNamed(context, '/'); },
               icon: const Icon(Icons.home_outlined, color: Colors.grey),
             ),
-            const Expanded(
+            Expanded(
               flex: 1,
               child: Center(
                 child: Text(
-                  // TODO: Change to dynamic title
-                  'Article Analyzer',
+                  title,
                   style: TextStyle(fontSize: 20, color: Colors.deepPurple),
                 ),
               ),

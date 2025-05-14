@@ -14,7 +14,7 @@ class Home extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           spacing: 30,
           children: [
-            const Header(),
+            const Header(title: "Detective"),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 30, 0, 0),
               child: Column(
