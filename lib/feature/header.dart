@@ -16,12 +16,13 @@ class Header extends StatelessWidget {
           ),
         ),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 100, 0),
-              child:
+      child:
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        child:
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
               IconButton(
                 alignment: FractionalOffset.centerLeft,
                 onPressed: () {},
@@ -30,40 +31,37 @@ class Header extends StatelessWidget {
                     color: Colors.grey
                 ),
               ),
-          ),
-          const Expanded(
-            flex: 1,
-            child:
-              Center(
-                child: Text(
-                  'Article Analyzer',
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.deepPurple,
+              const Expanded(
+                flex: 1,
+                child:
+                Center(
+                  child: Text(
+                    // TODO: Change to dynamic title
+                    'Article Analyzer',
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.deepPurple,
+                    ),
                   ),
                 ),
-             ),
+              ),
+              FilledButton(
+                onPressed: () {},
+                style: FilledButton.styleFrom(
+                  backgroundColor: Colors.deepPurple,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
+                child: const Text(
+                  'Login',
+                  style: TextStyle(
+                    color: Colors.white,
+                  ),
+                ),
+              )
+            ],
           ),
-          Padding(
-              padding: const EdgeInsets.fromLTRB(100, 0, 0, 0),
-              child:
-                FilledButton(
-                  onPressed: () {},
-                  style: FilledButton.styleFrom(
-                    backgroundColor: Colors.deepPurple,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(2.0),
-                    ),
-                  ),
-                  child: const Text(
-                    'Login',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                )
-          )
-        ],
       ),
     );
   }
