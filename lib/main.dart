@@ -1,3 +1,4 @@
+import 'package:detective/pages/about.dart';
 import 'package:detective/pages/analysis.dart';
 import 'package:detective/pages/home.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/': (context) => const Home(),
         '/analysis': (context) => const Analysis(),
+        '/about': (context) => const About(),
       },
       debugShowCheckedModeBanner: false,
     );
