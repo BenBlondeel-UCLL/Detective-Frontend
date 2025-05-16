@@ -1,12 +1,18 @@
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
+import '../api//http_client.dart';
 import 'package:flutter/material.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
+
+    final client = HttpClient();
+
     return Scaffold(
       body: Center(
         child: Column(
@@ -15,7 +21,7 @@ class Home extends StatelessWidget {
           children: [
             const Header(title: "Detective"),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 100, 0, 0),
+              padding: const EdgeInsets.only(top: 100),
               child: Column(
                 children: [
                   InputField(),
@@ -24,6 +30,7 @@ class Home extends StatelessWidget {
                     width: MediaQuery.of(context).size.width * 0.2,
                     child: ElevatedButton(
                       onPressed: () async {
+                        await client.postHttp();
                         if (context.mounted) Navigator.pushNamed(context, '/analysis');
                       },
                       style: ElevatedButton.styleFrom(

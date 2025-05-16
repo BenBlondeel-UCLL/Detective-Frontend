@@ -1,5 +1,5 @@
+import 'package:detective/enviorement/env.dart';
 import 'package:dio/dio.dart';
-
 
 class HttpClient{
 
@@ -7,7 +7,7 @@ class HttpClient{
   postHttp() async {
     final dio = Dio();
     final response = await dio.post(
-      'http://127.0.0.1:8000/analyse', 
+      '${Env.apiBasedUrl}/analyse', 
       queryParameters: {'text': 'Dit slechte zin.'}
     );
     return response;
@@ -16,7 +16,7 @@ class HttpClient{
   postLogin({required String email, required String password}) async {
     final dio = Dio();
     final response = await dio.post(
-      'http://127.0.0.1:8000/api/v1/8000/login',
+      '${Env.apiBasedUrl}/auth/login',
       data: {email, password},
     );
     return response;
@@ -31,7 +31,7 @@ class HttpClient{
       if (password == passwordRetry) {
         final dio = Dio();
         final response = await dio.post(
-          'http:127.0.0.1:8000/api/v1/8000/signup',
+          '${Env.apiBasedUrl}/auth/signup',
           data: {username, email, password},
         );
         return response;
