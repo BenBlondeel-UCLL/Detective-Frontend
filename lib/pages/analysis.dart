@@ -1,5 +1,10 @@
+import 'package:detective/constants/sizes.dart';
 import 'package:detective/features/header.dart';
 import 'package:flutter/material.dart';
+import 'package:detective/features/quote_card.dart';
+
+import '../constants/colors.dart';
+import '../features/underlined_title.dart';
 
 class Analysis extends StatelessWidget {
   const Analysis({super.key});
@@ -12,103 +17,78 @@ class Analysis extends StatelessWidget {
           const Header(title: "Analysis"),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 64),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 7,
+                    flex: 6,
                     child: Container(
+                      width: double.infinity,
+                      height: double.infinity,
                       decoration: BoxDecoration(
-                        color: Colors.grey[100],
-                        borderRadius: BorderRadius.circular(4),
+                        borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
+                        color: CustomColors.quaternary,
                       ),
                       child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(16),
-                        child: RichText(
-                            text: TextSpan(
-                                text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                            )
+                        padding: const EdgeInsets.all(32),
+                        child: Column(
+                          children: [
+                            UnderlinedTitle(title: "Analysed Article"),
+                            const SizedBox(height: Sizes.defaultSpace),
+                            RichText(
+                              text: TextSpan(
+                                text:
+                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                style: TextStyle(
+                                  color: CustomColors.primary,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
+                    )
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: Sizes.spaceBetweenSectionsBig),
                   Expanded(
-                    flex: 3,
+                    flex: 4,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Container(
-                          width: double.infinity,
+                        Container (
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.grey[100],
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
+                            color: CustomColors.quaternary,
                           ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Analysis",
-                                style: TextStyle(
-                                  fontSize: 22,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 16),
+                              UnderlinedTitle(title: "Analysis"),
+                              const SizedBox(height: Sizes.defaultSpace),
                               RichText(
-                                  text: TextSpan(
-                                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // TODO: Change to analysis
-                                  )
+                                text: TextSpan(
+                                  text:
+                                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // TODO: Change to analysis
+                                ),
                               ),
                             ],
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: Sizes.spaceBetweenSectionsBig),
                         Container(
-                          width: double.infinity,
                           padding: const EdgeInsets.all(16),
                           decoration: BoxDecoration(
-                            color: Colors.grey[600],
-                            borderRadius: BorderRadius.circular(4),
+                            borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
+                            color: CustomColors.quaternary,
                           ),
                           child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              RichText(
-                                  text: TextSpan(
-                                    text: 'sales of pencil cases rose by 17%', // TODO: Change to first quote from news article (if applicable)
-                                    style: TextStyle(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                              ),
-                              const SizedBox(height: 16),
-                              RichText(
-                                  text: TextSpan(
-                                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // TODO: Change to first quote analysis
-                                  )
-                              ),
-                              const SizedBox(height: 16),
-                              RichText(
-                                text: TextSpan(
-                                  text: '"The pencil case is being reimagined", says Andrea Chen', // TODO: Change to second quote from news article
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(height: 16),
-                              RichText(
-                                  text: TextSpan(
-                                    text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.', // TODO: Change to second quote analysis
-                                  )
-                              ),
+                              UnderlinedTitle(title: "Quotes"),
+                              const SizedBox(height: Sizes.defaultSpace),
+                              QuoteCard(),
+                              const SizedBox(height: Sizes.spaceBetweenSections),
+                              QuoteCard(),
                             ],
                           ),
                         ),

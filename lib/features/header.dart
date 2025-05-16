@@ -1,3 +1,5 @@
+import 'package:detective/constants/colors.dart';
+import 'package:detective/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
@@ -20,26 +22,27 @@ class Header extends StatelessWidget {
             IconButton(
               alignment: FractionalOffset.centerLeft,
               onPressed: () { Navigator.pushNamed(context, '/'); },
-              icon: const Icon(Icons.home_outlined, color: Color(0xffE6F2F5)),
+              icon: const Icon(Icons.home, color: CustomColors.secondary),
             ),
             Expanded(
               flex: 1,
               child: Center(
                 child: Text(
                   title,
-                  style: TextStyle(fontSize: 20, color: Color(0xffE6F2F5)),
+                  style: TextStyle(fontSize: 20, color: CustomColors.secondary),
                 ),
               ),
             ),
             ElevatedButton(
               onPressed: () { Navigator.pushNamed(context, '/login'); },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: CustomColors.buttonColor,
+                foregroundColor: CustomColors.secondary,
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
+                  borderRadius: BorderRadius.circular(Sizes.buttonRadius),
                 ),
               ),
-              child: const Text('Login', style: TextStyle(color: Color(0xffE6F2F5))),
+              child: const Text('Login', style: TextStyle(color: CustomColors.secondary)),
             ),
           ],
         ),

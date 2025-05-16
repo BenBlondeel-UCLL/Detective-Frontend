@@ -2,15 +2,14 @@ import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
 import '../api//http_client.dart';
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
+import '../constants/sizes.dart';
 
 class Home extends StatelessWidget {
   const Home({super.key});
 
-
-
   @override
   Widget build(BuildContext context) {
-
     final client = HttpClient();
 
     return Scaffold(
@@ -23,22 +22,34 @@ class Home extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.only(top: 100),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InputField(),
-                  SizedBox(height: 20),
+                  const InputField(),
+                  const SizedBox(height: Sizes.spaceBetweenItems),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.2,
+                    width: Sizes.buttonWidth,
+                    height: Sizes.buttonHeight * 2.5,
                     child: ElevatedButton(
                       onPressed: () async {
                         await client.postHttp();
-                        if (context.mounted) Navigator.pushNamed(context, '/analysis');
+                        if (context.mounted) {
+                          Navigator.pushNamed(context, '/analysis');
+                        }
                       },
                       style: ElevatedButton.styleFrom(
+                        backgroundColor: CustomColors.primary,
+                        foregroundColor: CustomColors.secondary,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(2.0),
+                          borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                      ),
+                      child: const Text(
+                        "Analyse",
+                        style: TextStyle(
+                          fontSize: 16.0,
                         ),
                       ),
-                      child: Text("Analyse"),
                     ),
                   ),
                 ],

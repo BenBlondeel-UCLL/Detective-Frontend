@@ -14,7 +14,7 @@ class Signup extends StatelessWidget {
         children: [
           const Header(title: "signup"),
             Padding(
-              padding: const EdgeInsets.only(top: Sizes.appBarHeight),
+              padding: const EdgeInsets.only(top: Sizes.headerHeight),
               child: SizedBox(
                 width: 550,
                 child: SingleChildScrollView(

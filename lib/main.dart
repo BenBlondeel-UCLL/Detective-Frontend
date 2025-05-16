@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         scaffoldBackgroundColor: const Color(0xffE6F2F5),
       ),
-      initialRoute: '/',
+      initialRoute: '/analysis',
       routes: {
         '/': (context) => const Home(),
         '/analysis': (context) => const Analysis(),
