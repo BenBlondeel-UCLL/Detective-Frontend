@@ -19,10 +19,13 @@ class Header extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              alignment: FractionalOffset.centerLeft,
-              onPressed: () { Navigator.pushNamed(context, '/'); },
-              icon: const Icon(Icons.home, color: CustomColors.secondary),
+            SizedBox(
+              width: 100,
+              child: IconButton(
+                alignment: FractionalOffset.centerLeft,
+                onPressed: () { Navigator.pushNamed(context, '/'); },
+                icon: const Icon(Icons.home, color: CustomColors.secondary),
+              ),
             ),
             Expanded(
               flex: 1,
@@ -33,16 +36,19 @@ class Header extends StatelessWidget {
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () { Navigator.pushNamed(context, '/login'); },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: CustomColors.buttonColor,
-                foregroundColor: CustomColors.secondary,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+            SizedBox(
+              width: 100,
+              child: ElevatedButton(
+                onPressed: () { Navigator.pushNamed(context, '/login'); },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.buttonColor,
+                  foregroundColor: CustomColors.secondary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+                  ),
                 ),
+                child: const Text('Login', style: TextStyle(color: CustomColors.secondary)),
               ),
-              child: const Text('Login', style: TextStyle(color: CustomColors.secondary)),
             ),
           ],
         ),
