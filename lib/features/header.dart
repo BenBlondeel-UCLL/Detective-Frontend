@@ -9,7 +9,7 @@ class Header extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
-        color: Colors.white,
+        color: Color(0xFF001f34),
         border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
       ),
       child: Padding(
@@ -20,26 +20,26 @@ class Header extends StatelessWidget {
             IconButton(
               alignment: FractionalOffset.centerLeft,
               onPressed: () { Navigator.pushNamed(context, '/'); },
-              icon: const Icon(Icons.home_outlined, color: Colors.grey),
+              icon: const Icon(Icons.home_outlined, color: Color(0xffE6F2F5)),
             ),
             Expanded(
               flex: 1,
               child: Center(
                 child: Text(
                   title,
-                  style: TextStyle(fontSize: 20, color: Colors.deepPurple),
+                  style: TextStyle(fontSize: 20, color: Color(0xffE6F2F5)),
                 ),
               ),
             ),
-            FilledButton(
-              onPressed: () { /*TODO: Implement LOGIN button logic*/ },
-              style: FilledButton.styleFrom(
+            ElevatedButton(
+              onPressed: () { Navigator.pushNamed(context, '/login'); },
+              style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.deepPurple,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(2.0),
                 ),
               ),
-              child: const Text('Login', style: TextStyle(color: Colors.white)),
+              child: const Text('Login', style: TextStyle(color: Color(0xffE6F2F5))),
             ),
           ],
         ),
