@@ -34,7 +34,7 @@ class Header extends StatelessWidget {
             ElevatedButton(
               onPressed: () { Navigator.pushNamed(context, '/login'); },
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
+                backgroundColor: Color(0xff00a2d4),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(2.0),
                 ),
