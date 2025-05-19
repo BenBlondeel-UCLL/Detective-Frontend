@@ -1,3 +1,5 @@
+import 'package:detective/constants/colors.dart';
+import 'package:detective/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class Header extends StatelessWidget {
@@ -9,37 +11,45 @@ class Header extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
-        color: Color(0xFF001f34),
+        color: CustomColors.primary,
         border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            IconButton(
-              alignment: FractionalOffset.centerLeft,
-              onPressed: () { Navigator.pushNamed(context, '/'); },
-              icon: const Icon(Icons.home_outlined, color: Color(0xffE6F2F5)),
+            SizedBox(
+              width: 100,
+              child: IconButton(
+                alignment: FractionalOffset.centerLeft,
+                onPressed: () { Navigator.pushNamed(context, '/'); },
+                icon: const Icon(Icons.home, color: CustomColors.secondary, size: Sizes.iconSize),
+              ),
             ),
             Expanded(
               flex: 1,
               child: Center(
                 child: Text(
                   title,
-                  style: TextStyle(fontSize: 20, color: Color(0xffE6F2F5)),
+                  style: TextStyle(fontSize: Sizes.fontSizeTitle, color: CustomColors.secondary),
                 ),
               ),
             ),
-            ElevatedButton(
-              onPressed: () { Navigator.pushNamed(context, '/login'); },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.deepPurple,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(2.0),
+            SizedBox(
+              width: 100,
+              height: 40,
+              child: ElevatedButton(
+                onPressed: () { Navigator.pushNamed(context, '/login'); },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.buttonColor,
+                  foregroundColor: CustomColors.secondary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+                  ),
                 ),
+                child: const Text('Login', style: TextStyle(color: CustomColors.secondary, fontSize: Sizes.fontSizeMedium)),
               ),
-              child: const Text('Login', style: TextStyle(color: Color(0xffE6F2F5))),
             ),
           ],
         ),
