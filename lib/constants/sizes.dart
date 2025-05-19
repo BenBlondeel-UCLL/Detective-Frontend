@@ -11,6 +11,10 @@ class Sizes {
 
   // Image sizes
   static const double imageThumbSize = 80.0;
+  static const double logoSize = 200.0;
+
+  // Icon sizes
+  static const double iconSize = 36.0;
 
   // Default spacing between sections
   static const double defaultSpace = 24.0;
@@ -26,4 +30,10 @@ class Sizes {
 
   // Divider height
   static const double dividerHeight = 1.0;
+
+  // Font sizes
+  static const double fontSizeSmall = 12.0;
+  static const double fontSizeMedium = 16.0;
+  static const double fontSizeBig = 20.0;
+  static const double fontSizeTitle = 36.0;
 }

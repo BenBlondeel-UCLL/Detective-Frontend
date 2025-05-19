@@ -11,11 +11,11 @@ class Header extends StatelessWidget {
     return Container(
       width: MediaQuery.of(context).size.width,
       decoration: const BoxDecoration(
-        color: Color(0xFF001f34),
+        color: CustomColors.primary,
         border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
       ),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -24,7 +24,7 @@ class Header extends StatelessWidget {
               child: IconButton(
                 alignment: FractionalOffset.centerLeft,
                 onPressed: () { Navigator.pushNamed(context, '/'); },
-                icon: const Icon(Icons.home, color: CustomColors.secondary),
+                icon: const Icon(Icons.home, color: CustomColors.secondary, size: Sizes.iconSize),
               ),
             ),
             Expanded(
@@ -32,12 +32,13 @@ class Header extends StatelessWidget {
               child: Center(
                 child: Text(
                   title,
-                  style: TextStyle(fontSize: 20, color: CustomColors.secondary),
+                  style: TextStyle(fontSize: Sizes.fontSizeTitle, color: CustomColors.secondary),
                 ),
               ),
             ),
             SizedBox(
               width: 100,
+              height: 40,
               child: ElevatedButton(
                 onPressed: () { Navigator.pushNamed(context, '/login'); },
                 style: ElevatedButton.styleFrom(
@@ -47,7 +48,7 @@ class Header extends StatelessWidget {
                     borderRadius: BorderRadius.circular(Sizes.buttonRadius),
                   ),
                 ),
-                child: const Text('Login', style: TextStyle(color: CustomColors.secondary)),
+                child: const Text('Login', style: TextStyle(color: CustomColors.secondary, fontSize: Sizes.fontSizeMedium)),
               ),
             ),
           ],

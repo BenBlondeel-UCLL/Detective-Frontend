@@ -86,9 +86,9 @@ class Analysis extends StatelessWidget {
                             children: [
                               UnderlinedTitle(title: "Quotes"),
                               const SizedBox(height: Sizes.defaultSpace),
-                              QuoteCard(),
+                              QuoteCard(quote: 'More than 70% of all student have resorted back to using pencil cases', analysis: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
                               const SizedBox(height: Sizes.spaceBetweenSections),
-                              QuoteCard(),
+                              QuoteCard(quote: '"The pencil case is being reimagined", says Andrea Chen', analysis: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."),
                             ],
                           ),
                         ),

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import '../constants/colors.dart';
+import '../constants/sizes.dart';
 import '../features/header.dart';
 import '../features/info_card.dart';
+import '../features/underlined_title.dart';
 
 class About extends StatelessWidget {
   const About({super.key});
@@ -13,7 +16,7 @@ class About extends StatelessWidget {
           const Header(title: "About"),
           Text(
             "How does detective work?",
-            style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+            style: TextStyle(fontSize: Sizes.fontSizeTitle, fontWeight: FontWeight.bold),
           ),
           Expanded(
             child: Padding(
@@ -22,19 +25,17 @@ class About extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 4,
                     child: Container(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(Sizes.spaceBetweenSections),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
+                        color: CustomColors.quaternary,
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            "Medium length feature headline",
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          const UnderlinedTitle(title: "Medium length feature headline"), //TODO: Replace with real headline
                           const SizedBox(height: 32),
                           Text(
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -43,29 +44,38 @@ class About extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 16),
+                  const SizedBox(width: Sizes.spaceBetweenSections),
                   Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        InfoCard(
-                            icon: Icons.info,
-                            title: "About",
-                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                        ),
-                        InfoCard(
-                            icon: Icons.info,
-                            title: "About",
-                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                        ),
-                        InfoCard(
-                            icon: Icons.info,
-                            title: "About",
-                            description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
-                        ),
-                      ],
-                    ),
+                    flex: 6,
+                    child: Container(
+                      padding: const EdgeInsets.all(Sizes.spaceBetweenSections),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
+                        color: CustomColors.quaternary,
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          InfoCard(
+                              icon: Icons.language,
+                              title: "Medium Length Headline", //TODO: Replace with real headline
+                              description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                          ),
+                          const SizedBox(height: Sizes.spaceBetweenSections),
+                          InfoCard(
+                              icon: Icons.autorenew,
+                              title: "Medium Length Headline", //TODO: Replace with real headline
+                              description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                          ),
+                          const SizedBox(height: Sizes.spaceBetweenSections),
+                          InfoCard(
+                              icon: Icons.star_rate,
+                              title: "Medium Length Headline", //TODO: Replace with real headline
+                              description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+                          ),
+                        ],
+                      ),
+                    )
                   ),
                 ],
               ),
@@ -74,11 +84,11 @@ class About extends StatelessWidget {
           const SizedBox(height: 16),
           Container(
             width: double.infinity,
-            color: Colors.grey[200],
+            color: CustomColors.primary,
             alignment: Alignment.center,
             child: Text(
               "Factcheck Yourself",
-              style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: Sizes.fontSizeTitle, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
         ],

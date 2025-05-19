@@ -10,23 +10,25 @@ class UnderlinedTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          title,
-          style: const TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.w900,
+    return IntrinsicWidth(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(
+              fontSize: Sizes.fontSizeBig,
+              fontWeight: FontWeight.w900,
+              color: CustomColors.primary,
+            ),
+          ),
+          const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
+          Container(
+            height: 2,
             color: CustomColors.primary,
           ),
-        ),
-        const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
-        Container(
-          width: 160,
-          height: 2,
-          color: CustomColors.primary,
-        ),
-      ],
+        ],
+      ),
     );
   }
 }
