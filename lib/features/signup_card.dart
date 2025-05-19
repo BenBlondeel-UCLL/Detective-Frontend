@@ -1,11 +1,36 @@
+import 'package:detective/api/http_client.dart';
 import 'package:detective/constants/padding_style.dart';
 import 'package:detective/constants/sizes.dart';
 import 'package:detective/constants/texts.dart';
 import 'package:detective/features/status_message.dart';
 import 'package:flutter/material.dart';
 
-class SignupCard extends StatelessWidget {
+class SignupCard extends StatefulWidget {
   const SignupCard({super.key});
+
+  @override
+  State<SignupCard> createState() => _SignupCardState();  
+}
+
+class _SignupCardState extends State<SignupCard> {
+
+
+  String username = '';
+  String email = '';
+  String password = '';
+  String passwordRetry = '';
+  int? _status;
+  String _statusText = '';
+
+
+  final client = HttpClient();
+
+  @override
+  void initState() {
+    super.initState();
+    _statusText;
+    _status;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +61,8 @@ class SignupCard extends StatelessWidget {
                   ),
                 ),
                 
-                StatusMessage(state: true, text: 'succesfully signed up'),
+                if (_status != null)
+                  StatusMessage(state: _status == 200, text: _statusText),
 
                 Form(
                   child: Padding(padding: EdgeInsets.symmetric(vertical: 10),
@@ -49,6 +75,7 @@ class SignupCard extends StatelessWidget {
                           labelStyle: const TextStyle(color: Color(0xffE6F2F5)),
                           ),
                           style: TextStyle(color: Color(0xffE6F2F5),),
+                          onChanged: (value) => username = value
                         ),
 
                         const SizedBox(height: Sizes.defaultSpace),
@@ -60,6 +87,7 @@ class SignupCard extends StatelessWidget {
                           labelStyle: const TextStyle(color: Color(0xffE6F2F5)),
                           ),
                           style: TextStyle(color: Color(0xffE6F2F5),),
+                          onChanged: (value) => email = value
                         ),
 
                         const SizedBox(height: Sizes.defaultSpace),
@@ -72,6 +100,7 @@ class SignupCard extends StatelessWidget {
                             labelStyle: const TextStyle(color: Color(0xffE6F2F5)),
                           ),
                           style: TextStyle(color: Color(0xffE6F2F5),),
+                          onChanged: (value) => password = value
                         ),
 
                         const SizedBox(height: Sizes.defaultSpace),
@@ -84,22 +113,38 @@ class SignupCard extends StatelessWidget {
                             labelStyle: const TextStyle(color: Color(0xffE6F2F5)),
                           ),
                           style: TextStyle(color: Color(0xffE6F2F5),),
+                          onChanged: (value) => passwordRetry = value
                         ),
       
                         const SizedBox(height: 20),
       
-                        /// Sign In Button
+                        /// create account Button
                         SizedBox(
                           width: double.infinity,
                           child: ElevatedButton(
-                            onPressed: (){}, 
+                            onPressed: () async {
+                              setState(() {
+                                _status = null;
+                                _statusText = '';
+                              });
+                              final response = await client.postSignUp(username: username, email: email, password: password, passwordRetry: passwordRetry);
+                              setState(() {
+                                _status = response?.statusCode ?? -1;
+                                _statusText = response?.statusMessage;
+                              });
+                              if (_status == 200) {
+                                await Future.delayed(Duration(milliseconds: 2000));
+                                Navigator.pushNamed(context, '/');
+                              }
+                            }, 
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xff00a2d4),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(2.0),
                               ),
                             ),
-                            child: Text('sign in'), )
+                            child: Text('create account', style: TextStyle(color: Color(0xffe6f2f5))),
+                          ),
                         ),
 
                         /// redirect to login
