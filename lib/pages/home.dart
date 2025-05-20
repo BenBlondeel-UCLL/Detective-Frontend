@@ -16,6 +16,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   final TextEditingController textEditingController = TextEditingController();
   final client = HttpClient();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -42,19 +43,40 @@ class _HomeState extends State<Home> {
                     width: Sizes.buttonWidth,
                     height: Sizes.buttonHeight * 2.5,
                     child: ElevatedButton(
-                      onPressed: () async {
-                        Analysis response = await client.postHttp(
-                          textEditingController.text,
-                        );
-                        if (context.mounted) {
-                          Navigator.pushNamed(
-                            context,
-                            '/result',
-                            arguments: {
-                              'response': response,
-                              'text': textEditingController.text,
-                            },
+                      onPressed: _isLoading
+                          ? null
+                          : () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+
+                        try {
+                          Analysis response = await client.postHttp(
+                            textEditingController.text,
                           );
+
+                          if (context.mounted) {
+                            Navigator.pushNamed(
+                              context,
+                              '/result',
+                              arguments: {
+                                'response': response,
+                                'text': textEditingController.text,
+                              },
+                            );
+                          }
+                        } catch (e) {
+                          if (context.mounted) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('Failed to analyze: ${e.toString()}')),
+                            );
+                          }
+                        } finally {
+                          if (mounted) {
+                            setState(() {
+                              _isLoading = false;
+                            });
+                          }
                         }
                       },
                       style: ElevatedButton.styleFrom(
@@ -70,7 +92,16 @@ class _HomeState extends State<Home> {
                           horizontal: 16.0,
                         ),
                       ),
-                      child: const Text(
+                      child: _isLoading
+                          ? const SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: CircularProgressIndicator(
+                          color: CustomColors.secondary,
+                          strokeWidth: 2.0,
+                        ),
+                      )
+                          : const Text(
                         "Analyse",
                         style: TextStyle(fontSize: 16.0),
                       ),

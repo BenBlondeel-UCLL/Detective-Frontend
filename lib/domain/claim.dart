@@ -1,6 +1,6 @@
 class Claim {
   final String target;
-  final VerficationResult verificationResult;
+  final VerificationResult verificationResult;
   final String explanation;
   final List<String> url;
 
@@ -14,14 +14,14 @@ class Claim {
   factory Claim.fromJson(Map<String, dynamic> json) {
     return Claim(
       target: json['target'] ?? '',
-      verificationResult: VerficationResult.values[json['verification_result'] ?? 0],
+      verificationResult: VerificationResult.values[json['verification_result'] ?? 0],
       explanation: json['explanation'] ?? '',
       url: List<String>.from(json['url'] ?? []),
     );
   }
 }
 
-enum VerficationResult {
+enum VerificationResult {
   TRUE,
   FALSE,
   UNCERTAIN,

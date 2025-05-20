@@ -15,11 +15,11 @@ class Analysis {
 
   factory Analysis.fromJson(Map<String, dynamic> json) {
     return Analysis(
-      spellingMistakes: (json['spelling_mistakes'] as List?)
+      spellingMistakes: (json['spellingMistakes'] as List?)
           ?.map((item) => SpellingMistake.fromJson(item))
           .toList() ??
           [],
-      grammarMistakes: (json['grammar_mistakes'] as List?)
+      grammarMistakes: (json['grammarMistakes'] as List?)
           ?.map((item) => GrammarMistake.fromJson(item))
           .toList() ??
           [],
