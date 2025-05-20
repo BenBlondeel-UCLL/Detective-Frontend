@@ -1,6 +1,7 @@
 import 'package:detective/constants/colors.dart';
 import 'package:detective/constants/sizes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class Header extends StatelessWidget {
   final String title;
@@ -8,52 +9,123 @@ class Header extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      decoration: const BoxDecoration(
-        color: CustomColors.primary,
-        border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 100,
-              child: IconButton(
-                alignment: FractionalOffset.centerLeft,
-                onPressed: () { Navigator.pushNamed(context, '/'); },
-                icon: const Icon(Icons.home, color: CustomColors.secondary, size: Sizes.iconSize),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Center(
-                child: Text(
-                  title,
-                  style: TextStyle(fontSize: Sizes.fontSizeTitle, color: CustomColors.secondary),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 100,
-              height: 40,
-              child: ElevatedButton(
-                onPressed: () { Navigator.pushNamed(context, '/login'); },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: CustomColors.buttonColor,
-                  foregroundColor: CustomColors.secondary,
+
+    final storage = FlutterSecureStorage();
+
+    void showLogoutConfirmationDialog(BuildContext context, VoidCallback onConfirm) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+          backgroundColor: const Color(0xFF001f34),
+          title: const Text('Confirm Logout', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xffE6F2F5))),
+          content: const Text('Are you sure you want to log out?', style: TextStyle(fontSize: 16, color: Color(0xffE6F2F5))),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: Color(0xff00a2d4),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+
+                ),
+                child: const Text('Cancel', style: TextStyle(color: Color(0xffE6F2F5))),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                  onConfirm();
+                  // Execute the logout action
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff00a2d4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.0),
                   ),
                 ),
-                child: const Text('Login', style: TextStyle(color: CustomColors.secondary, fontSize: Sizes.fontSizeMedium)),
+                child: const Text('Logout', style: TextStyle(color: Color(0xffE6F2F5))),
               ),
+            ],
+          );
+        },
+      );
+    }
+
+    return FutureBuilder<String?>(
+      future: storage.read(key: 'jwt'),
+      builder: (context, snapshot) {
+        final jwt = snapshot.data;
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          decoration: const BoxDecoration(
+            color: Color(0xFF001f34),
+            border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  alignment: FractionalOffset.centerLeft,
+                  onPressed: () { Navigator.pushNamed(context, '/'); },
+                  icon: const Icon(Icons.home_outlined, color: Color(0xffE6F2F5)),
+                ),
+                Expanded(
+                  flex: 1,
+                  child: Center(
+                    child: Text(
+                      title,
+                      style: TextStyle(fontSize: 20, color: Color(0xffE6F2F5)),
+                    ),
+                  ),
+                ),
+                (jwt == null)
+                    ? ElevatedButton(
+                        onPressed: () { Navigator.pushNamed(context, '/login'); },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xff00a2d4),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(2.0),
+                          ),
+                        ),
+                        child: const Text('Login', style: TextStyle(color: Color(0xffE6F2F5))),
+                      )
+                    : Row(
+                        children: [
+                          FutureBuilder<String?>(
+                            future: storage.read(key: 'username'),
+                            builder: (context, usernameSnapshot) {
+                              final username = usernameSnapshot.data ?? '';
+                              return Text('Welcome $username', style: const TextStyle(color: Color(0xffE6F2F5)));
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () {
+                              showLogoutConfirmationDialog(context, () {
+                                Navigator.pushNamed(context, '/login');
+                                storage.delete(key: 'jwt');
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xff00a2d4),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(2.0),
+                              ),
+                            ),
+                            child: const Text('Logout', style: TextStyle(color: Color(0xffE6F2F5))),
+                          ),
+                        ],
+                      ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }
