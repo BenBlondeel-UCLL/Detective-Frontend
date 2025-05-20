@@ -41,6 +41,10 @@ class HttpClient{
           key: 'jwt',
           value: jsonData.access_token,
         );
+        await storage.write(
+          key: 'username',
+          value: jsonData.username,
+        );
       }
       return response;
     } on DioException catch (error) {
@@ -62,23 +66,7 @@ class HttpClient{
     required String username,
     required String email,
     required String password,
-    required String passwordRetry,
     }) async {
-      final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$");
-      if (!emailRegex.hasMatch(email)) {
-        return Response(
-          requestOptions: RequestOptions(path: '${Env.apiBasedUrl}/auth/signup'),
-          statusCode: 400,
-          statusMessage: "Invalid email address",
-        );
-      }
-      if (password != passwordRetry) {
-        return Response(
-          requestOptions: RequestOptions(path: '${Env.apiBasedUrl}/auth/signup'),
-          statusCode: 400,
-          statusMessage: "Passwords don't match",
-        );
-      }
       try {
         final dio = Dio();
         final response = await dio.post(
@@ -91,17 +79,9 @@ class HttpClient{
         );
         return response;
       } on DioException catch (error) {
-        return Response(
-          requestOptions: error.requestOptions,
-          statusCode: error.response?.statusCode ?? 400,
-          data: error.response?.data ?? {'message': 'Signup failed'},
-        );
-      } catch (e) {
-        return Response(
-          requestOptions: RequestOptions(path: '${Env.apiBasedUrl}/auth/signup'),
-          statusCode: -1,
-          data: {'message': e.toString()},
-        );
+        return error.response;
+      } catch (error) {
+        return error;
       }
     }
 }

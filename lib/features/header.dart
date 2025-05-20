@@ -10,6 +10,47 @@ class Header extends StatelessWidget {
 
     final storage = FlutterSecureStorage();
 
+    void showLogoutConfirmationDialog(BuildContext context, VoidCallback onConfirm) {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+          backgroundColor: const Color(0xFF001f34),
+          title: const Text('Confirm Logout', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Color(0xffE6F2F5))),
+          content: const Text('Are you sure you want to log out?', style: TextStyle(fontSize: 16, color: Color(0xffE6F2F5))),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                },
+                style: TextButton.styleFrom(
+                  backgroundColor: Color(0xff00a2d4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
+                child: const Text('Cancel', style: TextStyle(color: Color(0xffE6F2F5))),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop(); // Close the dialog
+                  onConfirm();
+                  // Execute the logout action
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Color(0xff00a2d4),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(2.0),
+                  ),
+                ),
+                child: const Text('Logout', style: TextStyle(color: Color(0xffE6F2F5))),
+              ),
+            ],
+          );
+        },
+      );
+    }
+
     return FutureBuilder<String?>(
       future: storage.read(key: 'jwt'),
       builder: (context, snapshot) {
@@ -50,18 +91,32 @@ class Header extends StatelessWidget {
                         ),
                         child: const Text('Login', style: TextStyle(color: Color(0xffE6F2F5))),
                       )
-                    : ElevatedButton(
-                        onPressed: () { 
-                          Navigator.pushNamed(context, '/');
-                          storage.delete(key: 'jwt');
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Color(0xff00a2d4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(2.0),
+                    : Row(
+                        children: [
+                          FutureBuilder<String?>(
+                            future: storage.read(key: 'username'),
+                            builder: (context, usernameSnapshot) {
+                              final username = usernameSnapshot.data ?? '';
+                              return Text('Welcome $username', style: const TextStyle(color: Color(0xffE6F2F5)));
+                            },
                           ),
-                        ),
-                        child: const Text('Logout', style: TextStyle(color: Color(0xffE6F2F5))),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
+                            onPressed: () {
+                              showLogoutConfirmationDialog(context, () {
+                                Navigator.pushNamed(context, '/login');
+                                storage.delete(key: 'jwt');
+                              });
+                            },
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xff00a2d4),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(2.0),
+                              ),
+                            ),
+                            child: const Text('Logout', style: TextStyle(color: Color(0xffE6F2F5))),
+                          ),
+                        ],
                       ),
               ],
             ),

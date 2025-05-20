@@ -34,6 +34,31 @@ class _SignupCardState extends State<SignupCard> {
 
   @override
   Widget build(BuildContext context) {
+
+    signupValidation({
+      required String username,
+      required String email,
+      required String password,
+      required String passwordRetry,
+    }) {
+      final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$");
+      if (!emailRegex.hasMatch(email)) {
+        setState(() {
+          _status = -1;
+          _statusText = 'Invalid email format';
+        });
+        return false;
+      }
+      if (password != passwordRetry) {
+        setState(() {
+          _status = -1;
+          _statusText = 'Passwords do not match';
+        });
+        return false;
+      }
+      return true;
+    }
+
     return Padding(
       padding: const EdgeInsets.only(top: Sizes.appBarHeight),
       child: SizedBox(
@@ -52,7 +77,7 @@ class _SignupCardState extends State<SignupCard> {
                   child: Column(
                       children: [
                       Text(
-                        Texts.signupTitle, 
+                        Texts.signupTitle,
                         style: TextStyle(
                           color: Color(0xffE6F2F5),
                         ),
@@ -60,7 +85,7 @@ class _SignupCardState extends State<SignupCard> {
                     ],
                   ),
                 ),
-                
+
                 if (_status != null)
                   StatusMessage(state: _status == 200, text: _statusText),
 
@@ -79,7 +104,7 @@ class _SignupCardState extends State<SignupCard> {
                         ),
 
                         const SizedBox(height: Sizes.defaultSpace),
-      
+
                         /// email
                         TextFormField(
                           decoration: InputDecoration(
@@ -115,9 +140,9 @@ class _SignupCardState extends State<SignupCard> {
                           style: TextStyle(color: Color(0xffE6F2F5),),
                           onChanged: (value) => passwordRetry = value
                         ),
-      
+
                         const SizedBox(height: 20),
-      
+
                         /// create account Button
                         SizedBox(
                           width: double.infinity,
@@ -127,16 +152,26 @@ class _SignupCardState extends State<SignupCard> {
                                 _status = null;
                                 _statusText = '';
                               });
-                              final response = await client.postSignUp(username: username, email: email, password: password, passwordRetry: passwordRetry);
-                              setState(() {
-                                _status = response?.statusCode ?? -1;
-                                _statusText = response?.statusMessage;
-                              });
+                              final validated = signupValidation(username: username, email: email, password: password, passwordRetry: passwordRetry);
+                              if (validated) {
+                                final response = await client.postSignUp(
+                                    username: username,
+                                    email: email,
+                                    password: password);
+                                setState(() {
+                                  _status = response?.statusCode ?? -1;
+                                  _statusText = _status == 200
+                                      ? "Created Account"
+                                      : response?.data['detail'] ??
+                                      response.statusMessage ??
+                                      'Unknown error';
+                                });
+                              }
                               if (_status == 200) {
                                 await Future.delayed(Duration(milliseconds: 2000));
-                                Navigator.pushNamed(context, '/');
+                                Navigator.pushNamed(context, '/login');
                               }
-                            }, 
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xff00a2d4),
                               shape: RoundedRectangleBorder(
@@ -160,7 +195,7 @@ class _SignupCardState extends State<SignupCard> {
                       ],
                     ),
                   ),
-                ),       
+                ),
               ],
             ),
           ),
