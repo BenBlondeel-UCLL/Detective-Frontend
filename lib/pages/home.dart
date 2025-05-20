@@ -1,3 +1,4 @@
+import 'package:detective/domain/analysis.dart';
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
 import '../api//http_client.dart';
@@ -5,18 +6,29 @@ import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';
 
-class Home extends StatelessWidget {
+class Home extends StatefulWidget {
   const Home({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final client = HttpClient();
+  State<Home> createState() => _HomeState();
+}
 
+class _HomeState extends State<Home> {
+  final TextEditingController textEditingController = TextEditingController();
+  final client = HttpClient();
+
+  @override
+  void dispose() {
+    textEditingController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
-          spacing: 30,
           children: [
             const Header(title: "Detective"),
             Padding(
@@ -24,31 +36,43 @@ class Home extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const InputField(),
+                  InputField(textEditingController: textEditingController),
                   const SizedBox(height: Sizes.spaceBetweenItems),
                   SizedBox(
                     width: Sizes.buttonWidth,
                     height: Sizes.buttonHeight * 2.5,
                     child: ElevatedButton(
                       onPressed: () async {
-                        await client.postHttp();
+                        Analysis response = await client.postHttp(
+                          textEditingController.text,
+                        );
                         if (context.mounted) {
-                          Navigator.pushNamed(context, '/analysis');
+                          Navigator.pushNamed(
+                            context,
+                            '/result',
+                            arguments: {
+                              'response': response,
+                              'text': textEditingController.text,
+                            },
+                          );
                         }
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: CustomColors.primary,
                         foregroundColor: CustomColors.secondary,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+                          borderRadius: BorderRadius.circular(
+                            Sizes.buttonRadius,
+                          ),
                         ),
-                        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 12.0,
+                          horizontal: 16.0,
+                        ),
                       ),
                       child: const Text(
                         "Analyse",
-                        style: TextStyle(
-                          fontSize: 16.0,
-                        ),
+                        style: TextStyle(fontSize: 16.0),
                       ),
                     ),
                   ),

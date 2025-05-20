@@ -1,16 +1,25 @@
+import 'package:detective/domain/analysis.dart';
 import 'package:detective/enviorement/env.dart';
 import 'package:dio/dio.dart';
 
 class HttpClient{
 
 
-  postHttp() async {
+  Future<Analysis> postHttp(String article) async {
     final dio = Dio();
-    final response = await dio.post(
-      '${Env.apiBasedUrl}/analyse', 
-      queryParameters: {'text': 'Dit slechte zin.'}
-    );
-    return response;
+
+    try {
+      final response = await dio.post(
+        '${Env.apiBasedUrl}/analyse',
+        data: {'text': article},
+      );
+      return Analysis.fromJson(response.data);
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 422) {
+        throw Exception('Unable to process the article. The text may be too long or contain unsupported characters.');
+      }
+      throw Exception('Error sending article: ${e.message}');
+    }
   }
 
   postLogin({required String email, required String password}) async {

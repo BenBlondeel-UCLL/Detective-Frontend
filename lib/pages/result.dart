@@ -1,4 +1,5 @@
 import 'package:detective/constants/sizes.dart';
+import 'package:detective/domain/analysis.dart';
 import 'package:detective/features/header.dart';
 import 'package:flutter/material.dart';
 import 'package:detective/features/quote_card.dart';
@@ -6,11 +7,15 @@ import 'package:detective/features/quote_card.dart';
 import '../constants/colors.dart';
 import '../features/underlined_title.dart';
 
-class Analysis extends StatelessWidget {
-  const Analysis({super.key});
+class Result extends StatelessWidget {
+  const Result({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final args = ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
+    final Analysis response = args?['response'];
+    final String text = args?['text'];
+
     return Scaffold(
       body: Column(
         children: [
@@ -38,8 +43,7 @@ class Analysis extends StatelessWidget {
                             const SizedBox(height: Sizes.defaultSpace),
                             RichText(
                               text: TextSpan(
-                                text:
-                                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+                                text: text,
                                 style: TextStyle(
                                   color: CustomColors.primary,
                                 ),
