@@ -1,3 +1,4 @@
+import 'package:detective/pages/about.dart';
 import 'package:detective/pages/analysis.dart';
 import 'package:detective/pages/login.dart';
 import 'package:detective/pages/signup.dart';
@@ -19,10 +20,11 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         scaffoldBackgroundColor: const Color(0xffE6F2F5),
       ),
-      initialRoute: '/',
+      initialRoute: '/analysis',
       routes: {
         '/': (context) => const Home(),
         '/analysis': (context) => const Analysis(),
+        '/about': (context) => const About(),
         '/login': (context) => Login(),
         '/signup': (context) => Signup(),
       },

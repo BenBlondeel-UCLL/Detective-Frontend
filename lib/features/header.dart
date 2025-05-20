@@ -1,3 +1,5 @@
+import 'package:detective/constants/colors.dart';
+import 'package:detective/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
@@ -28,6 +30,7 @@ class Header extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(2.0),
                   ),
+
                 ),
                 child: const Text('Cancel', style: TextStyle(color: Color(0xffE6F2F5))),
               ),
