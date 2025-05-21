@@ -14,10 +14,16 @@ class Claim {
   factory Claim.fromJson(Map<String, dynamic> json) {
     return Claim(
       target: json['target'] ?? '',
-      verificationResult: VerificationResult.values[json['verification_result'] ?? 0],
+      verificationResult: _parseVerificationResult(json['verification_result']),
       explanation: json['explanation'] ?? '',
       url: List<String>.from(json['url'] ?? []),
     );
+  }
+
+  static VerificationResult _parseVerificationResult(dynamic value) {
+    if (value == 'TRUE') return VerificationResult.TRUE;
+    if (value == 'FALSE') return VerificationResult.FALSE;
+    return VerificationResult.UNCERTAIN;
   }
 }
 

@@ -2,6 +2,7 @@ import 'package:detective/domain/analysis.dart';
 import 'package:detective/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:detective/domain/login_response.dart';
 
 class HttpClient{
 
