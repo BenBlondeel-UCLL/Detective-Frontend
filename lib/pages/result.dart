@@ -123,142 +123,118 @@ class Result extends StatelessWidget {
     );
   }
 
-  Widget _buildTextWithHighlights(String text, Analysis analysis) {
-    final List<InlineSpan> spans = [];
-
-    final List<Map<String, dynamic>> allHighlights = [];
-
-    for (final mistake in analysis.spellingMistakes) {
-      allHighlights.add({
-        'start': mistake.index,
-        'end': mistake.index + mistake.length,
-        'type': 'spelling',
-        'message': mistake.message,
-      });
-    }
-
-    for (final mistake in analysis.grammarMistakes) {
-      final index = text.indexOf(mistake.target);
-      if (index != -1) {
-        allHighlights.add({
-          'start': index,
-          'end': index + mistake.target.length,
-          'type': 'grammar',
-          'message': mistake.message,
-        });
-      }
-    }
-
-    for (final claim in analysis.claims) {
-      final index = text.indexOf(claim.target);
-      if (index != -1) {
-        allHighlights.add({
-          'start': index,
-          'end': index + claim.target.length,
-          'type': 'claim',
-          'verificationResult': claim.verificationResult,
-          'explanation': claim.explanation,
-        });
-      }
-    }
-
-    allHighlights.sort((a, b) {
-      final startComparison = a['start'].compareTo(b['start']);
-      if (startComparison == 0) {
-        return b['end'].compareTo(a['end']);
-      }
-      return startComparison;
-    });
-
-    if (allHighlights.isEmpty) {
-      spans.add(TextSpan(
-        text: text,
-        style: TextStyle(color: CustomColors.primary),
-      ));
-    } else {
-      int lastIndex = 0;
-
-      final List<Map<String, dynamic>> activeHighlights = [];
-
-      for (int i = 0; i < text.length; i++) {
-        bool highlightsChanged = false;
-
-        for (final highlight in allHighlights) {
-          if (highlight['start'] == i) {
-            activeHighlights.add(highlight);
-            highlightsChanged = true;
-          }
-        }
-
-        for (int j = activeHighlights.length - 1; j >= 0; j--) {
-          if (activeHighlights[j]['end'] == i) {
-            activeHighlights.removeAt(j);
-            highlightsChanged = true;
-          }
-        }
-
-        if (highlightsChanged || i == text.length - 1) {
-          if (i > lastIndex) {
-            final spanText = text.substring(lastIndex, i);
-
-            if (activeHighlights.isEmpty) {
-              spans.add(
-                TextSpan(
-                  text: spanText,
-                  style: TextStyle(color: CustomColors.primary),
-                ),
-              );
-            } else {
-              Color textColor = CustomColors.primary;
-              Color backgroundColor = Colors.transparent;
-              TextDecoration textDecoration = TextDecoration.none;
-              Color decorationColor = Colors.transparent;
-
-              for (final highlight in activeHighlights) {
-                switch (highlight['type']) {
-                  case 'spelling':
-                    textColor = CustomColors.spellingMistake;
-                    break;
-                  case 'grammar':
-                    backgroundColor = CustomColors.grammarMistake;
-                    break;
-                  case 'claim':
-                    textDecoration = TextDecoration.underline;
-                    decorationColor = Colors.black;
-                    break;
-                }
-              }
-
-              spans.add(
-                TextSpan(
-                  text: spanText,
-                  style: TextStyle(
-                    color: textColor,
-                    backgroundColor: backgroundColor,
-                    decoration: textDecoration,
-                    decorationColor: decorationColor,
-                  ),
-                ),
-              );
-            }
-          }
-
-          lastIndex = i;
-        }
-      }
-
-      if (lastIndex < text.length) {
-        spans.add(
-          TextSpan(
-            text: text.substring(lastIndex),
-            style: TextStyle(color: CustomColors.primary),
-          ),
-        );
-      }
-    }
-
-    return RichText(text: TextSpan(children: spans));
+Widget _buildTextWithHighlights(String text, Analysis response) {
+  // If text is empty, return empty container
+  if (text.isEmpty) {
+    return Container();
   }
+
+  // Create a list to track styling for each character
+  List<Map<String, dynamic>> styles = List.generate(
+    text.length,
+    (_) => {
+      'color': CustomColors.primary,
+      'backgroundColor': null,
+      'decoration': null,
+      'decorationColor': null,
+    }
+  );
+
+  // Apply grammar mistake highlights (yellow background)
+  for (var mistake in response.grammarMistakes) {
+    int index = text.indexOf(mistake.target);
+    if (index != -1) {
+      for (int i = index; i < index + mistake.target.length && i < text.length; i++) {
+        styles[i]['backgroundColor'] = CustomColors.grammarMistake;
+      }
+    }
+  }
+
+  // Apply spelling mistake highlights (red text)
+  for (var mistake in response.spellingMistakes) {
+    int start = mistake.index;
+    int end = start + mistake.length;
+
+    for (int i = start; i < end && i < text.length; i++) {
+      styles[i]['color'] = CustomColors.spellingMistake;
+    }
+  }
+
+  // Apply claim highlights (underline with color based on verification)
+  for (var claim in response.claims) {
+    int index = text.indexOf(claim.target);
+    if (index != -1) {
+      Color decorationColor;
+      switch (claim.verificationResult) {
+        case VerificationResult.TRUE:
+          decorationColor = Colors.green;
+          break;
+        case VerificationResult.FALSE:
+          decorationColor = Colors.red;
+          break;
+        case VerificationResult.UNCERTAIN:
+          decorationColor = Colors.orange;
+          break;
+      }
+
+      for (int i = index; i < index + claim.target.length && i < text.length; i++) {
+        styles[i]['decoration'] = TextDecoration.underline;
+        styles[i]['decorationColor'] = decorationColor;
+      }
+    }
+  }
+
+  // Build text spans by grouping characters with the same styling
+  List<InlineSpan> spans = [];
+  String currentText = '';
+  Map<String, dynamic>? currentStyle = styles.isNotEmpty ? Map.from(styles[0]) : null;
+
+  for (int i = 0; i < text.length; i++) {
+    bool styleChanged = i > 0 && (
+      styles[i]['color'] != currentStyle?['color'] ||
+      styles[i]['backgroundColor'] != currentStyle?['backgroundColor'] ||
+      styles[i]['decoration'] != currentStyle?['decoration'] ||
+      styles[i]['decorationColor'] != currentStyle?['decorationColor']
+    );
+
+    if (styleChanged) {
+      // Add the accumulated text with previous style
+      spans.add(TextSpan(
+        text: currentText,
+        style: TextStyle(
+          color: currentStyle?['color'],
+          backgroundColor: currentStyle?['backgroundColor'],
+          decoration: currentStyle?['decoration'],
+          decorationColor: currentStyle?['decorationColor'],
+        ),
+      ));
+
+      // Reset for new style
+      currentText = '';
+      currentStyle = Map.from(styles[i]);
+    }
+
+    currentText += text[i];
+  }
+
+  // Add the last span
+  if (currentText.isNotEmpty && currentStyle != null) {
+    spans.add(TextSpan(
+      text: currentText,
+      style: TextStyle(
+        color: currentStyle['color'],
+        backgroundColor: currentStyle['backgroundColor'],
+        decoration: currentStyle['decoration'],
+        decorationColor: currentStyle['decorationColor'],
+      ),
+    ));
+  }
+
+  return RichText(
+    text: TextSpan(children: spans),
+  );
+}
+
 
   Widget _buildSpellingMistakesList(
     List<SpellingMistake> mistakes,
