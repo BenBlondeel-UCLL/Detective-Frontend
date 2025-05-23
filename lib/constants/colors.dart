@@ -10,4 +10,7 @@ class CustomColors {
   static const Color quaternary = Color.fromARGB(255, 209, 225, 232);
 
   static const Color buttonColor = Color.fromARGB(255, 30, 140, 230);
+
+  static const Color spellingMistake = Color.fromARGB(100, 255, 0, 0);
+  static const Color grammarMistake = Color.fromARGB(100, 255, 165, 0);
 }
