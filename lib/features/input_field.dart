@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class InputField extends StatelessWidget {
   final TextEditingController textEditingController;
+  final bool isLoading;
 
-  const InputField({super.key, required this.textEditingController});
+  const InputField({super.key, required this.textEditingController, required this.isLoading});
 
   @override
   Widget build(BuildContext context) {
@@ -14,6 +15,7 @@ class InputField extends StatelessWidget {
         keyboardType: TextInputType.multiline,
         minLines: 4,
         maxLines: 20,
+        readOnly: isLoading,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
           hintText: 'Give your article',
