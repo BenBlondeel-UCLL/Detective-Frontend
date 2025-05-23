@@ -67,10 +67,6 @@ class _HomeState extends State<Home> {
                             Navigator.pushNamed(
                               context,
                               '/result',
-                              arguments: {
-                                'response': response,
-                                'text': textEditingController.text,
-                              },
                             );
                           }
                         } catch (e) {
