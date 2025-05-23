@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:detective/constants/sizes.dart';
 import 'package:detective/domain/analysis.dart';
 import 'package:detective/features/claim_card.dart';
 import 'package:detective/features/grammar_card.dart';
 import 'package:detective/features/header.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/colors.dart';
 import '../domain/claim.dart';
@@ -12,16 +15,31 @@ import '../domain/spelling_mistake.dart';
 import '../features/spelling_card.dart';
 import '../features/underlined_title.dart';
 
-class Result extends StatelessWidget {
-  const Result({super.key});
+class Result extends StatefulWidget {
+  @override
+  _Result createState() => _Result();
+}
+
+class _Result extends State<Result> {
+  Analysis _response = Analysis(spellingMistakes: [], grammarMistakes: [], claims: []);
+  String _text = "";
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSavedValue();
+  }
+
+  void _loadSavedValue() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _response = Analysis.fromJson(jsonDecode(prefs.getString('response')!));
+      _text = prefs.getString('text') ?? "";
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    final args =
-        ModalRoute.of(context)?.settings.arguments as Map<String, dynamic>?;
-    final Analysis response = args?['response'];
-    final String text = args?['text'];
-
     return Scaffold(
       body: Column(
         children: [
@@ -49,7 +67,7 @@ class Result extends StatelessWidget {
                           children: [
                             UnderlinedTitle(title: "Analysed Article"),
                             const SizedBox(height: Sizes.defaultSpace),
-                            _buildTextWithHighlights(text, response),
+                            _buildTextWithHighlights(_text, _response),
                           ],
                         ),
                       ),
@@ -78,12 +96,12 @@ class Result extends StatelessWidget {
                                 UnderlinedTitle(title: "Spelling & Grammar"),
                                 const SizedBox(height: Sizes.defaultSpace),
                                 _buildSpellingMistakesList(
-                                  response.spellingMistakes,
-                                  text,
+                                  _response.spellingMistakes,
+                                  _text,
                                 ),
                                 const SizedBox(height: Sizes.defaultSpace),
                                 _buildGrammarMistakesList(
-                                  response.grammarMistakes,
+                                  _response.grammarMistakes,
                                 ),
                               ],
                             ),
@@ -106,7 +124,7 @@ class Result extends StatelessWidget {
                               children: [
                                 UnderlinedTitle(title: "Claims"),
                                 const SizedBox(height: Sizes.defaultSpace),
-                                _buildClaimsList(response.claims),
+                                _buildClaimsList(_response.claims),
                               ],
                             ),
                           ),

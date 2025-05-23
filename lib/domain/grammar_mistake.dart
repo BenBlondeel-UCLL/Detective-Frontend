@@ -16,4 +16,12 @@ class GrammarMistake {
       message: json['message'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'target': target,
+      'code': code,
+      'message': message,
+    };
+  }
 }

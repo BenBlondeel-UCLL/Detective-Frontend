@@ -5,7 +5,8 @@ import 'package:detective/pages/signup.dart';
 import 'package:detective/pages/home.dart';
 import 'package:flutter/material.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 

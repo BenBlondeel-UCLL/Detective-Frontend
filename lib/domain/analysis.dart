@@ -29,4 +29,12 @@ class Analysis {
           [],
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'spellingMistakes': spellingMistakes.map((item) => item.toJson()).toList(),
+      'grammarMistakes': grammarMistakes.map((item) => item.toJson()).toList(),
+      'claims': claims.map((item) => item.toJson()).toList(),
+    };
+  }
 }

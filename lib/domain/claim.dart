@@ -25,6 +25,15 @@ class Claim {
     if (value == 'FALSE') return VerificationResult.FALSE;
     return VerificationResult.UNCERTAIN;
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'target': target,
+      'verification_result': verificationResult.toString().split('.').last,
+      'explanation': explanation,
+      'url': url,
+    };
+  }
 }
 
 enum VerificationResult {

@@ -1,6 +1,9 @@
+import 'dart:convert';
+
 import 'package:detective/domain/analysis.dart';
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../api//http_client.dart';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
@@ -54,6 +57,10 @@ class _HomeState extends State<Home> {
                           Analysis response = await client.postHttp(
                             textEditingController.text,
                           );
+
+                          SharedPreferences prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('response', jsonEncode(response.toJson()));
+                          await prefs.setString('text', textEditingController.text);
 
                           if (context.mounted) {
                             Navigator.pushNamed(

@@ -22,4 +22,14 @@ class SpellingMistake {
       message: json['message'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'target': target,
+      'code': code,
+      'index': index,
+      'length': length,
+      'message': message,
+    };
+  }
 }
