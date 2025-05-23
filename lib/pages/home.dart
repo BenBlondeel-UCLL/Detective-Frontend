@@ -40,7 +40,7 @@ class _HomeState extends State<Home> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  InputField(textEditingController: textEditingController),
+                  InputField(textEditingController: textEditingController, isLoading: _isLoading),
                   const SizedBox(height: Sizes.spaceBetweenItems),
                   SizedBox(
                     width: Sizes.buttonWidth,
@@ -51,6 +51,7 @@ class _HomeState extends State<Home> {
                           : () async {
                         setState(() {
                           _isLoading = true;
+
                         });
 
                         try {
@@ -66,10 +67,6 @@ class _HomeState extends State<Home> {
                             Navigator.pushNamed(
                               context,
                               '/result',
-                              arguments: {
-                                'response': response,
-                                'text': textEditingController.text,
-                              },
                             );
                           }
                         } catch (e) {

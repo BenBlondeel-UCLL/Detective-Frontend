@@ -40,97 +40,137 @@ class _Result extends State<Result> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isLargeScreen = screenWidth > 900;
+    final horizontalPadding = isLargeScreen ? 64.0 : 16.0;
+
     return Scaffold(
       body: Column(
         children: [
           const Header(title: "Analysis"),
           Expanded(
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 32, horizontal: 64),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: EdgeInsets.symmetric(
+                  vertical: isLargeScreen ? 32 : 16,
+                  horizontal: horizontalPadding
+              ),
+              child: isLargeScreen
+                  ? _buildWideLayout()
+                  : _buildNarrowLayout(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildWideLayout() {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          flex: 6,
+          child: _buildArticleContainer(),
+        ),
+        const SizedBox(width: Sizes.spaceBetweenSections),
+        Expanded(
+          flex: 4,
+          child: _buildAnalysisTabsContainer(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNarrowLayout() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 300,
+          child: _buildArticleContainer(),
+        ),
+        const SizedBox(height: 16),
+        Expanded(
+          child: _buildAnalysisTabsContainer(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildArticleContainer() {
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
+        color: CustomColors.quaternary,
+      ),
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          children: [
+            UnderlinedTitle(title: "Analysed Article"),
+            const SizedBox(height: Sizes.defaultSpace),
+            _buildTextWithHighlights(_text, _response),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnalysisTabsContainer() {
+    return DefaultTabController(
+      length: 3,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: CustomColors.quaternary,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(Sizes.borderRadiusMedium),
+                topRight: Radius.circular(Sizes.borderRadiusMedium),
+              ),
+            ),
+            child: TabBar(
+              tabs: const [
+                Tab(text: "Spelling"),
+                Tab(text: "Grammar"),
+                Tab(text: "Claims"),
+              ],
+              labelColor: CustomColors.primary,
+              indicatorColor: CustomColors.primary,
+              unselectedLabelColor: CustomColors.primary.withOpacity(0.6),
+            ),
+          ),
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(Sizes.borderRadiusMedium),
+                  bottomRight: Radius.circular(Sizes.borderRadiusMedium),
+                ),
+                color: CustomColors.quaternary,
+              ),
+              width: double.infinity,
+              child: TabBarView(
                 children: [
-                  Expanded(
-                    flex: 5,
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(
-                          Sizes.borderRadiusMedium,
-                        ),
-                        color: CustomColors.quaternary,
-                      ),
-                      child: SingleChildScrollView(
-                        padding: const EdgeInsets.all(32),
-                        child: Column(
-                          children: [
-                            UnderlinedTitle(title: "Analysed Article"),
-                            const SizedBox(height: Sizes.defaultSpace),
-                            _buildTextWithHighlights(_text, _response),
-                          ],
-                        ),
-                      ),
+                  // Spelling tab
+                  SingleChildScrollView(
+                    child: _buildSpellingMistakesList(
+                      _response.spellingMistakes,
+                      _text,
                     ),
                   ),
-                  const SizedBox(width: Sizes.spaceBetweenSections),
-                  Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              Sizes.borderRadiusMedium,
-                            ),
-                            color: CustomColors.quaternary,
-                          ),
-                          width: double.infinity,
-                          height: 250,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                UnderlinedTitle(title: "Spelling & Grammar"),
-                                const SizedBox(height: Sizes.defaultSpace),
-                                _buildSpellingMistakesList(
-                                  _response.spellingMistakes,
-                                  _text,
-                                ),
-                                const SizedBox(height: Sizes.defaultSpace),
-                                _buildGrammarMistakesList(
-                                  _response.grammarMistakes,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: Sizes.spaceBetweenSections),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              Sizes.borderRadiusMedium,
-                            ),
-                            color: CustomColors.quaternary,
-                          ),
-                          width: double.infinity,
-                          height: 250,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                UnderlinedTitle(title: "Claims"),
-                                const SizedBox(height: Sizes.defaultSpace),
-                                _buildClaimsList(_response.claims),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                  // Grammar tab
+                  SingleChildScrollView(
+                    child: _buildGrammarMistakesList(
+                      _response.grammarMistakes,
                     ),
+                  ),
+                  // Claims tab
+                  SingleChildScrollView(
+                    child: _buildClaimsList(_response.claims),
                   ),
                 ],
               ),
@@ -248,8 +288,8 @@ Widget _buildTextWithHighlights(String text, Analysis response) {
     ));
   }
 
-  return RichText(
-    text: TextSpan(children: spans),
+  return SelectableText.rich(
+    TextSpan(children: spans),
   );
 }
 

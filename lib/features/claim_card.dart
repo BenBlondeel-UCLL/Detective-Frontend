@@ -1,5 +1,6 @@
 import 'package:detective/domain/claim.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/colors.dart';
 
@@ -48,9 +49,7 @@ class ClaimCard extends StatelessWidget {
                   ),
                   child: Text(
                     claim.verificationResult.name,
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
                 const SizedBox(width: 8),
@@ -81,13 +80,24 @@ class ClaimCard extends StatelessWidget {
                 ),
               ),
               ...claim.url.map(
-                    (url) => Padding(
+                (url) => Padding(
                   padding: const EdgeInsets.only(top: 2),
-                  child: Text(
-                    url,
-                    style: TextStyle(
-                      color: Colors.blue,
-                      decoration: TextDecoration.underline,
+                  child: InkWell(
+                    onTap: () async {
+                      final uri = Uri.parse(url);
+                      if (await canLaunchUrl(uri)) {
+                        await launchUrl(
+                          uri,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    },
+                    child: Text(
+                      url,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
                     ),
                   ),
                 ),
