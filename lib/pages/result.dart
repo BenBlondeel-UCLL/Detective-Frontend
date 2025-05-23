@@ -51,7 +51,7 @@ class _Result extends State<Result> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(
-                    flex: 5,
+                    flex: 6,
                     child: Container(
                       width: double.infinity,
                       height: double.infinity,
@@ -75,61 +75,67 @@ class _Result extends State<Result> {
                   ),
                   const SizedBox(width: Sizes.spaceBetweenSections),
                   Expanded(
-                    flex: 5,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              Sizes.borderRadiusMedium,
+                    flex: 4,
+                    child: DefaultTabController(
+                      length: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: CustomColors.quaternary,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(Sizes.borderRadiusMedium),
+                                topRight: Radius.circular(Sizes.borderRadiusMedium),
+                              ),
                             ),
-                            color: CustomColors.quaternary,
-                          ),
-                          width: double.infinity,
-                          height: 250,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                UnderlinedTitle(title: "Spelling & Grammar"),
-                                const SizedBox(height: Sizes.defaultSpace),
-                                _buildSpellingMistakesList(
-                                  _response.spellingMistakes,
-                                  _text,
-                                ),
-                                const SizedBox(height: Sizes.defaultSpace),
-                                _buildGrammarMistakesList(
-                                  _response.grammarMistakes,
-                                ),
+                            child: TabBar(
+                              tabs: const [
+                                Tab(text: "Spelling"),
+                                Tab(text: "Grammar"),
+                                Tab(text: "Claims"),
                               ],
+                              labelColor: CustomColors.primary,
+                              indicatorColor: CustomColors.primary,
+                              unselectedLabelColor: CustomColors.primary.withOpacity(0.6),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: Sizes.spaceBetweenSections),
-                        Container(
-                          padding: const EdgeInsets.all(16),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              Sizes.borderRadiusMedium,
+                          Expanded(
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  bottomLeft: Radius.circular(Sizes.borderRadiusMedium),
+                                  bottomRight: Radius.circular(Sizes.borderRadiusMedium),
+                                ),
+                                color: CustomColors.quaternary,
+                              ),
+                              width: double.infinity,
+                              child: TabBarView(
+                                children: [
+                                  // Spelling tab
+                                  SingleChildScrollView(
+                                    child: _buildSpellingMistakesList(
+                                      _response.spellingMistakes,
+                                      _text,
+                                    ),
+                                  ),
+                                  // Grammar tab
+                                  SingleChildScrollView(
+                                    child: _buildGrammarMistakesList(
+                                      _response.grammarMistakes,
+                                    ),
+                                  ),
+                                  // Claims tab
+                                  SingleChildScrollView(
+                                    child: _buildClaimsList(_response.claims),
+                                  ),
+                                ],
+                              ),
                             ),
-                            color: CustomColors.quaternary,
                           ),
-                          width: double.infinity,
-                          height: 250,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                UnderlinedTitle(title: "Claims"),
-                                const SizedBox(height: Sizes.defaultSpace),
-                                _buildClaimsList(_response.claims),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ],
