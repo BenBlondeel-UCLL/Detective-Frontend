@@ -1,3 +1,4 @@
+import 'package:detective/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';
@@ -11,9 +12,10 @@ class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HistoryDrawer(),
       body: Column(
         children: [
-          const Header(title: "About"),
+          Header(title: "About"),
           Text(
             "How does detective work?",
             style: TextStyle(fontSize: Sizes.fontSizeTitle, fontWeight: FontWeight.bold),

@@ -5,6 +5,7 @@ import 'package:detective/domain/analysis.dart';
 import 'package:detective/features/claim_card.dart';
 import 'package:detective/features/grammar_card.dart';
 import 'package:detective/features/header.dart';
+import 'package:detective/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -45,9 +46,10 @@ class _Result extends State<Result> {
     final horizontalPadding = isLargeScreen ? 64.0 : 16.0;
 
     return Scaffold(
+      drawer: HistoryDrawer(),
       body: Column(
         children: [
-          const Header(title: "Analysis"),
+          Header(title: "Analysis"),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(
