@@ -9,6 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/colors.dart';
+import '../domain/ai_content.dart';
 import '../domain/claim.dart';
 import '../domain/grammar_mistake.dart';
 import '../domain/spelling_mistake.dart';
@@ -21,7 +22,12 @@ class Result extends StatefulWidget {
 }
 
 class _Result extends State<Result> {
-  Analysis _response = Analysis(spellingMistakes: [], grammarMistakes: [], claims: []);
+  Analysis _response = Analysis(
+    spellingMistakes: [],
+    grammarMistakes: [],
+    claims: [],
+    aiContents: [],
+  );
   String _text = "";
 
   @override
@@ -51,12 +57,10 @@ class _Result extends State<Result> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(
-                  vertical: isLargeScreen ? 32 : 16,
-                  horizontal: horizontalPadding
+                vertical: isLargeScreen ? 32 : 16,
+                horizontal: horizontalPadding,
               ),
-              child: isLargeScreen
-                  ? _buildWideLayout()
-                  : _buildNarrowLayout(),
+              child: isLargeScreen ? _buildWideLayout() : _buildNarrowLayout(),
             ),
           ),
         ],
@@ -68,15 +72,9 @@ class _Result extends State<Result> {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          flex: 6,
-          child: _buildArticleContainer(),
-        ),
+        Expanded(flex: 5, child: _buildArticleContainer()),
         const SizedBox(width: Sizes.spaceBetweenSections),
-        Expanded(
-          flex: 4,
-          child: _buildAnalysisTabsContainer(),
-        ),
+        Expanded(flex: 5, child: _buildAnalysisTabsContainer()),
       ],
     );
   }
@@ -84,14 +82,9 @@ class _Result extends State<Result> {
   Widget _buildNarrowLayout() {
     return Column(
       children: [
-        SizedBox(
-          height: 300,
-          child: _buildArticleContainer(),
-        ),
+        SizedBox(height: 300, child: _buildArticleContainer()),
         const SizedBox(height: 16),
-        Expanded(
-          child: _buildAnalysisTabsContainer(),
-        ),
+        Expanded(child: _buildAnalysisTabsContainer()),
       ],
     );
   }
@@ -119,7 +112,7 @@ class _Result extends State<Result> {
 
   Widget _buildAnalysisTabsContainer() {
     return DefaultTabController(
-      length: 3,
+      length: 4,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -132,10 +125,39 @@ class _Result extends State<Result> {
               ),
             ),
             child: TabBar(
-              tabs: const [
-                Tab(text: "Spelling"),
-                Tab(text: "Grammar"),
-                Tab(text: "Claims"),
+              tabs: [
+                Tab(
+                  child: Column(
+                    children: [
+                      Text("Spelling"),
+                      Text("${_response.spellingMistakes.length}"),
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Column(
+                    children: [
+                      Text("Grammar"),
+                      Text("${_response.grammarMistakes.length}"),
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Column(
+                    children: [
+                      Text("Claims"),
+                      Text("${_response.claims.length}"),
+                    ],
+                  ),
+                ),
+                Tab(
+                  child: Column(
+                    children: [
+                      Text("AI"),
+                      Text("${_response.aiContents.length}"),
+                    ],
+                  ),
+                ),
               ],
               labelColor: CustomColors.primary,
               indicatorColor: CustomColors.primary,
@@ -164,13 +186,14 @@ class _Result extends State<Result> {
                   ),
                   // Grammar tab
                   SingleChildScrollView(
-                    child: _buildGrammarMistakesList(
-                      _response.grammarMistakes,
-                    ),
+                    child: _buildGrammarMistakesList(_response.grammarMistakes),
                   ),
                   // Claims tab
                   SingleChildScrollView(
                     child: _buildClaimsList(_response.claims),
+                  ),
+                  SingleChildScrollView(
+                    child: _buildAiContentsList(_response.aiContents),
                   ),
                 ],
               ),
@@ -181,118 +204,174 @@ class _Result extends State<Result> {
     );
   }
 
-Widget _buildTextWithHighlights(String text, Analysis response) {
-  // If text is empty, return empty container
-  if (text.isEmpty) {
-    return Container();
-  }
-
-  // Create a list to track styling for each character
-  List<Map<String, dynamic>> styles = List.generate(
-    text.length,
-    (_) => {
-      'color': CustomColors.primary,
-      'backgroundColor': null,
-      'decoration': null,
-      'decorationColor': null,
+  Widget _buildTextWithHighlights(String text, Analysis response) {
+    // If text is empty, return empty container
+    if (text.isEmpty) {
+      return Container();
     }
-  );
 
-  // Apply grammar mistake highlights (yellow background)
-  for (var mistake in response.grammarMistakes) {
-    int index = text.indexOf(mistake.target);
-    if (index != -1) {
-      for (int i = index; i < index + mistake.target.length && i < text.length; i++) {
-        styles[i]['backgroundColor'] = CustomColors.grammarMistake;
-      }
-    }
-  }
-
-  // Apply spelling mistake highlights (red text)
-  for (var mistake in response.spellingMistakes) {
-    int start = mistake.index;
-    int end = start + mistake.length;
-
-    for (int i = start; i < end && i < text.length; i++) {
-      styles[i]['color'] = CustomColors.spellingMistake;
-    }
-  }
-
-  // Apply claim highlights (underline with color based on verification)
-  for (var claim in response.claims) {
-    int index = text.indexOf(claim.target);
-    if (index != -1) {
-      Color decorationColor;
-      switch (claim.verificationResult) {
-        case VerificationResult.TRUE:
-          decorationColor = Colors.green;
-          break;
-        case VerificationResult.FALSE:
-          decorationColor = Colors.red;
-          break;
-        case VerificationResult.UNCERTAIN:
-          decorationColor = Colors.orange;
-          break;
-      }
-
-      for (int i = index; i < index + claim.target.length && i < text.length; i++) {
-        styles[i]['decoration'] = TextDecoration.underline;
-        styles[i]['decorationColor'] = decorationColor;
-      }
-    }
-  }
-
-  // Build text spans by grouping characters with the same styling
-  List<InlineSpan> spans = [];
-  String currentText = '';
-  Map<String, dynamic>? currentStyle = styles.isNotEmpty ? Map.from(styles[0]) : null;
-
-  for (int i = 0; i < text.length; i++) {
-    bool styleChanged = i > 0 && (
-      styles[i]['color'] != currentStyle?['color'] ||
-      styles[i]['backgroundColor'] != currentStyle?['backgroundColor'] ||
-      styles[i]['decoration'] != currentStyle?['decoration'] ||
-      styles[i]['decorationColor'] != currentStyle?['decorationColor']
+    // Create a list to track styling for each character
+    List<Map<String, dynamic>> styles = List.generate(
+      text.length,
+      (_) => {
+        'color': CustomColors.primary,
+        'backgroundColor': null,
+        'decoration': null,
+        'decorationColor': null,
+      },
     );
 
-    if (styleChanged) {
-      // Add the accumulated text with previous style
-      spans.add(TextSpan(
-        text: currentText,
-        style: TextStyle(
-          color: currentStyle?['color'],
-          backgroundColor: currentStyle?['backgroundColor'],
-          decoration: currentStyle?['decoration'],
-          decorationColor: currentStyle?['decorationColor'],
-        ),
-      ));
-
-      // Reset for new style
-      currentText = '';
-      currentStyle = Map.from(styles[i]);
+    // Apply grammar mistake highlights (yellow background)
+    for (var mistake in response.grammarMistakes) {
+      int index = text.indexOf(mistake.target);
+      if (index != -1) {
+        for (
+          int i = index;
+          i < index + mistake.target.length && i < text.length;
+          i++
+        ) {
+          styles[i]['backgroundColor'] = CustomColors.grammarMistake;
+        }
+      }
     }
 
-    currentText += text[i];
+    // Apply spelling mistake highlights (red text)
+    for (var mistake in response.spellingMistakes) {
+      int start = mistake.index;
+      int end = start + mistake.length;
+
+      for (int i = start; i < end && i < text.length; i++) {
+        styles[i]['color'] = CustomColors.spellingMistake;
+      }
+    }
+
+    // Apply claim highlights (underline with color based on verification)
+    for (var claim in response.claims) {
+      int index = text.indexOf(claim.target);
+      if (index != -1) {
+        Color decorationColor;
+        switch (claim.verificationResult) {
+          case VerificationResult.TRUE:
+            decorationColor = Colors.green;
+            break;
+          case VerificationResult.FALSE:
+            decorationColor = Colors.red;
+            break;
+          case VerificationResult.UNCERTAIN:
+            decorationColor = Colors.orange;
+            break;
+        }
+
+        for (
+          int i = index;
+          i < index + claim.target.length && i < text.length;
+          i++
+        ) {
+          styles[i]['decoration'] = TextDecoration.underline;
+          styles[i]['decorationColor'] = decorationColor;
+        }
+      }
+    }
+
+    // Build text spans by grouping characters with the same styling
+    List<InlineSpan> spans = [];
+    String currentText = '';
+    Map<String, dynamic>? currentStyle =
+        styles.isNotEmpty ? Map.from(styles[0]) : null;
+
+    for (int i = 0; i < text.length; i++) {
+      bool styleChanged =
+          i > 0 &&
+          (styles[i]['color'] != currentStyle?['color'] ||
+              styles[i]['backgroundColor'] !=
+                  currentStyle?['backgroundColor'] ||
+              styles[i]['decoration'] != currentStyle?['decoration'] ||
+              styles[i]['decorationColor'] != currentStyle?['decorationColor']);
+
+      if (styleChanged) {
+        // Add the accumulated text with previous style
+        spans.add(
+          TextSpan(
+            text: currentText,
+            style: TextStyle(
+              color: currentStyle?['color'],
+              backgroundColor: currentStyle?['backgroundColor'],
+              decoration: currentStyle?['decoration'],
+              decorationColor: currentStyle?['decorationColor'],
+            ),
+          ),
+        );
+
+        // Reset for new style
+        currentText = '';
+        currentStyle = Map.from(styles[i]);
+      }
+
+      currentText += text[i];
+    }
+
+    // Add the last span
+    if (currentText.isNotEmpty && currentStyle != null) {
+      spans.add(
+        TextSpan(
+          text: currentText,
+          style: TextStyle(
+            color: currentStyle['color'],
+            backgroundColor: currentStyle['backgroundColor'],
+            decoration: currentStyle['decoration'],
+            decorationColor: currentStyle['decorationColor'],
+          ),
+        ),
+      );
+    }
+
+    return SelectableText.rich(TextSpan(children: spans));
   }
 
-  // Add the last span
-  if (currentText.isNotEmpty && currentStyle != null) {
-    spans.add(TextSpan(
-      text: currentText,
-      style: TextStyle(
-        color: currentStyle['color'],
-        backgroundColor: currentStyle['backgroundColor'],
-        decoration: currentStyle['decoration'],
-        decorationColor: currentStyle['decorationColor'],
-      ),
-    ));
+  Widget _buildAiContentsList(List<AiContent> aiContents) {
+    if (aiContents.isEmpty) {
+      return const Text(
+        "No AI-generated content detected.",
+        style: TextStyle(color: CustomColors.primary),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ...aiContents.map((content) {
+          return Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  content.isAiGenerated
+                      ? "This content is likely AI-generated."
+                      : "This content is likely human-written.",
+                  style: TextStyle(
+                    color: CustomColors.primary.withOpacity(0.6),
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
+                const SizedBox(height: Sizes.spaceBetweenItems),
+                Text(
+                  content.target,
+                  style: TextStyle(
+                    color: CustomColors.primary,
+                    fontStyle:
+                        content.isAiGenerated
+                            ? FontStyle.italic
+                            : FontStyle.normal,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ],
+    );
   }
-
-  return SelectableText.rich(
-    TextSpan(children: spans),
-  );
-}
-
 
   Widget _buildSpellingMistakesList(
     List<SpellingMistake> mistakes,
@@ -308,21 +387,10 @@ Widget _buildTextWithHighlights(String text, Analysis response) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Spelling mistakes: ${mistakes.length}",
-          style: TextStyle(
-            color: CustomColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
         ...mistakes.map(
           (mistake) => Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: SpellingCard(
-              mistake: mistake,
-              text: text,
-            ),
+            child: SpellingCard(mistake: mistake, text: text),
           ),
         ),
       ],
@@ -340,20 +408,10 @@ Widget _buildTextWithHighlights(String text, Analysis response) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Grammar issues: ${mistakes.length}",
-          style: TextStyle(
-            color: CustomColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
         ...mistakes.map(
           (mistake) => Padding(
             padding: const EdgeInsets.only(bottom: 8),
-            child: GrammarCard(
-              mistake: mistake,
-            ),
+            child: GrammarCard(mistake: mistake),
           ),
         ),
       ],
@@ -371,18 +429,8 @@ Widget _buildTextWithHighlights(String text, Analysis response) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "Verified claims: ${claims.length}",
-          style: TextStyle(
-            color: CustomColors.primary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        const SizedBox(height: 8),
         ...claims.map((claim) {
-          return ClaimCard(
-            claim: claim,
-          );
+          return ClaimCard(claim: claim);
         }),
       ],
     );

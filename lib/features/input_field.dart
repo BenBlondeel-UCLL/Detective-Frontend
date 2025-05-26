@@ -14,7 +14,7 @@ class InputField extends StatelessWidget {
         controller: textEditingController,
         keyboardType: TextInputType.multiline,
         minLines: 4,
-        maxLines: 20,
+        maxLines: 14,
         readOnly: isLoading,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
