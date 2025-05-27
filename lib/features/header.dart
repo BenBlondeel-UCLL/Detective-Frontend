@@ -1,3 +1,4 @@
+import 'package:detective/api/http_client.dart';
 import 'package:detective/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -5,7 +6,11 @@ import 'package:detective/constants/colors.dart';
 
 class Header extends StatelessWidget {
   final String title;
-  const Header({super.key, required this.title});
+  Header({super.key, required this.title});
+
+
+  final client = HttpClient();
+
 
   @override
   Widget build(BuildContext context) {
@@ -70,7 +75,7 @@ class Header extends StatelessWidget {
                 children: [
                   IconButton(
                     alignment: FractionalOffset.centerLeft,
-                    onPressed: () => Scaffold.of(context).openDrawer(),
+                    onPressed: () => {Scaffold.of(context).openDrawer()},
                     icon: const Icon(Icons.menu, color: CustomColors.secondary, size: Sizes.iconSize),
                   ),
                   Expanded(

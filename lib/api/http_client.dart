@@ -1,9 +1,14 @@
+import 'dart:convert';
+
 import 'package:detective/domain/analysis.dart';
+import 'package:detective/domain/analysis_history_response.dart';
 import 'package:detective/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:detective/domain/login_response.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+    
+    
 class HttpClient{
 
   final storage = FlutterSecureStorage();
@@ -11,10 +16,15 @@ class HttpClient{
   Future<Analysis> postHttp(String article) async {
     final dio = Dio();
 
+    final token = await storage.read(key: 'jwt');
+
     try {
       final response = await dio.post(
         '${Env.apiBasedUrl}/analyse',
         data: {'text': article},
+        options: Options(
+          headers: { 'Authorization': 'Bearer $token' }
+        ),
       );
       return Analysis.fromJson(response.data);
     } on DioException catch (e) {
@@ -93,5 +103,32 @@ class HttpClient{
         return error;
       }
     }
+
+    getHistory() async {
+      final token = await storage.read(key: 'jwt');
+      try{
+        final dio = Dio();
+        final response = await dio.get(
+          '${Env.apiBasedUrl}/analyse/history',
+          options: Options(
+            headers: { 'Authorization': 'Bearer $token' }
+          ),
+        );
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        print("this is the response: $response");
+        print("this is the response.data: ${response.data}");
+        print("this is the response.data[0]: ${response.data[0]}");
+        // final jsonData = AnalysisHistoryResponse.fromJson(response.data);
+        // print("this is the jsonData: $jsonData");
+        await prefs.setString('history', response.toString());
+        return response;
+      } on DioException catch (error) {
+        return error.response;
+      } catch (error) {
+        return error;
+      }
+    }
+
+
 
 }

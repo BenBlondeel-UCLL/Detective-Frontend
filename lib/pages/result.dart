@@ -17,8 +17,11 @@ import '../features/spelling_card.dart';
 import '../features/underlined_title.dart';
 
 class Result extends StatefulWidget {
+
+  const Result({super.key});
+
   @override
-  _Result createState() => _Result();
+  State<Result> createState() => _Result();
 }
 
 class _Result extends State<Result> {

@@ -119,6 +119,7 @@ class _LoginCardState extends State<LoginCard> {
                                 _status = response?.statusCode ?? -1;
                               });
                               if (_status == 200) {
+                                await client.getHistory();
                                 await Future.delayed(Duration(milliseconds: 2000));
                                 Navigator.pushNamed(context, '/');
                               }
