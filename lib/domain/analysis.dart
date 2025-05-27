@@ -1,4 +1,3 @@
-import 'package:detective/domain/ai_content.dart';
 import 'package:detective/domain/spelling_mistake.dart';
 import 'grammar_mistake.dart';
 import 'claim.dart';
@@ -7,7 +6,7 @@ class Analysis {
   final List<SpellingMistake> spellingMistakes;
   final List<GrammarMistake> grammarMistakes;
   final List<Claim> claims;
-  final List<AiContent> aiContents;
+  final bool aiContents;
 
   Analysis({
     required this.spellingMistakes,
@@ -30,10 +29,7 @@ class Analysis {
           ?.map((item) => Claim.fromJson(item))
           .toList() ??
           [],
-      aiContents: (json['aiContent'] as List?)
-          ?.map((item) => AiContent.fromJson(item))
-          .toList() ??
-          [],
+      aiContents: (json['aiContent'] as bool)
     );
   }
 
@@ -42,7 +38,7 @@ class Analysis {
       'spellingMistakes': spellingMistakes.map((item) => item.toJson()).toList(),
       'grammarMistakes': grammarMistakes.map((item) => item.toJson()).toList(),
       'claims': claims.map((item) => item.toJson()).toList(),
-      'aiContent': aiContents.map((item) => item.toJson()).toList(),
+      'aiContent': aiContents,
     };
   }
 }
