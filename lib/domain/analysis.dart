@@ -6,11 +6,13 @@ class Analysis {
   final List<SpellingMistake> spellingMistakes;
   final List<GrammarMistake> grammarMistakes;
   final List<Claim> claims;
+  final bool aiContents;
 
   Analysis({
     required this.spellingMistakes,
     required this.grammarMistakes,
     required this.claims,
+    required this.aiContents,
   });
 
   factory Analysis.fromJson(Map<String, dynamic> json) {
@@ -27,6 +29,7 @@ class Analysis {
           ?.map((item) => Claim.fromJson(item))
           .toList() ??
           [],
+      aiContents: (json['aiContent'] as bool)
     );
   }
 
@@ -35,6 +38,7 @@ class Analysis {
       'spellingMistakes': spellingMistakes.map((item) => item.toJson()).toList(),
       'grammarMistakes': grammarMistakes.map((item) => item.toJson()).toList(),
       'claims': claims.map((item) => item.toJson()).toList(),
+      'aiContent': aiContents,
     };
   }
 }

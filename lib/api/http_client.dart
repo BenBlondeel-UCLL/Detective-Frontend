@@ -15,6 +15,8 @@ class HttpClient{
 
   Future<Analysis> postHttp(String article) async {
     final dio = Dio();
+    
+    final token = await storage.read(key: 'jwt');
 
     final token = await storage.read(key: 'jwt');
 
