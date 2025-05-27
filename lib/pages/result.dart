@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/colors.dart';
-import '../domain/ai_content.dart';
 import '../domain/claim.dart';
 import '../domain/grammar_mistake.dart';
 import '../domain/spelling_mistake.dart';
@@ -17,6 +16,8 @@ import '../features/spelling_card.dart';
 import '../features/underlined_title.dart';
 
 class Result extends StatefulWidget {
+  const Result({super.key});
+
   @override
   _Result createState() => _Result();
 }
@@ -26,7 +27,7 @@ class _Result extends State<Result> {
     spellingMistakes: [],
     grammarMistakes: [],
     claims: [],
-    aiContents: [],
+    aiContents: false,
   );
   String _text = "";
 
@@ -154,14 +155,14 @@ class _Result extends State<Result> {
                   child: Column(
                     children: [
                       Text("AI"),
-                      Text("${_response.aiContents.length}"),
+                      Text("${_response.aiContents ? 1:0}"),
                     ],
                   ),
                 ),
               ],
               labelColor: CustomColors.primary,
               indicatorColor: CustomColors.primary,
-              unselectedLabelColor: CustomColors.primary.withOpacity(0.6),
+              unselectedLabelColor: CustomColors.primary.withValues(alpha:0.6),
             ),
           ),
           Expanded(
@@ -328,48 +329,29 @@ class _Result extends State<Result> {
     return SelectableText.rich(TextSpan(children: spans));
   }
 
-  Widget _buildAiContentsList(List<AiContent> aiContents) {
-    if (aiContents.isEmpty) {
-      return const Text(
-        "No AI-generated content detected.",
-        style: TextStyle(color: CustomColors.primary),
-      );
-    }
+  Widget _buildAiContentsList(bool aiContents) {
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        ...aiContents.map((content) {
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  content.isAiGenerated
-                      ? "This content is likely AI-generated."
-                      : "This content is likely human-written.",
-                  style: TextStyle(
-                    color: CustomColors.primary.withOpacity(0.6),
-                    fontStyle: FontStyle.italic,
-                  ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                aiContents
+                    ? "This content is likely AI-generated."
+                    : "This content is likely human-written.",
+                style: TextStyle(
+                  color: CustomColors.primary.withValues(alpha: 0.6),
+                  fontStyle: FontStyle.italic,
                 ),
-                const SizedBox(height: Sizes.spaceBetweenItems),
-                Text(
-                  content.target,
-                  style: TextStyle(
-                    color: CustomColors.primary,
-                    fontStyle:
-                        content.isAiGenerated
-                            ? FontStyle.italic
-                            : FontStyle.normal,
-                  ),
-                ),
-              ],
-            ),
-          );
-        }),
-      ],
+              ),
+            ],
+          ),
+        )
+      ]
     );
   }
 
