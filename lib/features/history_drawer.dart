@@ -2,8 +2,6 @@
 import 'dart:convert';
 
 import 'package:detective/constants/colors.dart';
-import 'package:detective/constants/sizes.dart';
-import 'package:detective/domain/analysis.dart';
 import 'package:detective/domain/analysis_history_response.dart';
 import 'package:flutter/material.dart';
 import 'package:detective/api/http_client.dart';
@@ -23,7 +21,7 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
 
   final client = HttpClient();
 
-  List<AnalysisHistoryResponse> _response = [];
+  List<AnalysisHistoryResponse> historyResponse = [];
   
   @override
   void initState() {
@@ -34,9 +32,12 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
 
   void _loadHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    final responseJsonList = jsonDecode(prefs.getString('history')!);
+    print(prefs.getKeys());
+    final responseJsonList = jsonDecode(prefs.getString('history') ?? '{}');
     setState(() {
-      _response = responseJsonList?.forEach((responseJson) => AnalysisHistoryResponse.fromJson(responseJson)).toList() ?? [];  
+      historyResponse = (responseJsonList as List)
+          .map((responseJson) => AnalysisHistoryResponse.fromJson(responseJson))
+          .toList();
     });
   }
 
@@ -68,13 +69,15 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                 Navigator.pushNamed(context, '/');
                 },
             ),
-            ListTile(
-              title: Text('login'),
-              subtitle: Text("2020-01-01"),
-              onTap: () {
-                print(_response);
-              } ,
-            ),
+            ...historyResponse.map(
+                (hist) => ListTile(
+                  leading: Icon(Icons.history),
+                  title: Text(hist.title),
+                  subtitle: Text(hist.createdAt),
+                  onTap: () {
+                  }
+                )
+            )
           ],
         ),
       );

@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:detective/domain/analysis.dart';
-import 'package:detective/domain/analysis_history_response.dart';
 import 'package:detective/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -115,10 +114,7 @@ class HttpClient{
           ),
         );
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        print("test");
-        final jsonData = AnalysisHistoryResponse.fromJson(response.data);
-        print("this is the jsonData: $jsonData");
-        await prefs.setString('history', jsonEncode(jsonData));
+        await prefs.setString('history', jsonEncode(response.data));
         return response;
       } on DioException catch (error) {
         return error.response;
