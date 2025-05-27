@@ -18,8 +18,6 @@ class HttpClient{
     
     final token = await storage.read(key: 'jwt');
 
-    final token = await storage.read(key: 'jwt');
-
     try {
       final response = await dio.post(
         '${Env.apiBasedUrl}/analyse',
@@ -117,12 +115,10 @@ class HttpClient{
           ),
         );
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        print("this is the response: $response");
-        print("this is the response.data: ${response.data}");
-        print("this is the response.data[0]: ${response.data[0]}");
-        // final jsonData = AnalysisHistoryResponse.fromJson(response.data);
-        // print("this is the jsonData: $jsonData");
-        await prefs.setString('history', response.toString());
+        print("test");
+        final jsonData = AnalysisHistoryResponse.fromJson(response.data);
+        print("this is the jsonData: $jsonData");
+        await prefs.setString('history', jsonEncode(jsonData));
         return response;
       } on DioException catch (error) {
         return error.response;
