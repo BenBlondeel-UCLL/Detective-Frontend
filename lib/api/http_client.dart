@@ -10,11 +10,16 @@ class HttpClient{
 
   Future<Analysis> postHttp(String article) async {
     final dio = Dio();
+    
+    final token = await storage.read(key: 'jwt');
 
     try {
       final response = await dio.post(
         '${Env.apiBasedUrl}/analyse',
         data: {'text': article},
+        options: Options(
+          headers: { 'Authorization': 'Bearer $token' }
+        ),
       );
       return Analysis.fromJson(response.data);
     } on DioException catch (e) {
