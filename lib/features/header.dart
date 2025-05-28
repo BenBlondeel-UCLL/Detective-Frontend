@@ -3,6 +3,7 @@ import 'package:detective/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:detective/constants/colors.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Header extends StatelessWidget {
   final String title;
@@ -110,9 +111,11 @@ class Header extends StatelessWidget {
                             const SizedBox(width: 8),
                             ElevatedButton(
                               onPressed: () {
-                                showLogoutConfirmationDialog(context, () {
+                                showLogoutConfirmationDialog(context, () async {
                                   Navigator.pushNamed(context, '/login');
                                   storage.delete(key: 'jwt');
+                                  SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  prefs.remove('history');
                                 });
                               },
                               style: ElevatedButton.styleFrom(
