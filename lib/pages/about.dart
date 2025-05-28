@@ -37,7 +37,7 @@ class About extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const UnderlinedTitle(title: "Medium length feature headline"), //TODO: Replace with real headline
+                          const UnderlinedTitle(title: "Medium length feature headline"),
                           const SizedBox(height: 32),
                           Text(
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
@@ -60,19 +60,19 @@ class About extends StatelessWidget {
                         children: [
                           InfoCard(
                               icon: Icons.language,
-                              title: "Medium Length Headline", //TODO: Replace with real headline
+                              title: "Medium Length Headline",
                               description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                           ),
                           const SizedBox(height: Sizes.spaceBetweenSections),
                           InfoCard(
                               icon: Icons.autorenew,
-                              title: "Medium Length Headline", //TODO: Replace with real headline
+                              title: "Medium Length Headline",
                               description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                           ),
                           const SizedBox(height: Sizes.spaceBetweenSections),
                           InfoCard(
                               icon: Icons.star_rate,
-                              title: "Medium Length Headline", //TODO: Replace with real headline
+                              title: "Medium Length Headline",
                               description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
                           ),
                         ],

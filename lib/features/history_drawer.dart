@@ -2,10 +2,13 @@
 import 'dart:convert';
 
 import 'package:detective/constants/colors.dart';
+import 'package:detective/constants/date_utils.dart';
 import 'package:detective/domain/analysis_history_response.dart';
 import 'package:flutter/material.dart';
 import 'package:detective/api/http_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../domain/result.dart';
 
 
 class HistoryDrawer extends StatefulWidget {
@@ -26,18 +29,18 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
   @override
   void initState() {
     super.initState();
-    _loadHistory();
+    loadHistory();
   }
 
 
-  void _loadHistory() async {
+  void loadHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print(prefs.getKeys());
-    final responseJsonList = jsonDecode(prefs.getString('history') ?? '{}');
+    final responseJsonList = jsonDecode(prefs.getString('history') ?? '[]');
     setState(() {
       historyResponse = (responseJsonList as List)
           .map((responseJson) => AnalysisHistoryResponse.fromJson(responseJson))
-          .toList();
+          .toList()
+          ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
     });
   }
 
@@ -73,8 +76,15 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                 (hist) => ListTile(
                   leading: Icon(Icons.history),
                   title: Text(hist.title),
-                  subtitle: Text(hist.createdAt),
-                  onTap: () {
+                  subtitle: Text(DateUtil.getDdMMyyyy(hist.createdAt)),
+                  onTap: () async {
+                      Result response = await client.getAnalysisById(hist.id);
+                      SharedPreferences prefs = await SharedPreferences.getInstance();
+                      await prefs.setString('response', jsonEncode(response.toJson()));
+                      Navigator.pushNamed(
+                        context,
+                        '/result',
+                      );
                   }
                 )
             )

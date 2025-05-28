@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:detective/domain/analysis.dart';
+import 'package:detective/domain/result.dart';
 import 'package:detective/features/history_drawer.dart';
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
@@ -53,16 +53,20 @@ class _HomeState extends State<Home> {
                           : () async {
                         setState(() {
                           _isLoading = true;
-
                         });
 
                         try {
-                          Analysis response = await client.postHttp(
+                          Result response = await client.postHttp(
                             textEditingController.text,
                           );
 
+                          print('response $response');
+                          print('response json: ${response.toJson()}');
+
+                          final historyResponse = await client.getHistory();
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           await prefs.setString('response', jsonEncode(response.toJson()));
+                          await prefs.setString('history', jsonEncode(historyResponse.data));
                           await prefs.setString('text', textEditingController.text);
 
                           if (context.mounted) {
