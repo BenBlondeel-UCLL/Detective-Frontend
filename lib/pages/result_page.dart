@@ -1,10 +1,11 @@
 import 'dart:convert';
 
 import 'package:detective/constants/sizes.dart';
-import 'package:detective/domain/analysis.dart';
+import 'package:detective/domain/result.dart';
 import 'package:detective/features/claim_card.dart';
 import 'package:detective/features/grammar_card.dart';
 import 'package:detective/features/header.dart';
+import 'package:detective/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,19 +16,20 @@ import '../domain/spelling_mistake.dart';
 import '../features/spelling_card.dart';
 import '../features/underlined_title.dart';
 
-class Result extends StatefulWidget {
-  const Result({super.key});
+class ResultPage extends StatefulWidget {
+  const ResultPage({super.key});
 
   @override
-  _Result createState() => _Result();
+  State<ResultPage> createState() => _ResultState();
 }
 
-class _Result extends State<Result> {
-  Analysis _response = Analysis(
+class _ResultState extends State<ResultPage> {
+  Result _response = Result(
     spellingMistakes: [],
     grammarMistakes: [],
     claims: [],
-    aiContents: false,
+    arousalScore: 0.0,
+    aiContent: false,
   );
   String _text = "";
 
@@ -39,8 +41,8 @@ class _Result extends State<Result> {
 
   void _loadSavedValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _response = Analysis.fromJson(jsonDecode(prefs.getString('response')!));
+     setState(() {
+      _response = Result.fromJson(jsonDecode(prefs.getString('response')!));
       _text = prefs.getString('text') ?? "";
     });
   }
@@ -52,9 +54,10 @@ class _Result extends State<Result> {
     final horizontalPadding = isLargeScreen ? 64.0 : 16.0;
 
     return Scaffold(
+      drawer: HistoryDrawer(),
       body: Column(
         children: [
-          const Header(title: "Analysis"),
+          Header(title: "Analysis"),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -155,7 +158,7 @@ class _Result extends State<Result> {
                   child: Column(
                     children: [
                       Text("AI"),
-                      Text("${_response.aiContents ? 1:0}"),
+                      Text("${_response.aiContent ? 1:0}"),
                     ],
                   ),
                 ),
@@ -194,7 +197,7 @@ class _Result extends State<Result> {
                     child: _buildClaimsList(_response.claims),
                   ),
                   SingleChildScrollView(
-                    child: _buildAiContentsList(_response.aiContents),
+                    child: _buildAiContentsList(_response.aiContent),
                   ),
                 ],
               ),
@@ -205,7 +208,7 @@ class _Result extends State<Result> {
     );
   }
 
-  Widget _buildTextWithHighlights(String text, Analysis response) {
+  Widget _buildTextWithHighlights(String text, Result response) {
     // If text is empty, return empty container
     if (text.isEmpty) {
       return Container();

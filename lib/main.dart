@@ -1,5 +1,5 @@
 import 'package:detective/pages/about.dart';
-import 'package:detective/pages/result.dart';
+import 'package:detective/pages/result_page.dart';
 import 'package:detective/pages/login.dart';
 import 'package:detective/pages/signup.dart';
 import 'package:detective/pages/home.dart';
@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: {
         '/': (context) => Home(),
-        '/result': (context) => Result(),
+        '/result': (context) => ResultPage(),
         '/about': (context) => const About(),
         '/login': (context) => Login(),
         '/signup': (context) => Signup(),

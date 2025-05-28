@@ -1,4 +1,5 @@
 import 'package:detective/features/header.dart';
+import 'package:detective/features/history_drawer.dart';
 import 'package:detective/features/signup_card.dart';
 import 'package:flutter/material.dart';
 
@@ -8,9 +9,10 @@ class Signup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HistoryDrawer(),
       body: Column(
         children: [
-          const Header(title: "signup"),
+          Header(title: "signup"),
           SignupCard(),
         ],
       ),

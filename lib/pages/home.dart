@@ -1,6 +1,7 @@
 import 'dart:convert';
 
-import 'package:detective/domain/analysis.dart';
+import 'package:detective/domain/result.dart';
+import 'package:detective/features/history_drawer.dart';
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -30,11 +31,12 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HistoryDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            const Header(title: "Detective"),
+            Header(title: "Detective"),
             Padding(
               padding: const EdgeInsets.only(top: 100),
               child: Column(
@@ -51,16 +53,17 @@ class _HomeState extends State<Home> {
                           : () async {
                         setState(() {
                           _isLoading = true;
-
                         });
 
                         try {
-                          Analysis response = await client.postHttp(
+                          Result response = await client.postHttp(
                             textEditingController.text,
                           );
 
+                          final historyResponse = await client.getHistory();
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           await prefs.setString('response', jsonEncode(response.toJson()));
+                          await prefs.setString('history', jsonEncode(historyResponse.data));
                           await prefs.setString('text', textEditingController.text);
 
                           if (context.mounted) {

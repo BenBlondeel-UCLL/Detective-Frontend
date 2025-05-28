@@ -1,14 +1,16 @@
-import 'package:detective/domain/analysis.dart';
+import 'package:detective/domain/analysis_by_id.dart';
+import 'package:detective/domain/result.dart';
 import 'package:detective/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:detective/domain/login_response.dart';
 
+    
 class HttpClient{
 
   final storage = FlutterSecureStorage();
 
-  Future<Analysis> postHttp(String article) async {
+  Future<Result> postHttp(String article) async {
     final dio = Dio();
     
     final token = await storage.read(key: 'jwt');
@@ -21,7 +23,7 @@ class HttpClient{
           headers: { 'Authorization': 'Bearer $token' }
         ),
       );
-      return Analysis.fromJson(response.data);
+      return Result.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response?.statusCode == 422) {
         throw Exception('Unable to process the article. The text may be too long or contain unsupported characters.');
@@ -98,4 +100,42 @@ class HttpClient{
         return error;
       }
     }
+
+    getHistory() async {
+      final token = await storage.read(key: 'jwt');
+      try{
+        final dio = Dio();
+        final response = await dio.get(
+          '${Env.apiBasedUrl}/analyse/history',
+          options: Options(
+            headers: { 'Authorization': 'Bearer $token' }
+          ),
+        );
+        return response;
+      } on DioException catch (error) {
+        return error.response;
+      } catch (error) {
+        return error;
+      }
+    }
+
+    getAnalysisById(String id) async {
+      final token = await storage.read(key: 'jwt');
+      try {
+        final dio = Dio();
+        final response = await dio.get(
+          '${Env.apiBasedUrl}/analyse/analysis/$id',
+          options: Options(
+              headers: { 'Authorization': 'Bearer $token'}
+          ),
+        );
+        AnalysisById analysis = AnalysisById.fromJson(response.data);
+        return analysis;
+      } on DioException catch (error) {
+        return error.response;
+      } catch (error) {
+        return error;
+      }
+    }
+
 }

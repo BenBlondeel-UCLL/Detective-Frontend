@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:detective/constants/padding_style.dart';
 import 'package:detective/constants/sizes.dart';
 import 'package:detective/constants/texts.dart';
@@ -5,6 +7,7 @@ import 'package:detective/features/status_message.dart';
 import 'package:flutter/material.dart';
 import 'package:detective/api/http_client.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginCard extends StatefulWidget{
   const LoginCard({super.key});
@@ -119,10 +122,12 @@ class _LoginCardState extends State<LoginCard> {
                                 _status = response?.statusCode ?? -1;
                               });
                               if (_status == 200) {
+                                final response = await client.getHistory();
+                                SharedPreferences prefs = await SharedPreferences.getInstance();
+                                await prefs.setString('history', jsonEncode(response.data));
                                 await Future.delayed(Duration(milliseconds: 2000));
                                 Navigator.pushNamed(context, '/');
                               }
-                              // print('storage: ${storage.read(key: 'jwt', options: <String, String>{})}');                              
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Color(0xff00a2d4),

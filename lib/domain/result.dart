@@ -2,21 +2,23 @@ import 'package:detective/domain/spelling_mistake.dart';
 import 'grammar_mistake.dart';
 import 'claim.dart';
 
-class Analysis {
+class Result {
   final List<SpellingMistake> spellingMistakes;
   final List<GrammarMistake> grammarMistakes;
   final List<Claim> claims;
-  final bool aiContents;
+  final num arousalScore;
+  final bool aiContent;
 
-  Analysis({
+  Result({
     required this.spellingMistakes,
     required this.grammarMistakes,
     required this.claims,
-    required this.aiContents,
+    required this.arousalScore,
+    required this.aiContent,
   });
 
-  factory Analysis.fromJson(Map<String, dynamic> json) {
-    return Analysis(
+  factory Result.fromJson(Map<String, dynamic> json) {
+    return Result(
       spellingMistakes: (json['spellingMistakes'] as List?)
           ?.map((item) => SpellingMistake.fromJson(item))
           .toList() ??
@@ -29,7 +31,8 @@ class Analysis {
           ?.map((item) => Claim.fromJson(item))
           .toList() ??
           [],
-      aiContents: (json['aiContent'] as bool)
+      arousalScore: (json['arousal_score'] as num?) ?? 0.0,
+      aiContent: (json['aiContent'] as bool)
     );
   }
 
@@ -38,7 +41,8 @@ class Analysis {
       'spellingMistakes': spellingMistakes.map((item) => item.toJson()).toList(),
       'grammarMistakes': grammarMistakes.map((item) => item.toJson()).toList(),
       'claims': claims.map((item) => item.toJson()).toList(),
-      'aiContent': aiContents,
+      'arousal_score': arousalScore,
+      'aiContent': aiContent,
     };
   }
 }
