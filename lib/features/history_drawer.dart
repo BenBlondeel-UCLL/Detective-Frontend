@@ -3,13 +3,11 @@ import 'dart:convert';
 
 import 'package:detective/constants/colors.dart';
 import 'package:detective/constants/date_utils.dart';
+import 'package:detective/domain/analysis_by_id.dart';
 import 'package:detective/domain/analysis_history_response.dart';
 import 'package:flutter/material.dart';
 import 'package:detective/api/http_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../domain/result.dart';
-
 
 class HistoryDrawer extends StatefulWidget {
 
@@ -78,9 +76,10 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                   title: Text(hist.title),
                   subtitle: Text(DateUtil.getDdMMyyyy(hist.createdAt)),
                   onTap: () async {
-                      Result response = await client.getAnalysisById(hist.id);
+                      AnalysisById response = await client.getAnalysisById(hist.id);
                       SharedPreferences prefs = await SharedPreferences.getInstance();
-                      await prefs.setString('response', jsonEncode(response.toJson()));
+                      await prefs.setString('text', response.article);
+                      await prefs.setString('response', jsonEncode(response.result.toJson()));
                       Navigator.pushNamed(
                         context,
                         '/result',

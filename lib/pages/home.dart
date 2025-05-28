@@ -60,9 +60,6 @@ class _HomeState extends State<Home> {
                             textEditingController.text,
                           );
 
-                          print('response $response');
-                          print('response json: ${response.toJson()}');
-
                           final historyResponse = await client.getHistory();
                           SharedPreferences prefs = await SharedPreferences.getInstance();
                           await prefs.setString('response', jsonEncode(response.toJson()));

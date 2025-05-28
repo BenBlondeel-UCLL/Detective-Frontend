@@ -31,7 +31,7 @@ class Result {
           ?.map((item) => Claim.fromJson(item))
           .toList() ??
           [],
-      arousalScore: (json['arousal_score'] as num?) ?? 0,
+      arousalScore: (json['arousal_score'] as num?) ?? 0.0,
       aiContent: (json['aiContent'] as bool)
     );
   }

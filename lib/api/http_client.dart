@@ -23,7 +23,6 @@ class HttpClient{
           headers: { 'Authorization': 'Bearer $token' }
         ),
       );
-      print("response from postHttp: ${response.data}");
       return Result.fromJson(response.data);
     } on DioException catch (e) {
       if (e.response?.statusCode == 422) {
@@ -112,7 +111,6 @@ class HttpClient{
             headers: { 'Authorization': 'Bearer $token' }
           ),
         );
-        print("response from getHistory: ${response.data}");
         return response;
       } on DioException catch (error) {
         return error.response;
@@ -131,9 +129,8 @@ class HttpClient{
               headers: { 'Authorization': 'Bearer $token'}
           ),
         );
-        print("response from getAnalysisById: ${response.data}");
         AnalysisById analysis = AnalysisById.fromJson(response.data);
-        return analysis.result;
+        return analysis;
       } on DioException catch (error) {
         return error.response;
       } catch (error) {

@@ -37,13 +37,10 @@ class _ResultState extends State<ResultPage> {
   void initState() {
     super.initState();
     _loadSavedValue();
-    print("_response $_response");
-    print("_response ${_response.toJson()}");
   }
 
   void _loadSavedValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    print("response decoded: ${jsonDecode(prefs.getString('response')!)}");
      setState(() {
       _response = Result.fromJson(jsonDecode(prefs.getString('response')!));
       _text = prefs.getString('text') ?? "";
