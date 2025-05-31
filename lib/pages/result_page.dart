@@ -41,7 +41,7 @@ class _ResultState extends State<ResultPage> {
 
   void _loadSavedValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-     setState(() {
+    setState(() {
       _response = Result.fromJson(jsonDecode(prefs.getString('response')!));
       _text = prefs.getString('text') ?? "";
     });
@@ -101,15 +101,47 @@ class _ResultState extends State<ResultPage> {
         borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
         color: CustomColors.quaternary,
       ),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            UnderlinedTitle(title: "Analysed Article"),
-            const SizedBox(height: Sizes.defaultSpace),
-            _buildTextWithHighlights(_text, _response),
-          ],
-        ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: UnderlinedTitle(title: "Analysed Article"),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [_buildTextWithHighlights(_text, _response)],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.primary,
+                  foregroundColor: CustomColors.secondary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12.0,
+                    horizontal: 16.0,
+                  ),
+                ),
+                child: const Text(
+                  "Analyse Another Article",
+                  style: TextStyle(fontSize: 16.0),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -158,14 +190,14 @@ class _ResultState extends State<ResultPage> {
                   child: Column(
                     children: [
                       Text("AI"),
-                      Text("${_response.aiContent ? 1:0}"),
+                      Text("${_response.aiContent ? 1 : 0}"),
                     ],
                   ),
                 ),
               ],
               labelColor: CustomColors.primary,
               indicatorColor: CustomColors.primary,
-              unselectedLabelColor: CustomColors.primary.withValues(alpha:0.6),
+              unselectedLabelColor: CustomColors.primary.withValues(alpha: 0.6),
             ),
           ),
           Expanded(
@@ -320,7 +352,6 @@ class _ResultState extends State<ResultPage> {
   }
 
   Widget _buildAiContentsList(bool aiContents) {
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -340,8 +371,8 @@ class _ResultState extends State<ResultPage> {
               ),
             ],
           ),
-        )
-      ]
+        ),
+      ],
     );
   }
 
