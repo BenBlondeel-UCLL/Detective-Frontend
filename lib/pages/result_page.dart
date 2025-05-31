@@ -249,30 +249,17 @@ class _ResultState extends State<ResultPage> {
       }
     }
 
-    // Apply claim highlights (underline with color based on verification)
+    // Apply claim highlights
     for (var claim in response.claims) {
       int index = text.indexOf(claim.target);
       if (index != -1) {
-        Color decorationColor;
-        switch (claim.verificationResult) {
-          case VerificationResult.TRUE:
-            decorationColor = Colors.green;
-            break;
-          case VerificationResult.FALSE:
-            decorationColor = Colors.red;
-            break;
-          case VerificationResult.UNCERTAIN:
-            decorationColor = Colors.orange;
-            break;
-        }
-
         for (
           int i = index;
           i < index + claim.target.length && i < text.length;
           i++
         ) {
           styles[i]['decoration'] = TextDecoration.underline;
-          styles[i]['decorationColor'] = decorationColor;
+          styles[i]['decorationColor'] = Colors.black;
         }
       }
     }
