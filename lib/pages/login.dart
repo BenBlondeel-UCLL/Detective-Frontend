@@ -12,8 +12,12 @@ class Login extends StatelessWidget {
       drawer: HistoryDrawer(),
       body: Column(
         children: [
-          Header(title: "Login"),
-          const LoginCard()
+          Header(title: "Login"), // Fixed at the top
+          Expanded(
+            child: SingleChildScrollView(
+              child: LoginCard(),
+            ),
+          ),
         ],
       ),
     );

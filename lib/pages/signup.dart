@@ -12,8 +12,12 @@ class Signup extends StatelessWidget {
       drawer: HistoryDrawer(),
       body: Column(
         children: [
-          Header(title: "Signup"),
-          SignupCard(),
+          Header(title: "Signup"), // Fixed at the top
+          Expanded(
+            child: SingleChildScrollView(
+              child: SignupCard(),
+            ),
+          ),
         ],
       ),
     );
