@@ -38,8 +38,7 @@ class _SignupCardState extends State<SignupCard> {
       focusNode: FocusNode(skipTraversal: true)..requestFocus(),
       onKeyEvent: (event) {
         if (event is KeyDownEvent &&
-            event.logicalKey == LogicalKeyboardKey.enter &&
-            HardwareKeyboard.instance.isControlPressed) {
+            event.logicalKey == LogicalKeyboardKey.enter) {
           _handleSignUp();
         }
       },
