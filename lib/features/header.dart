@@ -8,6 +8,34 @@ import 'package:detective/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
+// Helper class for responsive dimensions
+class ResponsiveSize {
+  static double getHeaderHeight(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    // Scale down on smaller screens
+    if (width < Sizes.mobileWidth) return Sizes.headerHeight * 0.85;
+    return Sizes.headerHeight;
+  }
+
+  static double getFontSize(BuildContext context, double baseSize) {
+    final width = MediaQuery.of(context).size.width;
+    if (width < 360) return baseSize * 0.7;
+    if (width < Sizes.mobileWidth) return baseSize * 0.85;
+    return baseSize;
+  }
+
+  static double getIconSize(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    if (width < Sizes.mobileWidth) return Sizes.iconSize * 0.85;
+    return Sizes.iconSize;
+  }
+
+  static double getSpacing(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    if (width < Sizes.mobileWidth) return 8;
+    return 16;
+  }
+}
 
 class Header extends StatelessWidget {
   final String title;
@@ -38,9 +66,9 @@ class Header extends StatelessWidget {
     Timer.periodic(const Duration(minutes: 1), (_) => checkTokenExpiration(context));
 
     void showLogoutConfirmationDialog(
-      BuildContext context,
-      VoidCallback onConfirm,
-    ) {
+        BuildContext context,
+        VoidCallback onConfirm,
+        ) {
       showDialog(
         context: context,
         builder: (BuildContext context) {
@@ -100,56 +128,108 @@ class Header extends StatelessWidget {
       future: storage.read(key: 'jwt'),
       builder: (context, snapshot) {
         final jwt = snapshot.data;
-        return Container(
-          width: MediaQuery.of(context).size.width,
-          height: Sizes.headerHeight,
-          decoration: const BoxDecoration(
-            color: CustomColors.primary,
-            border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
-          ),
-          child: Stack(
-            children: [
-              // Center title absolutely regardless of other elements
-              Positioned.fill(
-                child: Center(
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: Sizes.fontSizeTitle,
-                      color: CustomColors.secondary,
+        return LayoutBuilder(
+          builder: (context, constraints) {
+            final isSmallScreen = MediaQuery.of(context).size.width < Sizes.mobileWidth;
+
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              height: ResponsiveSize.getHeaderHeight(context),
+              decoration: const BoxDecoration(
+                color: CustomColors.primary,
+                border: Border(bottom: BorderSide(color: Colors.grey, width: 1.0)),
+              ),
+              child: Stack(
+                children: [
+                  // Center title absolutely regardless of other elements
+                  Positioned.fill(
+                    child: Center(
+                      child: Text(
+                        title,
+                        style: TextStyle(
+                          fontSize: ResponsiveSize.getFontSize(context, Sizes.fontSizeTitle),
+                          color: CustomColors.secondary,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
-              ),
-              // Left side - Menu button
-              Positioned(
-                left: 16,
-                top: 0,
-                bottom: 0,
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: IconButton(
-                    onPressed: () => {Scaffold.of(context).openDrawer()},
-                    icon: const Icon(
-                      Icons.menu,
-                      color: CustomColors.secondary,
-                      size: Sizes.iconSize,
+                  // Left side - Menu button
+                  Positioned(
+                    left: ResponsiveSize.getSpacing(context),
+                    top: 0,
+                    bottom: 0,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: IconButton(
+                        onPressed: () => {Scaffold.of(context).openDrawer()},
+                        icon: Icon(
+                          Icons.menu,
+                          color: CustomColors.secondary,
+                          size: ResponsiveSize.getIconSize(context),
+                        ),
+                      ),
                     ),
                   ),
-                ),
-              ),
-              // Right side - Login/Logout
-              Positioned(
-                right: 16,
-                top: 0,
-                bottom: 0,
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child:
+                  // Right side - Login/Logout
+                  Positioned(
+                    right: ResponsiveSize.getSpacing(context),
+                    top: 0,
+                    bottom: 0,
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child:
                       (jwt == null)
                           ? ElevatedButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, '/login');
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.buttonColor,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(2.0),
+                          ),
+                        ),
+                        child: const Text(
+                          'Login',
+                          style: TextStyle(color: CustomColors.secondary),
+                        ),
+                      )
+                          : isSmallScreen
+                          ? IconButton(
+                        onPressed: () {
+                          showLogoutConfirmationDialog(context, () async { handleLogout(); });
+                        },
+                        icon: const Icon(Icons.logout, color: CustomColors.secondary),
+                      )
+                          : Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          FutureBuilder<String?>(
+                            future: storage.read(key: 'username'),
+                            builder: (context, usernameSnapshot) {
+                              final username = usernameSnapshot.data ?? '';
+                              return Text(
+                                'Welcome ${username.length > 10 ? '${username.substring(0, 8)}...' : username}',
+                                style: TextStyle(
+                                  color: CustomColors.secondary,
+                                  fontSize: ResponsiveSize.getFontSize(context, 14),
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                maxLines: 1,
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                          ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/login');
+                              showLogoutConfirmationDialog(
+                                context,
+                                    () async {
+                                  handleLogout();
+                                },
+                              );
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: CustomColors.buttonColor,
@@ -158,54 +238,20 @@ class Header extends StatelessWidget {
                               ),
                             ),
                             child: const Text(
-                              'Login',
-                              style: TextStyle(color: CustomColors.secondary),
+                              'Logout',
+                              style: TextStyle(
+                                color: CustomColors.secondary,
+                              ),
                             ),
-                          )
-                          : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              FutureBuilder<String?>(
-                                future: storage.read(key: 'username'),
-                                builder: (context, usernameSnapshot) {
-                                  final username = usernameSnapshot.data ?? '';
-                                  return Text(
-                                    'Welcome $username',
-                                    style: const TextStyle(
-                                      color: CustomColors.secondary,
-                                    ),
-                                  );
-                                },
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                onPressed: () {
-                                  showLogoutConfirmationDialog(
-                                    context,
-                                    () async {
-                                      handleLogout();
-                                    },
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: CustomColors.buttonColor,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(2.0),
-                                  ),
-                                ),
-                                child: const Text(
-                                  'Logout',
-                                  style: TextStyle(
-                                    color: CustomColors.secondary,
-                                  ),
-                                ),
-                              ),
-                            ],
                           ),
-                ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            );
+          },
         );
       },
     );
