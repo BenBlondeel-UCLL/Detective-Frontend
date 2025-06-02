@@ -11,59 +11,23 @@ class ClaimCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color borderColor;
-
-    switch (claim.verificationResult) {
-      case VerificationResult.TRUE:
-        borderColor = Colors.green;
-        break;
-      case VerificationResult.UNCERTAIN:
-        borderColor = Colors.orange;
-        break;
-      case VerificationResult.FALSE:
-        borderColor = Colors.red;
-        break;
-    }
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          border: Border.all(color: borderColor),
+          border: Border.all(color: CustomColors.primary),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: borderColor,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    claim.verificationResult.name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    claim.target,
-                    style: TextStyle(
-                      color: CustomColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
+            Text(
+              claim.target,
+              style: TextStyle(
+                color: CustomColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 4),
             Text(

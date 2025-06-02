@@ -12,7 +12,7 @@ class Login extends StatelessWidget {
       drawer: HistoryDrawer(),
       body: Column(
         children: [
-          Header(title: "login"),
+          Header(title: "Login"),
           const LoginCard()
         ],
       ),
