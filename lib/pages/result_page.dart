@@ -217,24 +217,38 @@ class _ResultState extends State<ResultPage> {
                 children: [
                   // Spelling tab
                   SingleChildScrollView(
-                    child: _buildSpellingMistakesList(
-                      _response.spellingMistakes,
-                      _text,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildSpellingMistakesList(
+                        _response.spellingMistakes,
+                        _text,
+                      ),
                     ),
                   ),
                   // Grammar tab
                   SingleChildScrollView(
-                    child: _buildGrammarMistakesList(_response.grammarMistakes),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildGrammarMistakesList(
+                        _response.grammarMistakes,
+                      ),
+                    ),
                   ),
                   // Claims tab
                   SingleChildScrollView(
-                    child: _buildClaimsList(_response.claims),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildClaimsList(_response.claims),
+                    ),
                   ),
                   SingleChildScrollView(
-                    child: _buildScoresContentsList(
-                      _response.aiContent,
-                      _response.arousalScore,
-                      _response.newsSite,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildScoresContentsList(
+                        _response.aiContent,
+                        _response.arousalScore,
+                        _response.newsSite,
+                      ),
                     ),
                   ),
                 ],
