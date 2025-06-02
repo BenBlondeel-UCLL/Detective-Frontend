@@ -1,9 +1,13 @@
+import 'dart:async';
+
 import 'package:detective/api/http_client.dart';
 import 'package:detective/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:detective/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+
 
 class Header extends StatelessWidget {
   final String title;
@@ -14,6 +18,24 @@ class Header extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storage = FlutterSecureStorage();
+
+    void handleLogout() async {
+      await storage.delete(key: 'jwt');
+      await storage.delete(key: 'username');
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.remove('history');
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+    }
+
+    void checkTokenExpiration(BuildContext context) async {
+      final jwt = await storage.read(key: 'jwt');
+
+      if (jwt != null && JwtDecoder.isExpired(jwt)) {
+        handleLogout();
+      }
+    }
+
+    Timer.periodic(const Duration(minutes: 1), (_) => checkTokenExpiration(context));
 
     void showLogoutConfirmationDialog(
       BuildContext context,
@@ -161,11 +183,7 @@ class Header extends StatelessWidget {
                                   showLogoutConfirmationDialog(
                                     context,
                                     () async {
-                                      Navigator.pushNamed(context, '/login');
-                                      storage.delete(key: 'jwt');
-                                      SharedPreferences prefs =
-                                          await SharedPreferences.getInstance();
-                                      prefs.remove('history');
+                                      handleLogout();
                                     },
                                   );
                                 },
