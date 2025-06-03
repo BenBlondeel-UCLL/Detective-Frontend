@@ -11,6 +11,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
   });
 
+  window.addEventListener('message', function(event) {
+    if (event.data && event.data.source === "extension") {
+      console.log("Received data from extension:", event.data.payload);
+      // You can now use event.data.payload in your page
+      // For example, display it in the DOM
+      document.body.innerHTML += `<pre>${JSON.stringify(event.data.payload, null, 2)}</pre>`;
+    }
+  });
+
   function displayResults(text, result) {
     // Update counters
     document.getElementById('spellingCount').textContent = result.spellingMistakes.length;

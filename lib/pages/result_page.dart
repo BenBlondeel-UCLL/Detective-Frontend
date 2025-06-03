@@ -8,6 +8,9 @@ import 'package:detective/features/header.dart';
 import 'package:detective/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:detective/utils/chrome_storage.dart';
+
+
 
 import '../constants/colors.dart';
 import '../domain/claim.dart';
@@ -40,6 +43,13 @@ class _ResultState extends State<ResultPage> {
   }
 
   void _loadSavedValue() async {
+    // listenForChromeMessage((message) {
+    //   setState(() {
+    //     _text = message['text'] ?? "";
+    //     _response = Result.fromJson(message['analysis']);
+    //   });
+    // });
+    listenForChromeMessage();
     SharedPreferences prefs = await SharedPreferences.getInstance();
      setState(() {
       _response = Result.fromJson(jsonDecode(prefs.getString('response')!));

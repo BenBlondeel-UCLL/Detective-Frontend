@@ -37,6 +37,8 @@
     </div>
   </div>
 
-  <script src="fullview.js"></script>
+  <script src="fullview.js">
+    window.addEventListener('message', (event) => { console.log('Received message:', event.data); });
+  </script>
 </body>
 </html>

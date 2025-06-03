@@ -3,7 +3,7 @@
   "name": "Detective",
   "version": "1.0.0",
   "description": "Analyze text using Detective AI",
-  "permissions": ["contextMenus", "storage", "activeTab", "scripting"],
+  "permissions": ["contextMenus", "storage", "activeTab", "scripting", "tabs"],
   "host_permissions": ["http://localhost:8000/"],
   "action": {
     "default_popup": "popup.html",

@@ -9,9 +9,17 @@
 <body>
     <div class="header">
         <h1>Detective</h1>
+        <h2 id="headerUsername"></h2>
     </div>
 
-    <div id="selectionContainer">
+    <div id="loginContainer">
+        <p>Please log in to continue.</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="loginBtn">Login</button>
+    </div>
+
+    <div id="selectionContainer" class="hidden">
         <p>Select text on a webpage to analyze it.</p>
         <button id="analyzeBtn">Analyze Selected Text</button>
     </div>

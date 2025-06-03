@@ -1,8 +1,21 @@
 // popup.js
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', async function() {
   const apiService = new ApiService();
   let currentAnalysis = null;
   let originalText = '';
+
+
+  const {access_token, username} = await chrome.storage.session.get(['access_token', 'username']);
+  if (!access_token && !username) {
+      document.getElementById('loginContainer').classList.remove('hidden');
+      document.getElementById('selectionContainer').classList.add('hidden');
+      document.getElementById('headerUsername').classList.add('hidden');
+    } else {
+      document.getElementById('loginContainer').classList.add('hidden');
+      document.getElementById('selectionContainer').classList.remove('hidden');
+      document.getElementById('headerUsername').textContent = `Hello, ${username}`;
+    }
+
 
   // Set up tab switching
   setupTabs();
@@ -12,6 +25,29 @@ document.addEventListener('DOMContentLoaded', function() {
     if (result.selectedText) {
       analyzeText(result.selectedText);
       chrome.storage.local.remove('selectedText');
+    }
+  });
+
+  document.getElementById('loginBtn').addEventListener('click', async function() {
+      const username = document.getElementById('username').value;
+      const password = document.getElementById('password').value;
+
+    try {
+      const response = await apiService.postLogin(username, password);
+      if (response.access_token) {
+        console.log('Login successful:', response);
+        document.getElementById('loginContainer').classList.add('hidden');
+        document.getElementById('selectionContainer').classList.remove('hidden');
+
+        chrome.storage.session.set({ 'access_token': response.access_token, 'username': response.username }, function() {
+          document.getElementById('headerUsername').textContent = `Hello, ${response.username}`;
+          document.getElementById('headerUsername').classList.remove('hidden');
+        });
+      } else {
+          alert('something went wrong, please try again');
+      }
+    } catch (error) {
+      alert('Login failed: ' + error.message);
     }
   });
 
@@ -39,14 +75,26 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Open full view button
   document.getElementById('openFullViewBtn').addEventListener('click', function() {
+
     if (currentAnalysis && originalText) {
-      chrome.storage.local.set({
-        'fullViewText': originalText,
-        'fullViewAnalysis': currentAnalysis
-      }, function() {
-        chrome.tabs.create({ url: 'fullview.html' });
-      });
-    }
+        chrome.storage.local.set({
+          'fullViewText': originalText,
+          'fullViewAnalysis': currentAnalysis
+        }, function() {
+          // Find the tab running your Dart app (localhost:5234)
+          chrome.tabs.create({ url: "http://localhost:5234/#/result" }, function(tab) {
+            // Wait a bit for the page to load, then send the message
+            setTimeout(() => {
+              chrome.tabs.sendMessage(tab.id, {
+                type: "FROM_EXTENSION",
+                text: originalText,
+                analysis: currentAnalysis
+              });
+            }, 5000); // Adjust delay as needed
+          });
+        });
+      }
+
   });
 
   async function analyzeText(text) {
