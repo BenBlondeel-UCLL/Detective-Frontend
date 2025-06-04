@@ -1,9 +1,7 @@
-// popup.js
 document.addEventListener('DOMContentLoaded', async function() {
   const apiService = new ApiService();
   let currentAnalysis = null;
   let originalText = '';
-
 
   const {access_token, username} = await chrome.storage.session.get(['access_token', 'username']);
   if (!access_token && !username) {
@@ -17,10 +15,8 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
 
-  // Set up tab switching
   setupTabs();
 
-  // Check if there's selected text to analyze
   chrome.storage.local.get(['selectedText'], function(result) {
     if (result.selectedText) {
       analyzeText(result.selectedText);
@@ -51,9 +47,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
   });
 
-  // Analyze button click handler
   document.getElementById('analyzeBtn').addEventListener('click', async function() {
-    // Get selected text from active tab
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       chrome.scripting.executeScript({
         target: {tabId: tabs[0].id},
@@ -68,33 +62,15 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   });
 
-  // Function to get selected text from the page
   function getSelectedText() {
     return window.getSelection().toString();
   }
 
-  // Open full view button
-  document.getElementById('openFullViewBtn').addEventListener('click', function() {
-
-    if (currentAnalysis && originalText) {
-        chrome.storage.local.set({
-          'fullViewText': originalText,
-          'fullViewAnalysis': currentAnalysis
-        }, function() {
-          // Find the tab running your Dart app (localhost:5234)
-          chrome.tabs.create({ url: "http://localhost:5234/#/result" }, function(tab) {
-            // Wait a bit for the page to load, then send the message
-            setTimeout(() => {
-              chrome.tabs.sendMessage(tab.id, {
-                type: "FROM_EXTENSION",
-                text: originalText,
-                analysis: currentAnalysis
-              });
-            }, 5000); // Adjust delay as needed
-          });
-        });
-      }
-
+  document.getElementById('openFullViewBtn').addEventListener('click', async function() {
+    const {access_token, username} = await chrome.storage.session.get(['access_token', 'username']);
+    const enc_access_token = encodeURIComponent(access_token);
+    const enc_username = encodeURIComponent(username);
+    chrome.tabs.create({ url: `http://localhost:5234/redirect?access_token=${enc_access_token}&username=${enc_username}` });
   });
 
   async function analyzeText(text) {
