@@ -9,12 +9,12 @@ import 'package:detective/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:detective/utils/chrome_storage.dart';
-
-
+import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/colors.dart';
 import '../domain/claim.dart';
 import '../domain/grammar_mistake.dart';
+import '../domain/news_site.dart';
 import '../domain/spelling_mistake.dart';
 import '../features/spelling_card.dart';
 import '../features/underlined_title.dart';
@@ -33,6 +33,13 @@ class _ResultState extends State<ResultPage> {
     claims: [],
     arousalScore: 0.0,
     aiContent: false,
+    newsSite: NewsSite(
+      name: "",
+      url: "",
+      bias: "",
+      factual: "",
+      credibility: "",
+    ),
   );
   String _text = "";
 
@@ -51,7 +58,7 @@ class _ResultState extends State<ResultPage> {
     // });
     listenForChromeMessage();
     SharedPreferences prefs = await SharedPreferences.getInstance();
-     setState(() {
+    setState(() {
       _response = Result.fromJson(jsonDecode(prefs.getString('response')!));
       _text = prefs.getString('text') ?? "";
     });
@@ -111,15 +118,47 @@ class _ResultState extends State<ResultPage> {
         borderRadius: BorderRadius.circular(Sizes.borderRadiusMedium),
         color: CustomColors.quaternary,
       ),
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            UnderlinedTitle(title: "Analysed Article"),
-            const SizedBox(height: Sizes.defaultSpace),
-            _buildTextWithHighlights(_text, _response),
-          ],
-        ),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: UnderlinedTitle(title: "Analysed Article"),
+          ),
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                children: [_buildTextWithHighlights(_text, _response)],
+              ),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, '/');
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: CustomColors.primary,
+                  foregroundColor: CustomColors.secondary,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(Sizes.buttonRadius),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12.0,
+                    horizontal: 16.0,
+                  ),
+                ),
+                child: const Text(
+                  "Analyse Another Article",
+                  style: TextStyle(fontSize: 16.0),
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -164,18 +203,11 @@ class _ResultState extends State<ResultPage> {
                     ],
                   ),
                 ),
-                Tab(
-                  child: Column(
-                    children: [
-                      Text("AI"),
-                      Text("${_response.aiContent ? 1:0}"),
-                    ],
-                  ),
-                ),
+                Tab(child: Text("Extra")),
               ],
               labelColor: CustomColors.primary,
               indicatorColor: CustomColors.primary,
-              unselectedLabelColor: CustomColors.primary.withValues(alpha:0.6),
+              unselectedLabelColor: CustomColors.primary.withValues(alpha: 0.6),
             ),
           ),
           Expanded(
@@ -193,21 +225,39 @@ class _ResultState extends State<ResultPage> {
                 children: [
                   // Spelling tab
                   SingleChildScrollView(
-                    child: _buildSpellingMistakesList(
-                      _response.spellingMistakes,
-                      _text,
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildSpellingMistakesList(
+                        _response.spellingMistakes,
+                        _text,
+                      ),
                     ),
                   ),
                   // Grammar tab
                   SingleChildScrollView(
-                    child: _buildGrammarMistakesList(_response.grammarMistakes),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildGrammarMistakesList(
+                        _response.grammarMistakes,
+                      ),
+                    ),
                   ),
                   // Claims tab
                   SingleChildScrollView(
-                    child: _buildClaimsList(_response.claims),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildClaimsList(_response.claims),
+                    ),
                   ),
                   SingleChildScrollView(
-                    child: _buildAiContentsList(_response.aiContent),
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: _buildScoresContentsList(
+                        _response.aiContent,
+                        _response.arousalScore,
+                        _response.newsSite,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -259,30 +309,17 @@ class _ResultState extends State<ResultPage> {
       }
     }
 
-    // Apply claim highlights (underline with color based on verification)
+    // Apply claim highlights
     for (var claim in response.claims) {
       int index = text.indexOf(claim.target);
       if (index != -1) {
-        Color decorationColor;
-        switch (claim.verificationResult) {
-          case VerificationResult.TRUE:
-            decorationColor = Colors.green;
-            break;
-          case VerificationResult.FALSE:
-            decorationColor = Colors.red;
-            break;
-          case VerificationResult.UNCERTAIN:
-            decorationColor = Colors.orange;
-            break;
-        }
-
         for (
           int i = index;
           i < index + claim.target.length && i < text.length;
           i++
         ) {
           styles[i]['decoration'] = TextDecoration.underline;
-          styles[i]['decorationColor'] = decorationColor;
+          styles[i]['decorationColor'] = Colors.black;
         }
       }
     }
@@ -342,8 +379,11 @@ class _ResultState extends State<ResultPage> {
     return SelectableText.rich(TextSpan(children: spans));
   }
 
-  Widget _buildAiContentsList(bool aiContents) {
-
+  Widget _buildScoresContentsList(
+    bool aiContents,
+    num arousalScore,
+    NewsSite newsSite,
+  ) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -352,6 +392,8 @@ class _ResultState extends State<ResultPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text("AI Check:", style: TextStyle(fontWeight: FontWeight.bold)),
+              const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
               Text(
                 aiContents
                     ? "This content is likely AI-generated."
@@ -361,10 +403,87 @@ class _ResultState extends State<ResultPage> {
                   fontStyle: FontStyle.italic,
                 ),
               ),
+              const SizedBox(height: Sizes.spaceBetweenSections),
+              Text(
+                "Arousal Score: $arousalScore",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
+              Text(
+                "Score from 0 to 1. This score indicates the level of emotional arousal in the text. A higher score suggests more emotional content.",
+                style: TextStyle(
+                  color: CustomColors.primary.withValues(alpha: 0.6),
+                ),
+              ),
+              const SizedBox(height: Sizes.spaceBetweenSections),
+              Text(
+                "Probable News Source:",
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
+              Text("\t\tName: ${newsSite.name}"),
+              Row(
+                children: [
+                  Text("\t\tURL: "),
+                  InkWell(
+                    onTap: () async {
+                      final url = Uri.parse("https://${newsSite.url}");
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    },
+                    child: Text(
+                      newsSite.url,
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Text("\t\tBias: ${newsSite.bias}"),
+              Text("\t\tFactuality: ${newsSite.factual}"),
+              Text("\t\tCredibility: ${newsSite.credibility}"),
+              const SizedBox(height: Sizes.spaceBetweenItems),
+              Text(
+                "This information is provided by the:",
+                style: TextStyle(
+                  color: CustomColors.primary.withValues(alpha: 0.6),
+                  fontStyle: FontStyle.italic,
+                ),
+              ),
+              Row(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      final url = Uri.parse(
+                        "https://mediabiasfactcheck.com/mbfcs-data-api/",
+                      );
+                      if (await canLaunchUrl(url)) {
+                        await launchUrl(
+                          url,
+                          mode: LaunchMode.externalApplication,
+                        );
+                      }
+                    },
+                    child: Text(
+                      "Media Bias/Fact Check API",
+                      style: TextStyle(
+                        color: Colors.blue,
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ],
           ),
-        )
-      ]
+        ),
+      ],
     );
   }
 

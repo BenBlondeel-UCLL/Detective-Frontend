@@ -39,4 +39,7 @@ class Sizes {
   static const double fontSizeMedium = 16.0;
   static const double fontSizeBig = 20.0;
   static const double fontSizeTitle = 36.0;
+
+  // Mobile width threshold
+  static const double mobileWidth = 600.0;
 }

@@ -9,6 +9,7 @@ import '../api/http_client.dart';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';
+import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -28,96 +29,106 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
+  Future<void> _analyzeText() async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    try {
+      Result response = await client.postHttp(textEditingController.text);
+
+      final historyResponse = await client.getHistory();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('response', jsonEncode(response.toJson()));
+      await prefs.setString('history', jsonEncode(historyResponse.data));
+      await prefs.setString('text', textEditingController.text);
+
+      if (context.mounted) {
+        Navigator.pushNamed(context, '/result');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Failed to analyze: ${e.toString()}')),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      drawer: HistoryDrawer(),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Header(title: "Detective"),
-            Padding(
-              padding: const EdgeInsets.only(top: 100),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  InputField(textEditingController: textEditingController, isLoading: _isLoading),
-                  const SizedBox(height: Sizes.spaceBetweenItems),
-                  SizedBox(
-                    width: Sizes.buttonWidth,
-                    height: Sizes.buttonHeight * 2.5,
-                    child: ElevatedButton(
-                      onPressed: _isLoading
-                          ? null
-                          : () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
-
-                        try {
-                          Result response = await client.postHttp(
-                            textEditingController.text,
-                          );
-
-                          final historyResponse = await client.getHistory();
-                          SharedPreferences prefs = await SharedPreferences.getInstance();
-                          await prefs.setString('response', jsonEncode(response.toJson()));
-                          await prefs.setString('history', jsonEncode(historyResponse.data));
-                          await prefs.setString('text', textEditingController.text);
-
-                          if (context.mounted) {
-                            Navigator.pushNamed(
-                              context,
-                              '/result',
-                            );
-                          }
-                        } catch (e) {
-                          if (context.mounted) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('Failed to analyze: ${e.toString()}')),
-                            );
-                          }
-                        } finally {
-                          if (mounted) {
-                            setState(() {
-                              _isLoading = false;
-                            });
-                          }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: CustomColors.primary,
-                        foregroundColor: CustomColors.secondary,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(
-                            Sizes.buttonRadius,
+    return KeyboardListener(
+      focusNode: FocusNode(skipTraversal: true)..requestFocus(),
+      onKeyEvent: (event) {
+        if (event is KeyDownEvent &&
+            event.logicalKey == LogicalKeyboardKey.enter &&
+            HardwareKeyboard.instance.isControlPressed &&
+            !_isLoading) {
+          _analyzeText();
+        }
+      },
+      child: Scaffold(
+        drawer: HistoryDrawer(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Header(title: "Detective"),
+              Padding(
+                padding: const EdgeInsets.only(top: 100),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    InputField(
+                      textEditingController: textEditingController,
+                      isLoading: _isLoading,
+                    ),
+                    const SizedBox(height: Sizes.spaceBetweenItems),
+                    SizedBox(
+                      width: Sizes.buttonWidth,
+                      height: Sizes.buttonHeight * 2.5,
+                      child: ElevatedButton(
+                        onPressed: _isLoading ? null : _analyzeText,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: CustomColors.primary,
+                          foregroundColor: CustomColors.secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(
+                              Sizes.buttonRadius,
+                            ),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
                           ),
                         ),
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 12.0,
-                          horizontal: 16.0,
-                        ),
-                      ),
-                      child: _isLoading
-                          ? const SizedBox(
-                        width: 24,
-                        height: 24,
-                        child: CircularProgressIndicator(
-                          color: CustomColors.secondary,
-                          strokeWidth: 2.0,
-                        ),
-                      )
-                          : const Text(
-                        "Analyse",
-                        style: TextStyle(fontSize: 16.0),
+                        child:
+                            _isLoading
+                                ? const SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: CircularProgressIndicator(
+                                    color: CustomColors.secondary,
+                                    strokeWidth: 2.0,
+                                  ),
+                                )
+                                : const Text(
+                                  "Analyse",
+                                  style: TextStyle(fontSize: 16.0),
+                                ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

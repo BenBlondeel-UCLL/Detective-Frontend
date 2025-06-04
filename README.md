@@ -14,3 +14,10 @@ A few resources to get you started if this is your first Flutter project:
 For help getting started with Flutter development, view the
 [online documentation](https://docs.flutter.dev/), which offers tutorials,
 samples, guidance on mobile development, and a full API reference.
+
+
+### Starting the app
+To run the app, you can use the following command in your terminal:
+```bash
+flutter run --web-port=5234
+```
