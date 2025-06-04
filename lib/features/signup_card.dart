@@ -77,6 +77,7 @@ class _SignupCardState extends State<SignupCard> {
                         children: [
                           /// username
                           TextFormField(
+                            key: const Key('signUpUsernameField'),
                             decoration: InputDecoration(
                               labelText: 'username',
                               labelStyle: const TextStyle(
@@ -91,6 +92,7 @@ class _SignupCardState extends State<SignupCard> {
 
                           /// email
                           TextFormField(
+                            key: const Key('signUpEmailField'),
                             decoration: InputDecoration(
                               labelText: 'email@gmail.com',
                               labelStyle: const TextStyle(
@@ -105,6 +107,7 @@ class _SignupCardState extends State<SignupCard> {
 
                           ///password
                           TextFormField(
+                            key: const Key('signUpPasswordField'),
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'password',
@@ -120,6 +123,7 @@ class _SignupCardState extends State<SignupCard> {
 
                           /// password retry
                           TextFormField(
+                            key: const Key('signUpPasswordRepeatField'),
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'repeat password',
@@ -137,6 +141,7 @@ class _SignupCardState extends State<SignupCard> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
+                              key: const Key('signUpButton'),
                               onPressed: _handleSignUp,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: CustomColors.buttonColor,
@@ -246,3 +251,4 @@ class _SignupCardState extends State<SignupCard> {
     }
   }
 }
+
