@@ -9,7 +9,8 @@ import 'package:flutter/services.dart';
 import '../constants/colors.dart';
 
 class SignupCard extends StatefulWidget {
-  const SignupCard({super.key});
+  final HttpClient? httpClient;
+  const SignupCard({super.key, this.httpClient});
 
   @override
   State<SignupCard> createState() => _SignupCardState();
@@ -23,11 +24,12 @@ class _SignupCardState extends State<SignupCard> {
   int? _status;
   String _statusText = '';
 
-  final client = HttpClient();
+  late final HttpClient client;
 
   @override
   void initState() {
     super.initState();
+    client = widget.httpClient ?? HttpClient();
     _statusText;
     _status;
   }

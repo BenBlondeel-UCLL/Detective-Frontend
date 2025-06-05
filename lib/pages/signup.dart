@@ -2,9 +2,11 @@ import 'package:detective/features/header.dart';
 import 'package:detective/features/history_drawer.dart';
 import 'package:detective/features/signup_card.dart';
 import 'package:flutter/material.dart';
+import 'package:detective/api/http_client.dart';
 
 class Signup extends StatelessWidget {
-  const Signup({super.key});
+  final HttpClient? httpClient;
+  const Signup({super.key, this.httpClient});
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +17,7 @@ class Signup extends StatelessWidget {
           Header(title: "Signup"), // Fixed at the top
           Expanded(
             child: SingleChildScrollView(
-              child: SignupCard(),
+              child: SignupCard(httpClient: httpClient),
             ),
           ),
         ],

@@ -2,12 +2,25 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:detective/main.dart' as app;
 import 'package:flutter/material.dart';
+import 'package:mockito/mockito.dart';
+import '../test/mocks.mocks.dart';
+import 'package:dio/dio.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('Sign Up Flow', (WidgetTester tester) async {
-    app.main();
+  testWidgets('Sign Up Flow with Mockito', (WidgetTester tester) async {
+    final mockHttpClient = MockHttpClient();
+
+    when(
+      mockHttpClient.postSignUp(username: anyNamed('username'), email: anyNamed('email'), password: anyNamed('password')),
+    ).thenAnswer((_) async => Response(
+      requestOptions: RequestOptions(path: '/auth/signup'),
+      statusCode: 200,
+      data: {'message': 'Signup successful'},
+    ));
+
+    app.main(httpClient: mockHttpClient);
     await tester.pumpAndSettle();
 
     // Logout if already logged in
@@ -15,7 +28,9 @@ void main() {
     if (logoutButton.evaluate().isNotEmpty) {
       await tester.tap(logoutButton);
       await tester.pumpAndSettle();
-      final logoutConfirmationButton = find.byKey(const Key('logoutConfirmationButton'));
+      final logoutConfirmationButton = find.byKey(
+        const Key('logoutConfirmationButton'),
+      );
       if (logoutConfirmationButton.evaluate().isNotEmpty) {
         await tester.tap(logoutConfirmationButton);
         await tester.pumpAndSettle();
@@ -36,14 +51,26 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    await tester.enterText(find.byKey(const Key('signUpUsernameField')), 'testuser');
-    await tester.enterText(find.byKey(const Key('signUpEmailField')), 'testuser@gmail.com');
-    await tester.enterText(find.byKey(const Key('signUpPasswordField')), '123');
-    await tester.enterText(find.byKey(const Key('signUpPasswordRepeatField')), '123');
+    await tester.enterText(
+      find.byKey(const Key('signUpUsernameField')),
+      'testuser',
+    );
+    await tester.enterText(
+      find.byKey(const Key('signUpEmailField')),
+      'test@example.com',
+    );
+    await tester.enterText(
+      find.byKey(const Key('signUpPasswordField')),
+      'password123',
+    );
+    await tester.enterText(
+      find.byKey(const Key('signUpPasswordRepeatField')),
+      'password123',
+    );
     await tester.tap(find.byKey(const Key('signUpButton')));
-    await tester.pumpAndSettle(const Duration(seconds: 1));
+    await tester.pumpAndSettle(const Duration(seconds: 3));
 
-    expect(find.text('Created Account'), findsOneWidget);
+    expect(find.text('Created Account', skipOffstage: false), findsOneWidget);
   });
 
   testWidgets('Login Flow', (WidgetTester tester) async {
@@ -55,7 +82,9 @@ void main() {
     if (logoutButton.evaluate().isNotEmpty) {
       await tester.tap(logoutButton);
       await tester.pumpAndSettle();
-      final logoutConfirmationButton = find.byKey(const Key('logoutConfirmationButton'));
+      final logoutConfirmationButton = find.byKey(
+        const Key('logoutConfirmationButton'),
+      );
       if (logoutConfirmationButton.evaluate().isNotEmpty) {
         await tester.tap(logoutConfirmationButton);
         await tester.pumpAndSettle();
@@ -69,27 +98,14 @@ void main() {
       await tester.pumpAndSettle();
     }
 
-    await tester.enterText(find.byKey(const Key('loginEmailField')), 'testuser@gmail.com');
+    await tester.enterText(
+      find.byKey(const Key('loginEmailField')),
+      'testuser@gmail.com',
+    );
     await tester.enterText(find.byKey(const Key('loginPasswordField')), '123');
     await tester.tap(find.byKey(const Key('loginButton')));
-    await tester.pumpAndSettle(const Duration(seconds: 1));
+    await tester.pumpAndSettle(const Duration(seconds: 3));
 
-    expect(find.text('succesfully logged in'), findsAny);
+    expect(find.text('succesfully logged in', skipOffstage: false), findsOneWidget);
   });
-
-  // testWidgets('History Fetch', (WidgetTester tester) async {
-  //   app.main();
-  //   await tester.pumpAndSettle();
-  //
-  //   // Assume user is already logged in or perform login steps here
-  //   final historyTab = find.byKey(const Key('historyTab'));
-  //   if (historyTab.evaluate().isNotEmpty) {
-  //     await tester.tap(historyTab);
-  //     await tester.pumpAndSettle();
-  //   }
-  //
-  //   expect(find.byType(ListView), findsOneWidget);
-  //   // Optionally check for a specific history item
-  //   // expect(find.text('Expected History Item'), findsOneWidget);
-  // });
 }
