@@ -95,6 +95,7 @@ class _LoginCardState extends State<LoginCard> {
                         children: [
                           ///email
                           TextFormField(
+                            key: const Key('loginEmailField'),
                             decoration: InputDecoration(
                               labelText: 'email@gmail.com',
                               labelStyle: const TextStyle(
@@ -112,6 +113,7 @@ class _LoginCardState extends State<LoginCard> {
 
                           ///password
                           TextFormField(
+                            key: const Key('loginPasswordField'),
                             obscureText: _isObscured,
                             onChanged: (value) => password = value,
                             decoration: InputDecoration(
@@ -150,6 +152,7 @@ class _LoginCardState extends State<LoginCard> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
+                              key: const Key('loginButton'),
                               onPressed: _handleSignIn,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: CustomColors.buttonColor,
@@ -176,6 +179,7 @@ class _LoginCardState extends State<LoginCard> {
                                   ),
                                 ),
                                 TextButton(
+                                  key: const Key('goToSignUpPageButton'),
                                   onPressed: () {
                                     Navigator.pushNamed(context, '/signup');
                                   },

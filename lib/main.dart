@@ -1,3 +1,4 @@
+import 'package:detective/api/http_client.dart';
 import 'package:detective/pages/about.dart';
 import 'package:detective/pages/result_page.dart';
 import 'package:detective/pages/login.dart';
@@ -5,13 +6,14 @@ import 'package:detective/pages/signup.dart';
 import 'package:detective/pages/home.dart';
 import 'package:flutter/material.dart';
 
-void main() async {
+void main({HttpClient? httpClient}) async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(MyApp(httpClient: httpClient));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final HttpClient? httpClient;
+  const MyApp({super.key, this.httpClient});
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
         '/result': (context) => ResultPage(),
         '/about': (context) => const About(),
         '/login': (context) => Login(),
-        '/signup': (context) => Signup(),
+        '/signup': (context) => Signup(httpClient: httpClient),
       },
       debugShowCheckedModeBanner: false,
     );
