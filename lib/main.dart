@@ -26,8 +26,6 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       onGenerateRoute: (settings) {
-        print("test ongenerateRoute");
-        print('Route requested: ${settings.name}');
         if (settings.name != null && settings.name!.startsWith('/redirect')) {
           final uri = Uri.parse(settings.name!);
           final accessToken = uri.queryParameters['access_token'];

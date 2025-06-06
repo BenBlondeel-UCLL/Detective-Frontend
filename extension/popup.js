@@ -53,7 +53,9 @@ document.addEventListener('DOMContentLoaded', async function() {
         target: {tabId: tabs[0].id},
         function: getSelectedText,
       }, (results) => {
+        console.log(results);
         if (results && results[0] && results[0].result) {
+          console.log(`tekst in analyzeBTN: ${results[0].result}`);
           analyzeText(results[0].result);
         } else {
           alert('Please select text on the page first');
@@ -66,18 +68,13 @@ document.addEventListener('DOMContentLoaded', async function() {
     return window.getSelection().toString();
   }
 
-  document.getElementById('openFullViewBtn').addEventListener('click', async function() {
-    const {access_token, username} = await chrome.storage.session.get(['access_token', 'username']);
-    const enc_access_token = encodeURIComponent(access_token);
-    const enc_username = encodeURIComponent(username);
-    chrome.tabs.create({ url: `http://localhost:5234/redirect?access_token=${enc_access_token}&username=${enc_username}` });
-  });
-
   async function analyzeText(text) {
     if (!text || text.trim() === '') {
       alert('Please select text to analyze');
       return;
     }
+
+    console.log("we are here and running in the analyzeText");
 
     originalText = text;
 
@@ -94,6 +91,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       document.getElementById('resultContainer').classList.remove('hidden');
 
       // Update the UI with results
+      console.log(result);
+      console.log(result.extraContent);
+      console.log(text);
       displayResults(text, result);
     } catch (error) {
       document.getElementById('loadingContainer').classList.add('hidden');
@@ -102,12 +102,19 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
   }
 
+  document.getElementById('openFullViewBtn').addEventListener('click', async function() {
+    const {access_token, username} = await chrome.storage.session.get(['access_token', 'username']);
+    const enc_access_token = btoa(access_token);
+    const enc_username = btoa(username);
+    chrome.tabs.create({ url: `http://localhost:5234/redirect?access_token=${enc_access_token}&username=${enc_username}` });
+  });
+
   function displayResults(text, result) {
     // Update counters
     document.getElementById('spellingCount').textContent = result.spellingMistakes.length;
     document.getElementById('grammarCount').textContent = result.grammarMistakes.length;
     document.getElementById('claimsCount').textContent = result.claims.length;
-    document.getElementById('aiCount').textContent = result.aiContent ? '1' : '0';
+    // document.getElementById('extra').textContent = result.aiContent;
 
     // Display the text with highlights
     document.getElementById('analyzedText').innerHTML = createHighlightedText(text, result);
@@ -116,7 +123,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     populateSpellingTab(result.spellingMistakes, text);
     populateGrammarTab(result.grammarMistakes);
     populateClaimsTab(result.claims);
-    populateAiTab(result.aiContent);
+    populateExtraTab(result);
   }
 
   function createHighlightedText(text, result) {
@@ -244,16 +251,70 @@ document.addEventListener('DOMContentLoaded', async function() {
     });
   }
 
-  function populateAiTab(aiContent) {
-    const container = document.getElementById('aiTab');
-    container.innerHTML = '';
+  // function populateExtraTab(result) {
+  //   const container = document.getElementById('extraTab');
+  //   container.innerHTML = '';
 
-    const message = aiContent
-      ? "This content is likely AI-generated."
-      : "This content is likely human-written.";
+  //   const aiMessage = result.aiContent
+  //     ? "This content is likely AI-generated."
+  //     : "This content is likely human-written.";
 
-    container.innerHTML = `<p>${message}</p>`;
-  }
+
+  //   container.innerHTML = `
+  //   <p><strong>AI: </strong>${aiMessage}</p>
+  //   <p><strong>Arousal Score: </strong> ${result.arousalScore ?? 'N/A'}</p>
+  //   <p><strong>Probable News Source: </strong> ${result.newsSite?.name ?? ''}</p>
+  //   <p><strong>URL: </strong> <a href="https://${result.newsSite?.url ?? ''}" target="_blank">${result.newsSite?.url ?? ''}</a></p>
+  //   <p><strong>Bias: </strong> ${result.newsSite?.bias ?? ''}</p>
+  //   <p><strong>Factuality: </strong> ${result.newsSite?.factual ?? ''}</p>
+  //   <p><strong>Credibility: </strong> ${result.newsSite?.credibility ?? ''}</p>`;
+  // }
+
+  function populateExtraTab(result) {
+  const container = document.getElementById('extraTab');
+  container.innerHTML = '';
+
+  // AI Content
+  const aiMessage = result.aiContent
+    ? `<span style="color:#d32f2f;font-weight:bold;">This content is likely AI-generated.</span>`
+    : `<span style="color:#388e3c;font-weight:bold;">This content is likely human-written.</span>`;
+
+  // Arousal Score
+  const arousalScore = typeof result.arousalScore !== 'undefined' ? result.arousalScore : 'N/A';
+
+  // News Site Info
+  const newsSite = result.newsSite || {};
+  const newsSiteHtml = newsSite.name ? `
+    <div style="margin-top:16px;">
+      <div style="font-weight:bold;">Probable News Source:</div>
+      <div style="margin-left:16px;">
+        <div><strong>Name:</strong> ${newsSite.name}</div>
+        <div><strong>URL:</strong> <a href="https://${newsSite.url}" target="_blank" style="color:#1976d2;text-decoration:underline;">${newsSite.url}</a></div>
+        <div><strong>Bias:</strong> ${newsSite.bias}</div>
+        <div><strong>Factuality:</strong> ${newsSite.factual}</div>
+        <div><strong>Credibility:</strong> ${newsSite.credibility}</div>
+      </div>
+    </div>
+  ` : '';
+
+  container.innerHTML = `
+    <div style="margin-bottom:16px;">
+      <div style="font-weight:bold;">AI Check:</div>
+      <div style="margin-left:16px; margin-bottom:8px;">${aiMessage}</div>
+    </div>
+    <div style="margin-bottom:16px;">
+      <div style="font-weight:bold;">Arousal Score: ${arousalScore}</div>
+      <div style="margin-left:16px; color:#666;">
+        Score from 0 to 1. This score indicates the level of emotional arousal in the text. A higher score suggests more emotional content.
+      </div>
+    </div>
+    ${newsSiteHtml}
+    <div style="margin-top:16px; color:#666; font-style:italic;">
+      This information is provided by the:
+      <a href="https://mediabiasfactcheck.com/mbfcs-data-api/" target="_blank" style="color:#1976d2;text-decoration:underline;">Media Bias/Fact Check API</a>
+    </div>
+  `;
+}
 
   function setupTabs() {
     const tabs = document.querySelectorAll('.tab');

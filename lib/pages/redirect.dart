@@ -26,24 +26,46 @@ class _RedirectPageState extends State<RedirectPage> {
     _handleRedirect();
   }
 
-  Future<void> _handleRedirect() async {
-    print("handleRedirect called");
-    print("Access Token: ${widget.accessToken}");
-    print("Username: ${widget.username}");
+  _handleRedirect() async {
 
-    if (widget.accessToken != null && widget.username != null) {
-      await storage.write(key: 'jwt', value: widget.accessToken);
-      await storage.write(key: 'username', value: widget.username);
-    }
-    
-    final historyResponse = await client.getHistory();
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('history', jsonEncode(historyResponse.data));
+    try {
 
-    if (mounted) {
-      Navigator.of(context).pushReplacementNamed('/home');
+      if (widget.accessToken != null && widget.username != null) {
+        final accessToken = decodeVariable(widget.accessToken!);
+        final username = decodeVariable(widget.username!);
+        await storage.write(key: 'jwt', value: accessToken);
+        await storage.write(key: 'username', value: username);
+      }
+      
+      final historyResponse = await client.getHistory();
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('history', jsonEncode(historyResponse.data));
+
+      final analysisResponse = await client.getAnalysisById(historyResponse.data.last['id']);
+
+      await prefs.setString('text', analysisResponse.article);
+      await prefs.setString('response', jsonEncode(analysisResponse.result.toJson()));
+
+      if (mounted) {
+        Navigator.of(context).pushNamedAndRemoveUntil('/result', (route) => false);
+      }
+
+    } catch (e) {
+      return e;
     }
+
   }
+
+  String decodeVariable(String variable) {
+  try {
+    final bytes = base64Decode(variable);
+    final decoded = latin1.decode(bytes);
+    return decoded;
+  } catch (e) {
+    return 'DECODE_FAILED';
+  }
+}
+ 
 
   @override
   Widget build(BuildContext context) {
