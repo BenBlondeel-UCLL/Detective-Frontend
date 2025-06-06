@@ -103,6 +103,7 @@ class Header extends StatelessWidget {
                 ),
               ),
               ElevatedButton(
+                key: const Key('logoutConfirmationButton'),
                 onPressed: () {
                   Navigator.of(context).pop(); // Close the dialog
                   onConfirm();
@@ -163,6 +164,7 @@ class Header extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: IconButton(
+                        key: const Key('historyTab'),
                         onPressed: () => {Scaffold.of(context).openDrawer()},
                         icon: Icon(
                           Icons.menu,
@@ -182,6 +184,7 @@ class Header extends StatelessWidget {
                       child:
                       (jwt == null)
                           ? ElevatedButton(
+                        key: const Key('goToLoginPageButton'),
                         onPressed: () {
                           Navigator.pushNamed(context, '/login');
                         },
@@ -223,6 +226,7 @@ class Header extends StatelessWidget {
                           ),
                           const SizedBox(width: 8),
                           ElevatedButton(
+                            key: const Key('logoutButton'),
                             onPressed: () {
                               showLogoutConfirmationDialog(
                                 context,
@@ -257,3 +261,4 @@ class Header extends StatelessWidget {
     );
   }
 }
+

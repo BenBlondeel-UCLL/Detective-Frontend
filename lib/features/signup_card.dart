@@ -9,7 +9,8 @@ import 'package:flutter/services.dart';
 import '../constants/colors.dart';
 
 class SignupCard extends StatefulWidget {
-  const SignupCard({super.key});
+  final HttpClient? httpClient;
+  const SignupCard({super.key, this.httpClient});
 
   @override
   State<SignupCard> createState() => _SignupCardState();
@@ -23,11 +24,12 @@ class _SignupCardState extends State<SignupCard> {
   int? _status;
   String _statusText = '';
 
-  final client = HttpClient();
+  late final HttpClient client;
 
   @override
   void initState() {
     super.initState();
+    client = widget.httpClient ?? HttpClient();
     _statusText;
     _status;
   }
@@ -77,6 +79,7 @@ class _SignupCardState extends State<SignupCard> {
                         children: [
                           /// username
                           TextFormField(
+                            key: const Key('signUpUsernameField'),
                             decoration: InputDecoration(
                               labelText: 'username',
                               labelStyle: const TextStyle(
@@ -91,6 +94,7 @@ class _SignupCardState extends State<SignupCard> {
 
                           /// email
                           TextFormField(
+                            key: const Key('signUpEmailField'),
                             decoration: InputDecoration(
                               labelText: 'email@gmail.com',
                               labelStyle: const TextStyle(
@@ -105,6 +109,7 @@ class _SignupCardState extends State<SignupCard> {
 
                           ///password
                           TextFormField(
+                            key: const Key('signUpPasswordField'),
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'password',
@@ -120,6 +125,7 @@ class _SignupCardState extends State<SignupCard> {
 
                           /// password retry
                           TextFormField(
+                            key: const Key('signUpPasswordRepeatField'),
                             obscureText: true,
                             decoration: InputDecoration(
                               labelText: 'repeat password',
@@ -137,6 +143,7 @@ class _SignupCardState extends State<SignupCard> {
                           SizedBox(
                             width: double.infinity,
                             child: ElevatedButton(
+                              key: const Key('signUpButton'),
                               onPressed: _handleSignUp,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: CustomColors.buttonColor,
@@ -246,3 +253,4 @@ class _SignupCardState extends State<SignupCard> {
     }
   }
 }
+

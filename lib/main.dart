@@ -1,3 +1,4 @@
+import 'package:detective/api/http_client.dart';
 import 'package:detective/pages/about.dart';
 import 'package:detective/pages/redirect.dart';
 import 'package:detective/pages/result_page.dart';
@@ -10,11 +11,12 @@ import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 void main() async {
   setUrlStrategy(PathUrlStrategy());
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(MyApp(httpClient: httpClient));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final HttpClient? httpClient;
+  const MyApp({super.key, this.httpClient});
 
   @override
   Widget build(BuildContext context) {
