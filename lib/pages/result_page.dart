@@ -8,7 +8,6 @@ import 'package:detective/features/header.dart';
 import 'package:detective/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:detective/utils/chrome_storage.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../constants/colors.dart';
