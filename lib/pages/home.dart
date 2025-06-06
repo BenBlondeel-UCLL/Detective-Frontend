@@ -5,7 +5,7 @@ import 'package:detective/features/history_drawer.dart';
 import 'package:detective/features/header.dart';
 import 'package:detective/features/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../api//http_client.dart';
+import '../api/http_client.dart';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';

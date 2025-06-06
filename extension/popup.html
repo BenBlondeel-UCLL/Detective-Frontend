@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detective</title>
+    <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+    <div class="header">
+        <h1>Detective</h1>
+        <h2 id="headerUsername"></h2>
+    </div>
+
+    <div id="loginContainer">
+        <p>Please log in to continue.</p>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <button id="loginBtn">Login</button>
+    </div>
+
+    <div id="selectionContainer" class="hidden">
+        <p>Select text on a webpage to analyze it.</p>
+        <button id="analyzeBtn">Analyze Selected Text</button>
+    </div>
+
+    <div id="loadingContainer" class="hidden">
+        <div class="spinner"></div>
+        <p>Analyzing text...</p>
+    </div>
+
+    <div id="resultContainer" class="hidden" >
+        <div class="text-container">
+            <h3>Analyzed Text</h3>
+            <div id="analyzedText"></div>
+            <button id="openFullViewBtn">Open in Full View</button>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tab-header">
+                <div class="tab active" data-tab="spelling">Spelling <span id="spellingCount">0</span></div>
+                <div class="tab" data-tab="grammar">Grammar <span id="grammarCount">0</span></div>
+                <div class="tab" data-tab="claims">Claims <span id="claimsCount">0</span></div>
+                <div class="tab" data-tab="extra">Extra <span id="extra"></span></div>
+            </div>
+
+            <div class="tab-content">
+                <div id="spellingTab" class="tab-panel active"></div>
+                <div id="grammarTab" class="tab-panel"></div>
+                <div id="claimsTab" class="tab-panel"></div>
+                <div id="extraTab" class="tab-panel"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="api-service.js"></script>
+    <script src="popup.js"></script>
+</body>
+</html>

@@ -33,6 +33,18 @@
   <link rel="manifest" href="manifest.json">
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
+  <script src="flutter_bootstrap.js" async>
+    window.receivedData = null;
+
+  window.addEventListener("message", (event) => {
+    if (event.data?.source === "extension") {
+      window.receivedData = event.data.payload;
+
+      if (typeof window.onExtensionDataReceived === "function") {
+        window.onExtensionDataReceived();
+      }
+    }
+  });
+  </script>
 </body>
 </html>

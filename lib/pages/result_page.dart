@@ -174,7 +174,10 @@ class _ResultState extends State<ResultPage> {
                 Tab(
                   child: Column(
                     children: [
-                      Text("Spelling"),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                        child: Text("Spelling"),
+                      ),
                       Text("${_response.spellingMistakes.length}"),
                     ],
                   ),
@@ -182,7 +185,10 @@ class _ResultState extends State<ResultPage> {
                 Tab(
                   child: Column(
                     children: [
-                      Text("Grammar"),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                        child: Text("Grammar"),
+                      ),
                       Text("${_response.grammarMistakes.length}"),
                     ],
                   ),
@@ -190,7 +196,10 @@ class _ResultState extends State<ResultPage> {
                 Tab(
                   child: Column(
                     children: [
-                      Text("Claims"),
+                      Padding(
+                        padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
+                        child: Text("Claims"),
+                      ),
                       Text("${_response.claims.length}"),
                     ],
                   ),
