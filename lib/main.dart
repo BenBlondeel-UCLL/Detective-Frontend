@@ -8,7 +8,7 @@ import 'package:detective/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_web_plugins/flutter_web_plugins.dart';
 
-void main() async {
+void main({HttpClient? httpClient}) async {
   setUrlStrategy(PathUrlStrategy());
   WidgetsFlutterBinding.ensureInitialized();
   runApp(MyApp(httpClient: httpClient));
@@ -52,7 +52,7 @@ class MyApp extends StatelessWidget {
           case '/login':
             return MaterialPageRoute(builder: (_) => Login());
           case '/signup':
-            return MaterialPageRoute(builder: (_) => Signup());
+            return MaterialPageRoute(builder: (_) => Signup(httpClient: httpClient));
           default:
             return MaterialPageRoute(builder: (_) => Home());
         }
