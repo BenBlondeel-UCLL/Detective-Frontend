@@ -185,8 +185,8 @@ document.addEventListener('DOMContentLoaded', async function() {
       card.className = 'mistake-card';
       card.innerHTML = `
         <p><strong>Mistake:</strong> <span class="spelling-mistake">${mistakeText}</span></p>
-        <p><strong>Suggestions:</strong> ${mistake.suggestions.join(', ')}</p>
-      `;
+        <p>${mistake.message}</p>
+        `;
       container.appendChild(card);
     });
   }
@@ -205,8 +205,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       card.className = 'mistake-card';
       card.innerHTML = `
         <p><strong>Issue:</strong> <span class="grammar-mistake">${mistake.target}</span></p>
-        <p><strong>Description:</strong> ${mistake.description}</p>
-        <p><strong>Suggestion:</strong> ${mistake.suggestion || 'No suggestion available'}</p>
+        <p><strong>Suggestion:</strong> ${mistake.message}</p>
       `;
       container.appendChild(card);
     });
@@ -222,53 +221,30 @@ document.addEventListener('DOMContentLoaded', async function() {
     }
 
     claims.forEach(claim => {
-      let statusClass = '';
-      let statusText = '';
-
-      switch(claim.verificationResult) {
-        case 'TRUE':
-          statusClass = 'claim-true';
-          statusText = 'True';
-          break;
-        case 'FALSE':
-          statusClass = 'claim-false';
-          statusText = 'False';
-          break;
-        case 'UNCERTAIN':
-          statusClass = 'claim-uncertain';
-          statusText = 'Uncertain';
-          break;
-      }
-
       const card = document.createElement('div');
       card.className = 'claim-card';
       card.innerHTML = `
-        <p><strong>Claim:</strong> <span class="${statusClass}">${claim.target}</span></p>
-        <p><strong>Status:</strong> ${statusText}</p>
-        <p><strong>Explanation:</strong> ${claim.explanation || 'No explanation available'}</p>
+        <p><strong>Claim:</strong> <span>${claim.target}</span></p>
+        <p><strong>Explanation:</strong> ${claim.explanation}</p>
+        <div><strong>Sources:</strong>
+          <ul style="margin: 8px 0 0 16px; padding: 0;">
+        ${
+          Array.isArray(claim.url)
+            ? claim.url.map(url => `
+            <li style="margin-bottom:4px;">
+              <a href="${url}" target="_blank" style="color:#1976d2;text-decoration:underline;word-break:break-all;">${url}</a>
+            </li>
+          `).join('')
+            : claim.url
+          ? `<li><a href="${claim.url}" target="_blank" style="color:#1976d2;text-decoration:underline;word-break:break-all;">${claim.url}</a></li>`
+          : '<li>No sources provided.</li>'
+        }
+          </ul>
+        </div>
       `;
       container.appendChild(card);
     });
   }
-
-  // function populateExtraTab(result) {
-  //   const container = document.getElementById('extraTab');
-  //   container.innerHTML = '';
-
-  //   const aiMessage = result.aiContent
-  //     ? "This content is likely AI-generated."
-  //     : "This content is likely human-written.";
-
-
-  //   container.innerHTML = `
-  //   <p><strong>AI: </strong>${aiMessage}</p>
-  //   <p><strong>Arousal Score: </strong> ${result.arousalScore ?? 'N/A'}</p>
-  //   <p><strong>Probable News Source: </strong> ${result.newsSite?.name ?? ''}</p>
-  //   <p><strong>URL: </strong> <a href="https://${result.newsSite?.url ?? ''}" target="_blank">${result.newsSite?.url ?? ''}</a></p>
-  //   <p><strong>Bias: </strong> ${result.newsSite?.bias ?? ''}</p>
-  //   <p><strong>Factuality: </strong> ${result.newsSite?.factual ?? ''}</p>
-  //   <p><strong>Credibility: </strong> ${result.newsSite?.credibility ?? ''}</p>`;
-  // }
 
   function populateExtraTab(result) {
   const container = document.getElementById('extraTab');
@@ -276,11 +252,11 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // AI Content
   const aiMessage = result.aiContent
-    ? `<span style="color:#d32f2f;font-weight:bold;">This content is likely AI-generated.</span>`
-    : `<span style="color:#388e3c;font-weight:bold;">This content is likely human-written.</span>`;
+    ? `<span>This content is likely AI-generated.</span>`
+    : `<span>This content is likely human-written.</span>`;
 
   // Arousal Score
-  const arousalScore = typeof result.arousalScore !== 'undefined' ? result.arousalScore : 'N/A';
+  const arousalScore = typeof result.arousal_score !== 'undefined' ? result.arousal_score : 'N/A';
 
   // News Site Info
   const newsSite = result.newsSite || {};

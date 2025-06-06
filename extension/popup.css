@@ -4,9 +4,6 @@
   --quaternary: #f5f5f5;
   --spelling-mistake: #d32f2f;
   --grammar-mistake-bg: #fff59d;
-  --claim-true: #388e3c;
-  --claim-false: #d32f2f;
-  --claim-uncertain: #fbc02d;
 }
 
 body {
@@ -148,24 +145,6 @@ button {
   background: var(--grammar-mistake-bg);
   border-radius: 3px;
   padding: 0 2px;
-}
-
-.claim-true {
-  text-decoration: underline;
-  text-decoration-color: var(--claim-true);
-  color: var(--claim-true);
-}
-
-.claim-false {
-  text-decoration: underline;
-  text-decoration-color: var(--claim-false);
-  color: var(--claim-false);
-}
-
-.claim-uncertain {
-  text-decoration: underline;
-  text-decoration-color: var(--claim-uncertain);
-  color: var(--claim-uncertain);
 }
 
 #selectionPrompt {
