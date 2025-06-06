@@ -50,7 +50,6 @@ class _ResultState extends State<ResultPage> {
   }
 
   void _loadSavedValue() async {
-    listenForChromeMessage();
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       _response = Result.fromJson(jsonDecode(prefs.getString('response')!));

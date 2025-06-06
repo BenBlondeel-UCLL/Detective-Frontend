@@ -77,6 +77,7 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                   subtitle: Text(DateUtil.getDdMMyyyy(hist.createdAt)),
                   onTap: () async {
                       AnalysisById response = await client.getAnalysisById(hist.id);
+                      print(response.article);
                       SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setString('text', response.article);
                       await prefs.setString('response', jsonEncode(response.result.toJson()));
