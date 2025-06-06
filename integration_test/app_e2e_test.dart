@@ -57,15 +57,15 @@ void main() {
     );
     await tester.enterText(
       find.byKey(const Key('signUpEmailField')),
-      'test@example.com',
+      'testuser@gmail.com',
     );
     await tester.enterText(
       find.byKey(const Key('signUpPasswordField')),
-      'password123',
+      '123',
     );
     await tester.enterText(
       find.byKey(const Key('signUpPasswordRepeatField')),
-      'password123',
+      '123',
     );
     await tester.tap(find.byKey(const Key('signUpButton')));
     await tester.pumpAndSettle(const Duration(seconds: 3));
