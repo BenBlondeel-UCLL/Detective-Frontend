@@ -44,29 +44,21 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
   @override
   Widget build(BuildContext context) {
   return 
-      Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: CustomColors.primary),
-              child: Column(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/logo_1.png'),
-                    radius: 50,
-                  ),
-                  SizedBox(height: 10),
-                  Text('Geschiedenis', style: TextStyle(color: CustomColors.secondary),),
-                ],
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Home"),
-              onTap: () {
-                Navigator.pushNamed(context, '/');
-                },
+    Drawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: [
+          DrawerHeader(
+            decoration: BoxDecoration(color: CustomColors.primary),
+            child: Column(
+              children: [
+                CircleAvatar(
+                  backgroundImage: AssetImage('assets/images/logo_1.png'),
+                  radius: 50,
+                ),
+                SizedBox(height: 10),
+                Text('Geschiedenis', style: TextStyle(color: CustomColors.secondary),),
+              ],
             ),
           ),
           ListTile(
@@ -74,8 +66,8 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
             title: Text("Home"),
             onTap: () {
               Navigator.pushNamed(context, '/');
-            },
-          ),
+              },
+          ),          
           ...historyResponse.map(
             (hist) => Row(
               children: [
