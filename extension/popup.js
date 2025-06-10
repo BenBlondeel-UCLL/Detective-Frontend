@@ -243,50 +243,92 @@ document.addEventListener('DOMContentLoaded', async function() {
   }
 
   function populateExtraTab(result) {
-  const container = document.getElementById('extraTab');
-  container.innerHTML = '';
+    const container = document.getElementById('extraTab');
+    container.innerHTML = '';
 
-  // AI Content
-  const aiMessage = result.aiContent
-    ? `<span>Deze tekst is waarschijnlijk AI gegenereerd.</span>`
-    : `<span>Deze tekst is waarschijnlijk door een mens geschreven.</span>`;
+    // AI Content
+    const aiMessage = result.aiContent
+      ? `<span>Deze tekst is waarschijnlijk AI gegenereerd.</span>`
+      : `<span>Deze tekst is waarschijnlijk door een mens geschreven.</span>`;
 
-  // Arousal Score
-  const arousalScore = typeof result.arousal_score !== 'undefined' ? result.arousal_score : 'N/A';
+    // Arousal Score
+    const arousalScore = typeof result.arousal_score !== 'undefined' ? result.arousal_score : 'N/A';
 
-  // News Site Info
-  const newsSite = result.newsSite || {};
-  const newsSiteHtml = newsSite.name ? `
-    <div style="margin-top:16px;">
-      <div style="font-weight:bold;">Waarschijnlijke Bron:</div>
-      <div style="margin-left:16px;">
-        <div><strong>Naam:</strong> ${newsSite.name}</div>
-        <div><strong>URL:</strong> <a href="https://${newsSite.url}" target="_blank" style="color:#1976d2;text-decoration:underline;">${newsSite.url}</a></div>
-        <div><strong>Partijdigheid:</strong> ${newsSite.bias}</div>
-        <div><strong>Feitelijkheid:</strong> ${newsSite.factual}</div>
-        <div><strong>Betrouwbaarheid:</strong> ${newsSite.credibility}</div>
+    // News Site Info
+    const newsSite = result.newsSite || {};
+    const newsSiteHtml = newsSite.name ? `
+      <div style="margin-top:16px;">
+        <div style="font-weight:bold;">Waarschijnlijke Bron:</div>
+        <div style="margin-left:16px;">
+          <div><strong>Naam:</strong> ${newsSite.name}</div>
+          <div><strong>URL:</strong> <a href="https://${newsSite.url}" target="_blank" style="color:#1976d2;text-decoration:underline;">${newsSite.url}</a></div>
+          <div><strong>Partijdigheid:</strong> ${getTranslatedBias(newsSite.bias)}</div>
+          <div><strong>Feitelijkheid:</strong> ${getTranslatedFactual(newsSite.factual)}</div>
+          <div><strong>Betrouwbaarheid:</strong> ${getTranslatedCredibility(newsSite.credibility)}</div>
+        </div>
       </div>
-    </div>
-  ` : '';
+    ` : '';
 
-  container.innerHTML = `
-    <div style="margin-bottom:16px;">
-      <div style="font-weight:bold;">AI Check:</div>
-      <div style="margin-left:16px; margin-bottom:8px;">${aiMessage}</div>
-    </div>
-    <div style="margin-bottom:16px;">
-      <div style="font-weight:bold;">Sensatiewaarde: ${arousalScore}</div>
-      <div style="margin-left:16px; color:#666;">
-        Een waare van 0 tot 1. Deze waarde duidt op de opwekking van emoties in the tekst. Een hogere waarde suggereert dat de tekst meer emoties opwekt.
+    container.innerHTML = `
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:bold;">AI Check:</div>
+        <div style="margin-left:16px; margin-bottom:8px;">${aiMessage}</div>
       </div>
-    </div>
-    ${newsSiteHtml}
-    <div style="margin-top:16px; color:#666; font-style:italic;">
-      Deze informatie komt van:
-      <a href="https://mediabiasfactcheck.com/mbfcs-data-api/" target="_blank" style="color:#1976d2;text-decoration:underline;">Media Bias/Fact Check API</a>
-    </div>
-  `;
+      <div style="margin-bottom:16px;">
+        <div style="font-weight:bold;">Sensatiewaarde: ${arousalScore}</div>
+        <div style="margin-left:16px; color:#666;">
+          Een waare van 0 tot 1. Deze waarde duidt op de opwekking van emoties in the tekst. Een hogere waarde suggereert dat de tekst meer emoties opwekt.
+        </div>
+      </div>
+      ${newsSiteHtml}
+      <div style="margin-top:16px; color:#666; font-style:italic;">
+        Deze informatie komt van:
+        <a href="https://mediabiasfactcheck.com/mbfcs-data-api/" target="_blank" style="color:#1976d2;text-decoration:underline;">Media Bias/Fact Check API</a>
+      </div>
+    `;
+  }
+
+  const biasTranslations = {
+    'extreme-right': 'extreem-rechts',
+    'right': 'rechts',
+    'right-center': 'midden-rechts',
+    'center': 'midden',
+    'left-center': 'midden-links',
+    'left': 'links',
+    'extreme-left': 'extreem-links',
+    'conspiracy': 'complot',
+    'satire': 'satire',
+    'pro-science': 'pro-wetenschap',
+  };
+
+const factualTranslations = {
+  'very high': 'zeer hoog',
+  'high': 'hoog',
+  'mostly_factual': 'meestal feitelijk',
+  'mostly': 'meestal feitelijk',
+  'mixed': 'gemengd',
+  'low': 'laag',
+  'VeryLow': 'zeer laag',
+};
+
+const credibilityTranslations ={
+  'high credibility': 'hoge betrouwbaarheid',
+  'medium credibility': 'gemiddelde betrouwbaarheid',
+  'low credibility': 'lage betrouwbaarheid',
+};
+
+function getTranslatedBias(bias) {
+  return biasTranslations[bias] || bias;
 }
+
+function getTranslatedFactual(bias) {
+  return factualTranslations[bias] || bias;
+}
+
+function getTranslatedCredibility(bias) {
+  return credibilityTranslations[bias] || bias;
+}
+
 
   function setupTabs() {
     const tabs = document.querySelectorAll('.tab');

@@ -129,6 +129,7 @@ class HttpClient{
               headers: { 'Authorization': 'Bearer $token'}
           ),
         );
+        print(response);
         AnalysisById analysis = AnalysisById.fromJson(response.data);
         return analysis;
       } on DioException catch (error) {
