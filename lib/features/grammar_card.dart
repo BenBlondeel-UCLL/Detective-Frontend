@@ -1,4 +1,4 @@
-import 'package:detective/domain/grammar_mistake.dart';
+import 'package:critify/domain/grammar_mistake.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';

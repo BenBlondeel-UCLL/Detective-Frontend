@@ -12,7 +12,7 @@ class StatusMessage extends StatelessWidget{
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.check_circle, color: state ?Colors.green : Colors.red),
+          state ? Icon(Icons.check_circle, color: Colors.green):Icon(Icons.cancel, color: Colors.red),
           Text(text, style: TextStyle(color: state ?Colors.green : Colors.red),), 
         ],
       ),

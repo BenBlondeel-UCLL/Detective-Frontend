@@ -1,9 +1,9 @@
-import 'package:detective/domain/analysis_by_id.dart';
-import 'package:detective/domain/result.dart';
-import 'package:detective/enviorement/env.dart';
+import 'package:critify/domain/analysis_by_id.dart';
+import 'package:critify/domain/result.dart';
+import 'package:critify/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:detective/domain/login_response.dart';
+import 'package:critify/domain/login_response.dart';
 
     
 class HttpClient{
@@ -102,7 +102,6 @@ class HttpClient{
     }
 
     getHistory() async {
-      print("history test");
       final token = await storage.read(key: 'jwt');
       try{
         final dio = Dio();
@@ -138,5 +137,22 @@ class HttpClient{
         return error;
       }
     }
+
+  deleteAnalysisById(String id) async {
+    final token = await storage.read(key: 'jwt');
+    try {
+      final dio = Dio();
+      await dio.delete(
+        '${Env.apiBasedUrl}/analyse/analysis/$id',
+        options: Options(
+          headers: { 'Authorization': 'Bearer $token' }
+        ),
+      );
+    } on DioException catch (error) {
+      return error.response;
+    } catch (error) {
+      return error;
+    }
+  }
 
 }

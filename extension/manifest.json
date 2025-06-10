@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "Detective",
+  "name": "Critify",
   "version": "1.0.0",
-  "description": "Analyze text using Detective AI",
+  "description": "Analyze text using Critify AI",
   "permissions": ["contextMenus", "storage", "activeTab", "scripting", "tabs"],
   "host_permissions": ["http://localhost:8000/"],
   "action": {

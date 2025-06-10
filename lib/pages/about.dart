@@ -1,4 +1,4 @@
-import 'package:detective/features/history_drawer.dart';
+import 'package:critify/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../constants/colors.dart';

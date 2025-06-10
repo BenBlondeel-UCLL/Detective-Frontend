@@ -2,7 +2,7 @@
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
     id: "analyzeText",
-    title: "Analyze with Detective",
+    title: "Analyze with Critify",
     contexts: ["selection"]
   });
 });

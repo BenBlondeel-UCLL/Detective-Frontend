@@ -1,10 +1,10 @@
-import 'package:detective/api/http_client.dart';
-import 'package:detective/pages/about.dart';
-import 'package:detective/pages/redirect.dart';
-import 'package:detective/pages/result_page.dart';
-import 'package:detective/pages/login.dart';
-import 'package:detective/pages/signup.dart';
-import 'package:detective/pages/home.dart';
+import 'package:critify/api/http_client.dart';
+import 'package:critify/pages/about.dart';
+import 'package:critify/pages/redirect.dart';
+import 'package:critify/pages/result_page.dart';
+import 'package:critify/pages/login.dart';
+import 'package:critify/pages/signup.dart';
+import 'package:critify/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 
@@ -35,8 +35,6 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/about',
       onGenerateRoute: (settings) {
-        print("name: ${settings.name}");
-
         // Handle both /redirect and /#/redirect patterns
         final redirectPattern = RegExp(r'^/?#?/redirect');
         if (settings.name != null && redirectPattern.hasMatch(settings.name!)) {

@@ -18,7 +18,7 @@ class InputField extends StatelessWidget {
         readOnly: isLoading,
         decoration: InputDecoration(
           border: OutlineInputBorder(),
-          hintText: 'Give your article',
+          hintText: 'Geef je artikel',
         ),
       ),
     );

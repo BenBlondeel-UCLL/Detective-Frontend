@@ -1,4 +1,4 @@
-import 'package:detective/constants/sizes.dart';
+import 'package:critify/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class QuoteCard extends StatelessWidget {
