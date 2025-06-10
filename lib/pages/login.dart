@@ -1,6 +1,6 @@
-import 'package:detective/features/header.dart';
-import 'package:detective/features/history_drawer.dart';
-import 'package:detective/features/login_card.dart';
+import 'package:critify/features/header.dart';
+import 'package:critify/features/history_drawer.dart';
+import 'package:critify/features/login_card.dart';
 import 'package:flutter/material.dart';
 
 class Login extends StatelessWidget {
@@ -12,7 +12,7 @@ class Login extends StatelessWidget {
       drawer: HistoryDrawer(),
       body: Column(
         children: [
-          Header(title: "Login"), // Fixed at the top
+          Header(title: "Aanmelden"), // Fixed at the top
           Expanded(
             child: SingleChildScrollView(
               child: LoginCard(),

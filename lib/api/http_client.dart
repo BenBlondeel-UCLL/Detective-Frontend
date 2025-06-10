@@ -1,9 +1,9 @@
-import 'package:detective/domain/analysis_by_id.dart';
-import 'package:detective/domain/result.dart';
-import 'package:detective/enviorement/env.dart';
+import 'package:critify/domain/analysis_by_id.dart';
+import 'package:critify/domain/result.dart';
+import 'package:critify/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:detective/domain/login_response.dart';
+import 'package:critify/domain/login_response.dart';
 
     
 class HttpClient{
@@ -129,6 +129,7 @@ class HttpClient{
               headers: { 'Authorization': 'Bearer $token'}
           ),
         );
+        print(response);
         AnalysisById analysis = AnalysisById.fromJson(response.data);
         return analysis;
       } on DioException catch (error) {

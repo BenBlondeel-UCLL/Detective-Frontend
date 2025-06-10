@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:detective/api/http_client.dart';
-import 'package:detective/constants/sizes.dart';
+import 'package:critify/api/http_client.dart';
+import 'package:critify/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:detective/constants/colors.dart';
+import 'package:critify/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -75,7 +75,7 @@ class Header extends StatelessWidget {
           return AlertDialog(
             backgroundColor: CustomColors.primary,
             title: const Text(
-              'Confirm Logout',
+              'Bevestig afmelden',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -83,7 +83,7 @@ class Header extends StatelessWidget {
               ),
             ),
             content: const Text(
-              'Are you sure you want to log out?',
+              'Ben je zeker dat je wilt afmelden?',
               style: TextStyle(fontSize: 16, color: CustomColors.secondary),
             ),
             actions: [
@@ -98,7 +98,7 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Cancel',
+                  'Annuleer',
                   style: TextStyle(color: CustomColors.secondary),
                 ),
               ),
@@ -115,7 +115,7 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Logout',
+                  'Meld af',
                   style: TextStyle(color: CustomColors.secondary),
                 ),
               ),
@@ -195,7 +195,7 @@ class Header extends StatelessWidget {
                           ),
                         ),
                         child: const Text(
-                          'Login',
+                          'Aanmelden',
                           style: TextStyle(color: CustomColors.secondary),
                         ),
                       )
@@ -214,7 +214,7 @@ class Header extends StatelessWidget {
                             builder: (context, usernameSnapshot) {
                               final username = usernameSnapshot.data ?? '';
                               return Text(
-                                'Welcome ${username.length > 10 ? '${username.substring(0, 8)}...' : username}',
+                                'Welkom ${username.length > 10 ? '${username.substring(0, 8)}...' : username}',
                                 style: TextStyle(
                                   color: CustomColors.secondary,
                                   fontSize: ResponsiveSize.getFontSize(context, 14),
@@ -242,7 +242,7 @@ class Header extends StatelessWidget {
                               ),
                             ),
                             child: const Text(
-                              'Logout',
+                              'Meld af',
                               style: TextStyle(
                                 color: CustomColors.secondary,
                               ),

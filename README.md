@@ -1,4 +1,4 @@
-# detective
+# critify
 
 A new Flutter project.
 

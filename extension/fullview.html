@@ -1,0 +1,44 @@
+<!-- fullview.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Critify - Full Analysis</title>
+  <link rel="stylesheet" href="fullview.css">
+</head>
+<body>
+  <div class="header">
+    <h1>Critify Analysis</h1>
+  </div>
+
+  <div class="content">
+    <div class="text-section">
+      <h2>Analyzed Text</h2>
+      <div id="analyzedText" class="text-container"></div>
+    </div>
+
+    <div class="analysis-section">
+      <div class="tabs-container">
+        <div class="tab-header">
+          <div class="tab active" data-tab="spelling">Spelling <span id="spellingCount">0</span></div>
+          <div class="tab" data-tab="grammar">Grammatica <span id="grammarCount">0</span></div>
+          <div class="tab" data-tab="claims">Stellingen <span id="claimsCount">0</span></div>
+          <div class="tab" data-tab="ai">AI <span id="aiCount">0</span></div>
+        </div>
+
+        <div class="tab-content">
+          <div id="spellingTab" class="tab-panel active"></div>
+          <div id="grammarTab" class="tab-panel"></div>
+          <div id="claimsTab" class="tab-panel"></div>
+          <div id="aiTab" class="tab-panel"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="fullview.js">
+    window.addEventListener('message', (event) => { console.log('Received message:', event.data); });
+  </script>
+</body>
+</html>

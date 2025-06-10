@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:detective/constants/padding_style.dart';
-import 'package:detective/constants/sizes.dart';
-import 'package:detective/constants/texts.dart';
-import 'package:detective/features/status_message.dart';
+import 'package:critify/constants/padding_style.dart';
+import 'package:critify/constants/sizes.dart';
+import 'package:critify/constants/texts.dart';
+import 'package:critify/features/status_message.dart';
 import 'package:flutter/material.dart';
-import 'package:detective/api/http_client.dart';
+import 'package:critify/api/http_client.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -80,11 +80,11 @@ class _LoginCardState extends State<LoginCard> {
                       ? (_status == 200
                           ? StatusMessage(
                             state: true,
-                            text: 'succesfully logged in',
+                            text: 'succesvol aangemeld',
                           )
                           : StatusMessage(
                             state: false,
-                            text: 'failed to log in',
+                            text: 'het aanmelden is gefaald',
                           ))
                       : SizedBox()),
 
@@ -117,7 +117,7 @@ class _LoginCardState extends State<LoginCard> {
                             obscureText: _isObscured,
                             onChanged: (value) => password = value,
                             decoration: InputDecoration(
-                              labelText: 'password',
+                              labelText: 'wachtwoord',
                               labelStyle: const TextStyle(
                                 color: CustomColors.secondary,
                               ),
@@ -161,7 +161,7 @@ class _LoginCardState extends State<LoginCard> {
                                 ),
                               ),
                               child: Text(
-                                'Sign in',
+                                'Meld je aan',
                                 style: TextStyle(color: CustomColors.secondary),
                               ),
                             ),
@@ -173,7 +173,7 @@ class _LoginCardState extends State<LoginCard> {
                             child: Row(
                               children: [
                                 Text(
-                                  'Don\'t have an account yet?',
+                                  'Nog geen account?',
                                   style: TextStyle(
                                     color: CustomColors.secondary,
                                   ),
@@ -184,7 +184,7 @@ class _LoginCardState extends State<LoginCard> {
                                     Navigator.pushNamed(context, '/signup');
                                   },
                                   child: Text(
-                                    'sign up',
+                                    'registreer',
                                     style: TextStyle(
                                       color: CustomColors.secondary,
                                     ),

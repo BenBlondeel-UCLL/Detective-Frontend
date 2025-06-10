@@ -1,6 +1,6 @@
 {
-    "name": "detective",
-    "short_name": "detective",
+    "name": "critify",
+    "short_name": "critify",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#hexcode",

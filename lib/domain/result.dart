@@ -1,5 +1,5 @@
-import 'package:detective/domain/news_site.dart';
-import 'package:detective/domain/spelling_mistake.dart';
+import 'package:critify/domain/news_site.dart';
+import 'package:critify/domain/spelling_mistake.dart';
 import 'grammar_mistake.dart';
 import 'claim.dart';
 
