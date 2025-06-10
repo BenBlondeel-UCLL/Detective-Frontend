@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     } else {
       document.getElementById('loginContainer').classList.add('hidden');
       document.getElementById('selectionContainer').classList.remove('hidden');
-      document.getElementById('headerUsername').textContent = `Hello, ${username}`;
+      document.getElementById('headerUsername').textContent = `Hallo, ${username}`;
     }
 
 
@@ -31,19 +31,18 @@ document.addEventListener('DOMContentLoaded', async function() {
     try {
       const response = await apiService.postLogin(username, password);
       if (response.access_token) {
-        console.log('Login successful:', response);
         document.getElementById('loginContainer').classList.add('hidden');
         document.getElementById('selectionContainer').classList.remove('hidden');
 
         chrome.storage.session.set({ 'access_token': response.access_token, 'username': response.username }, function() {
-          document.getElementById('headerUsername').textContent = `Hello, ${response.username}`;
+          document.getElementById('headerUsername').textContent = `Hallo, ${response.username}`;
           document.getElementById('headerUsername').classList.remove('hidden');
         });
       } else {
-          alert('something went wrong, please try again');
+          alert('Er is iets misgegaan, probeer opnieuw');
       }
     } catch (error) {
-      alert('Login failed: ' + error.message);
+      alert('Aanmelden mislukt: ' + error.message);
     }
   });
 
@@ -55,10 +54,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       }, (results) => {
         console.log(results);
         if (results && results[0] && results[0].result) {
-          console.log(`tekst in analyzeBTN: ${results[0].result}`);
           analyzeText(results[0].result);
         } else {
-          alert('Please select text on the page first');
+          alert('Selecteer eerst een tekst op de pagina');
         }
       });
     });
@@ -70,11 +68,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   async function analyzeText(text) {
     if (!text || text.trim() === '') {
-      alert('Please select text to analyze');
+      alert('Selecteer een tekst om te analyseren');
       return;
     }
-
-    console.log("we are here and running in the analyzeText");
 
     originalText = text;
 
@@ -98,7 +94,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     } catch (error) {
       document.getElementById('loadingContainer').classList.add('hidden');
       document.getElementById('selectionContainer').classList.remove('hidden');
-      alert('Error analyzing text: ' + error.message);
+      alert('Een error tijdens het analyseren van de tekst: ' + error.message);
     }
   }
 
@@ -184,7 +180,7 @@ document.addEventListener('DOMContentLoaded', async function() {
       const card = document.createElement('div');
       card.className = 'mistake-card';
       card.innerHTML = `
-        <p><strong>Mistake:</strong> <span class="spelling-mistake">${mistakeText}</span></p>
+        <p><strong>Fout:</strong> <span class="spelling-mistake">${mistakeText}</span></p>
         <p>${mistake.message}</p>
         `;
       container.appendChild(card);
@@ -204,8 +200,8 @@ document.addEventListener('DOMContentLoaded', async function() {
       const card = document.createElement('div');
       card.className = 'mistake-card';
       card.innerHTML = `
-        <p><strong>Issue:</strong> <span class="grammar-mistake">${mistake.target}</span></p>
-        <p><strong>Suggestion:</strong> ${mistake.message}</p>
+        <p><strong>Fout:</strong> <span class="grammar-mistake">${mistake.target}</span></p>
+        <p><strong>Suggestie:</strong> ${mistake.message}</p>
       `;
       container.appendChild(card);
     });
@@ -286,7 +282,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     </div>
     ${newsSiteHtml}
     <div style="margin-top:16px; color:#666; font-style:italic;">
-      This information is provided by the:
+      Deze informatie komt van:
       <a href="https://mediabiasfactcheck.com/mbfcs-data-api/" target="_blank" style="color:#1976d2;text-decoration:underline;">Media Bias/Fact Check API</a>
     </div>
   `;
