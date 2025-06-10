@@ -67,7 +67,14 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
             onTap: () {
               Navigator.pushNamed(context, '/');
               },
-          ),          
+          ),
+          ListTile(
+            leading: Icon(Icons.info),
+            title: Text("Over Critify"),
+            onTap: () {
+              Navigator.pushNamed(context, '/about');
+            },
+          ),
           ...historyResponse.map(
             (hist) => Row(
               children: [
