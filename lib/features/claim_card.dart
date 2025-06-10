@@ -37,7 +37,7 @@ class ClaimCard extends StatelessWidget {
             if (claim.url.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(
-                "Sources:",
+                "Bronnen:",
                 style: TextStyle(
                   color: CustomColors.primary,
                   fontWeight: FontWeight.bold,

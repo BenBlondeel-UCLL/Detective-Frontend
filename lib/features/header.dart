@@ -75,7 +75,7 @@ class Header extends StatelessWidget {
           return AlertDialog(
             backgroundColor: CustomColors.primary,
             title: const Text(
-              'Confirm Logout',
+              'Bevestig afmelden',
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
@@ -83,7 +83,7 @@ class Header extends StatelessWidget {
               ),
             ),
             content: const Text(
-              'Are you sure you want to log out?',
+              'Ben je zeker dat je wilt afmelden?',
               style: TextStyle(fontSize: 16, color: CustomColors.secondary),
             ),
             actions: [
@@ -98,7 +98,7 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Cancel',
+                  'Annuleer',
                   style: TextStyle(color: CustomColors.secondary),
                 ),
               ),
@@ -115,7 +115,7 @@ class Header extends StatelessWidget {
                   ),
                 ),
                 child: const Text(
-                  'Logout',
+                  'Meld af',
                   style: TextStyle(color: CustomColors.secondary),
                 ),
               ),
@@ -242,7 +242,7 @@ class Header extends StatelessWidget {
                               ),
                             ),
                             child: const Text(
-                              'Logout',
+                              'Meld af',
                               style: TextStyle(
                                 color: CustomColors.secondary,
                               ),

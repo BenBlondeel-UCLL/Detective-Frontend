@@ -66,7 +66,7 @@ class _ResultState extends State<ResultPage> {
       drawer: HistoryDrawer(),
       body: Column(
         children: [
-          Header(title: "Analysis"),
+          Header(title: "Analyse"),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(

@@ -15,7 +15,7 @@ class About extends StatelessWidget {
       drawer: HistoryDrawer(),
       body: Column(
         children: [
-          Header(title: "About"),
+          Header(title: "Over"),
           Text(
             "How does critify work?",
             style: TextStyle(fontSize: Sizes.fontSizeTitle, fontWeight: FontWeight.bold),
