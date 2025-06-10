@@ -1,9 +1,9 @@
 const Map<String, String> biasTranslations = {
   'extreme-right': 'extreem-rechts',
   'right': 'rechts',
-  'right-center': 'midden-rechts',
-  'center': 'midden',
-  'left-center': 'midden-links',
+  'right-center': 'centrum-rechts',
+  'center': 'centrum',
+  'left-center': 'centrum-links',
   'left': 'links',
   'extreme-left': 'extreem-links',
   'conspiracy': 'complot',
