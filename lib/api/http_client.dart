@@ -139,4 +139,21 @@ class HttpClient{
       }
     }
 
+  deleteAnalysisById(String id) async {
+    final token = await storage.read(key: 'jwt');
+    try {
+      final dio = Dio();
+      await dio.delete(
+        '${Env.apiBasedUrl}/analyse/analysis/$id',
+        options: Options(
+          headers: { 'Authorization': 'Bearer $token' }
+        ),
+      );
+    } on DioException catch (error) {
+      return error.response;
+    } catch (error) {
+      return error;
+    }
+  }
+
 }
