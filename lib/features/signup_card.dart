@@ -1,8 +1,8 @@
-import 'package:detective/api/http_client.dart';
-import 'package:detective/constants/padding_style.dart';
-import 'package:detective/constants/sizes.dart';
-import 'package:detective/constants/texts.dart';
-import 'package:detective/features/status_message.dart';
+import 'package:critify/api/http_client.dart';
+import 'package:critify/constants/padding_style.dart';
+import 'package:critify/constants/sizes.dart';
+import 'package:critify/constants/texts.dart';
+import 'package:critify/features/status_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -81,7 +81,7 @@ class _SignupCardState extends State<SignupCard> {
                           TextFormField(
                             key: const Key('signUpUsernameField'),
                             decoration: InputDecoration(
-                              labelText: 'username',
+                              labelText: 'gebruikersnaam',
                               labelStyle: const TextStyle(
                                 color: CustomColors.secondary,
                               ),
@@ -112,7 +112,7 @@ class _SignupCardState extends State<SignupCard> {
                             key: const Key('signUpPasswordField'),
                             obscureText: true,
                             decoration: InputDecoration(
-                              labelText: 'password',
+                              labelText: 'wachtwoord',
                               labelStyle: const TextStyle(
                                 color: CustomColors.secondary,
                               ),
@@ -128,7 +128,7 @@ class _SignupCardState extends State<SignupCard> {
                             key: const Key('signUpPasswordRepeatField'),
                             obscureText: true,
                             decoration: InputDecoration(
-                              labelText: 'repeat password',
+                              labelText: 'herhaal wachtwoord',
                               labelStyle: const TextStyle(
                                 color: CustomColors.secondary,
                               ),
@@ -152,7 +152,7 @@ class _SignupCardState extends State<SignupCard> {
                                 ),
                               ),
                               child: Text(
-                                'create account',
+                                'maak account',
                                 style: TextStyle(color: CustomColors.secondary),
                               ),
                             ),
@@ -174,7 +174,7 @@ class _SignupCardState extends State<SignupCard> {
                                     Navigator.pushNamed(context, '/login');
                                   },
                                   child: Text(
-                                    'sign in',
+                                    'meld je aan',
                                     style: TextStyle(
                                       color: CustomColors.secondary,
                                     ),
@@ -202,18 +202,32 @@ class _SignupCardState extends State<SignupCard> {
     required String password,
     required String passwordRetry,
   }) {
+    if (username == ''){
+      setState(() {
+        _status = -1;
+        _statusText = 'Een gebruikersnaam moet minstens 1 karakter bevatten';
+      });
+      return false;
+    }
     final emailRegex = RegExp(r"^[\w-\.]+@([\w-]+\.)+[\w-]{2,}$");
     if (!emailRegex.hasMatch(email)) {
       setState(() {
         _status = -1;
-        _statusText = 'Invalid email format';
+        _statusText = 'Ongeldig email formaat';
+      });
+      return false;
+    }
+    if (password.length < 8){
+      setState(() {
+        _status = -1;
+        _statusText = 'Wachtwoord moet minstens 8 karakters hebben';
       });
       return false;
     }
     if (password != passwordRetry) {
       setState(() {
         _status = -1;
-        _statusText = 'Passwords do not match';
+        _statusText = 'Wachtwoorden zijn niet hetzelfde';
       });
       return false;
     }
@@ -241,7 +255,7 @@ class _SignupCardState extends State<SignupCard> {
         _status = response?.statusCode ?? -1;
         _statusText =
             _status == 200
-                ? "Created Account"
+                ? "Account aangemaakt"
                 : response?.data['detail'] ??
                     response.statusMessage ??
                     'Unknown error';

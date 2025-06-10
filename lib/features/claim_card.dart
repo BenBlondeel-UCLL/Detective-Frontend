@@ -1,4 +1,4 @@
-import 'package:detective/domain/claim.dart';
+import 'package:critify/domain/claim.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

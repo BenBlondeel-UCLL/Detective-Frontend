@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:detective/main.dart' as app;
+import 'package:critify/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
 import '../test/mocks.mocks.dart';
@@ -70,7 +70,7 @@ void main() {
     await tester.tap(find.byKey(const Key('signUpButton')));
     await tester.pumpAndSettle(const Duration(seconds: 3));
 
-    expect(find.text('Created Account', skipOffstage: false), findsOneWidget);
+    expect(find.text('Account aangemaakt', skipOffstage: false), findsOneWidget);
   });
 
   testWidgets('Login Flow', (WidgetTester tester) async {
@@ -106,6 +106,6 @@ void main() {
     await tester.tap(find.byKey(const Key('loginButton')));
     await tester.pumpAndSettle(const Duration(seconds: 3));
 
-    expect(find.text('succesfully logged in', skipOffstage: false), findsOneWidget);
+    expect(find.text('succesvol aangemeld', skipOffstage: false), findsOneWidget);
   });
 }

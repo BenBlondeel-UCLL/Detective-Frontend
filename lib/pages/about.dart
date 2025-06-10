@@ -1,4 +1,4 @@
-import 'package:detective/features/history_drawer.dart';
+import 'package:critify/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';
@@ -17,7 +17,7 @@ class About extends StatelessWidget {
         children: [
           Header(title: "About"),
           Text(
-            "How does detective work?",
+            "How does critify work?",
             style: TextStyle(fontSize: Sizes.fontSizeTitle, fontWeight: FontWeight.bold),
           ),
           Expanded(

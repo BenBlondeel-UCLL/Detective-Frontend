@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:detective/domain/result.dart';
-import 'package:detective/features/history_drawer.dart';
-import 'package:detective/features/header.dart';
-import 'package:detective/features/input_field.dart';
+import 'package:critify/domain/result.dart';
+import 'package:critify/features/history_drawer.dart';
+import 'package:critify/features/header.dart';
+import 'package:critify/features/input_field.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../api/http_client.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +79,7 @@ class _HomeState extends State<Home> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Header(title: "Detective"),
+              Header(title: "Critify"),
               Padding(
                 padding: const EdgeInsets.only(top: 100),
                 child: Column(
@@ -119,7 +119,7 @@ class _HomeState extends State<Home> {
                                   ),
                                 )
                                 : const Text(
-                                  "Analyse",
+                                  "Analyseer",
                                   style: TextStyle(fontSize: 16.0),
                                 ),
                       ),

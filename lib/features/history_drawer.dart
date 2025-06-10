@@ -1,12 +1,12 @@
     
 import 'dart:convert';
 
-import 'package:detective/constants/colors.dart';
-import 'package:detective/constants/date_utils.dart';
-import 'package:detective/domain/analysis_by_id.dart';
-import 'package:detective/domain/analysis_history_response.dart';
+import 'package:critify/constants/colors.dart';
+import 'package:critify/constants/date_utils.dart';
+import 'package:critify/domain/analysis_by_id.dart';
+import 'package:critify/domain/analysis_history_response.dart';
 import 'package:flutter/material.dart';
-import 'package:detective/api/http_client.dart';
+import 'package:critify/api/http_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HistoryDrawer extends StatefulWidget {
@@ -59,7 +59,7 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                     radius: 50,
                   ),
                   SizedBox(height: 10),
-                  Text('History', style: TextStyle(color: CustomColors.secondary),),
+                  Text('Geschiedenis', style: TextStyle(color: CustomColors.secondary),),
                 ],
               ),
             ),
@@ -77,7 +77,6 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                   subtitle: Text(DateUtil.getDdMMyyyy(hist.createdAt)),
                   onTap: () async {
                       AnalysisById response = await client.getAnalysisById(hist.id);
-                      print(response.article);
                       SharedPreferences prefs = await SharedPreferences.getInstance();
                       await prefs.setString('text', response.article);
                       await prefs.setString('response', jsonEncode(response.result.toJson()));

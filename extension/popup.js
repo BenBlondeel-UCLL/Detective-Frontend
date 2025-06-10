@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     container.innerHTML = '';
 
     if (mistakes.length === 0) {
-      container.innerHTML = '<p>No spelling mistakes found.</p>';
+      container.innerHTML = '<p>Geen spelling fouten gevonden.</p>';
       return;
     }
 
@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     container.innerHTML = '';
 
     if (mistakes.length === 0) {
-      container.innerHTML = '<p>No grammar issues found.</p>';
+      container.innerHTML = '<p>Geen gramatica fouten gevonden.</p>';
       return;
     }
 
@@ -216,7 +216,7 @@ document.addEventListener('DOMContentLoaded', async function() {
     container.innerHTML = '';
 
     if (claims.length === 0) {
-      container.innerHTML = '<p>No claims detected for verification.</p>';
+      container.innerHTML = '<p>Geen stellingen gedetecteerd voor verificatie.</p>';
       return;
     }
 
@@ -224,9 +224,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       const card = document.createElement('div');
       card.className = 'claim-card';
       card.innerHTML = `
-        <p><strong>Claim:</strong> <span>${claim.target}</span></p>
-        <p><strong>Explanation:</strong> ${claim.explanation}</p>
-        <div><strong>Sources:</strong>
+        <p><strong>Stelling:</strong> <span>${claim.target}</span></p>
+        <p><strong>Uitleg:</strong> ${claim.explanation}</p>
+        <div><strong>Bronnen:</strong>
           <ul style="margin: 8px 0 0 16px; padding: 0;">
         ${
           Array.isArray(claim.url)
@@ -237,7 +237,7 @@ document.addEventListener('DOMContentLoaded', async function() {
           `).join('')
             : claim.url
           ? `<li><a href="${claim.url}" target="_blank" style="color:#1976d2;text-decoration:underline;word-break:break-all;">${claim.url}</a></li>`
-          : '<li>No sources provided.</li>'
+          : '<li>Geen bronnen gegeven.</li>'
         }
           </ul>
         </div>
@@ -252,8 +252,8 @@ document.addEventListener('DOMContentLoaded', async function() {
 
   // AI Content
   const aiMessage = result.aiContent
-    ? `<span>This content is likely AI-generated.</span>`
-    : `<span>This content is likely human-written.</span>`;
+    ? `<span>Deze tekst is waarschijnlijk AI gegenereerd.</span>`
+    : `<span>Deze tekst is waarschijnlijk door een mens geschreven.</span>`;
 
   // Arousal Score
   const arousalScore = typeof result.arousal_score !== 'undefined' ? result.arousal_score : 'N/A';
@@ -262,13 +262,13 @@ document.addEventListener('DOMContentLoaded', async function() {
   const newsSite = result.newsSite || {};
   const newsSiteHtml = newsSite.name ? `
     <div style="margin-top:16px;">
-      <div style="font-weight:bold;">Probable News Source:</div>
+      <div style="font-weight:bold;">Waarschijnlijke Bron:</div>
       <div style="margin-left:16px;">
-        <div><strong>Name:</strong> ${newsSite.name}</div>
+        <div><strong>Naam:</strong> ${newsSite.name}</div>
         <div><strong>URL:</strong> <a href="https://${newsSite.url}" target="_blank" style="color:#1976d2;text-decoration:underline;">${newsSite.url}</a></div>
-        <div><strong>Bias:</strong> ${newsSite.bias}</div>
-        <div><strong>Factuality:</strong> ${newsSite.factual}</div>
-        <div><strong>Credibility:</strong> ${newsSite.credibility}</div>
+        <div><strong>Partijdigheid:</strong> ${newsSite.bias}</div>
+        <div><strong>Feitelijkheid:</strong> ${newsSite.factual}</div>
+        <div><strong>Betrouwbaarheid:</strong> ${newsSite.credibility}</div>
       </div>
     </div>
   ` : '';
@@ -279,9 +279,9 @@ document.addEventListener('DOMContentLoaded', async function() {
       <div style="margin-left:16px; margin-bottom:8px;">${aiMessage}</div>
     </div>
     <div style="margin-bottom:16px;">
-      <div style="font-weight:bold;">Arousal Score: ${arousalScore}</div>
+      <div style="font-weight:bold;">Sensatiewaarde: ${arousalScore}</div>
       <div style="margin-left:16px; color:#666;">
-        Score from 0 to 1. This score indicates the level of emotional arousal in the text. A higher score suggests more emotional content.
+        Een waare van 0 tot 1. Deze waarde duidt op de opwekking van emoties in the tekst. Een hogere waarde suggereert dat de tekst meer emoties opwekt.
       </div>
     </div>
     ${newsSiteHtml}
