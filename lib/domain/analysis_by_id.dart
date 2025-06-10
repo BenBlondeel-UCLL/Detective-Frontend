@@ -1,4 +1,4 @@
-import 'package:detective/domain/result.dart';
+import 'package:critify/domain/result.dart';
 
 class AnalysisById {
   final String id;

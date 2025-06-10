@@ -1,3 +1,5 @@
+import 'package:critify/constants/news_site_translation.dart';
+
 class NewsSite {
   final String name;
   final String url;
@@ -17,9 +19,9 @@ class NewsSite {
     return NewsSite(
       name: json['name'] as String,
       url: json['url'] as String,
-      bias: json['bias'] as String,
-      factual: json['factual'] as String,
-      credibility: json['credibility'] as String,
+      bias: getTranslatedBias(json['bias'] as String),
+      factual: getTranslatedFactual(json['factual'] as String),
+      credibility: getTranslatedCredibility(json['credibility'] as String),
     );
   }
 

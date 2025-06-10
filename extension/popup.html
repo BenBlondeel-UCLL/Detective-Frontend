@@ -3,44 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Detective</title>
+    <title>Critify</title>
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
     <div class="header">
-        <h1>Detective</h1>
+        <h1>Critify</h1>
         <h2 id="headerUsername"></h2>
     </div>
 
     <div id="loginContainer">
-        <p>Please log in to continue.</p>
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button id="loginBtn">Login</button>
+        <p>Meld je aan om verder te gaan.</p>
+        <input type="text" id="username" placeholder="Email">
+        <input type="password" id="password" placeholder="Wachtwoord">
+        <button id="loginBtn">Aanmelden</button>
     </div>
 
     <div id="selectionContainer" class="hidden">
-        <p>Select text on a webpage to analyze it.</p>
-        <button id="analyzeBtn">Analyze Selected Text</button>
+        <p>Selecteer een tekst op een pagina om te analyseren.</p>
+        <button id="analyzeBtn">Analyseer geselecteerde tekst</button>
     </div>
 
     <div id="loadingContainer" class="hidden">
         <div class="spinner"></div>
-        <p>Analyzing text...</p>
+        <p>Tekst aan het analyseren...</p>
     </div>
 
     <div id="resultContainer" class="hidden" >
         <div class="text-container">
-            <h3>Analyzed Text</h3>
+            <h3>Geanalyseerde tekst</h3>
             <div id="analyzedText"></div>
-            <button id="openFullViewBtn">Open in Full View</button>
+            <button id="openFullViewBtn">Open in de website</button>
         </div>
 
         <div class="tabs-container">
             <div class="tab-header">
                 <div class="tab active" data-tab="spelling">Spelling <span id="spellingCount">0</span></div>
-                <div class="tab" data-tab="grammar">Grammar <span id="grammarCount">0</span></div>
-                <div class="tab" data-tab="claims">Claims <span id="claimsCount">0</span></div>
+                <div class="tab" data-tab="grammar">Grammatica <span id="grammarCount">0</span></div>
+                <div class="tab" data-tab="claims">Stellingen <span id="claimsCount">0</span></div>
                 <div class="tab" data-tab="extra">Extra <span id="extra"></span></div>
             </div>
 

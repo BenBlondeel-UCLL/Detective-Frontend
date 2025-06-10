@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:detective/constants/sizes.dart';
-import 'package:detective/domain/result.dart';
-import 'package:detective/features/claim_card.dart';
-import 'package:detective/features/grammar_card.dart';
-import 'package:detective/features/header.dart';
-import 'package:detective/features/history_drawer.dart';
+import 'package:critify/constants/sizes.dart';
+import 'package:critify/domain/result.dart';
+import 'package:critify/features/claim_card.dart';
+import 'package:critify/features/grammar_card.dart';
+import 'package:critify/features/header.dart';
+import 'package:critify/features/history_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -66,7 +66,7 @@ class _ResultState extends State<ResultPage> {
       drawer: HistoryDrawer(),
       body: Column(
         children: [
-          Header(title: "Analysis"),
+          Header(title: "Analyse"),
           Expanded(
             child: Padding(
               padding: EdgeInsets.symmetric(
@@ -114,7 +114,7 @@ class _ResultState extends State<ResultPage> {
         children: [
           Padding(
             padding: const EdgeInsets.all(16.0),
-            child: UnderlinedTitle(title: "Analysed Article"),
+            child: UnderlinedTitle(title: "Geanalyseerd Artikel"),
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -144,7 +144,7 @@ class _ResultState extends State<ResultPage> {
                   ),
                 ),
                 child: const Text(
-                  "Analyse Another Article",
+                  "Analyseer een ander artikel",
                   style: TextStyle(fontSize: 16.0),
                 ),
               ),
@@ -187,7 +187,7 @@ class _ResultState extends State<ResultPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: Text("Grammar"),
+                        child: Text("Grammatica"),
                       ),
                       Text("${_response.grammarMistakes.length}"),
                     ],
@@ -198,7 +198,7 @@ class _ResultState extends State<ResultPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: Text("Claims"),
+                        child: Text("Stellingen"),
                       ),
                       Text("${_response.claims.length}"),
                     ],
@@ -397,8 +397,8 @@ class _ResultState extends State<ResultPage> {
               const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
               Text(
                 aiContents
-                    ? "This content is likely AI-generated."
-                    : "This content is likely human-written.",
+                    ? "Deze tekst is waarschijnlijk AI gegenereerd."
+                    : "Deze tekst is waarschijnlijk door een mens geschreven.",
                 style: TextStyle(
                   color: CustomColors.primary.withValues(alpha: 0.6),
                   fontStyle: FontStyle.italic,
@@ -406,23 +406,23 @@ class _ResultState extends State<ResultPage> {
               ),
               const SizedBox(height: Sizes.spaceBetweenSections),
               Text(
-                "Arousal Score: $arousalScore",
+                "Sensatiewaarde: $arousalScore",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
               Text(
-                "Score from 0 to 1. This score indicates the level of emotional arousal in the text. A higher score suggests more emotional content.",
+                "Een waare van 0 tot 1. Deze waarde duidt op de opwekking van emoties in the tekst. Een hogere waarde suggereert dat de tekst meer emoties opwekt.",
                 style: TextStyle(
                   color: CustomColors.primary.withValues(alpha: 0.6),
                 ),
               ),
               const SizedBox(height: Sizes.spaceBetweenSections),
               Text(
-                "Probable News Source:",
+                "Waarschijnlijke Bron:",
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
-              Text("\t\tName: ${newsSite.name}"),
+              Text("\t\tNaam: ${newsSite.name}"),
               Row(
                 children: [
                   Text("\t\tURL: "),
@@ -446,12 +446,12 @@ class _ResultState extends State<ResultPage> {
                   ),
                 ],
               ),
-              Text("\t\tBias: ${newsSite.bias}"),
-              Text("\t\tFactuality: ${newsSite.factual}"),
-              Text("\t\tCredibility: ${newsSite.credibility}"),
+              Text("\t\tPartijdigheid: ${newsSite.bias}"),
+              Text("\t\tFeitelijkheid: ${newsSite.factual}"),
+              Text("\t\tBetrouwbaarheid: ${newsSite.credibility}"),
               const SizedBox(height: Sizes.spaceBetweenItems),
               Text(
-                "This information is provided by the:",
+                "Deze informatie komt van:",
                 style: TextStyle(
                   color: CustomColors.primary.withValues(alpha: 0.6),
                   fontStyle: FontStyle.italic,
@@ -494,7 +494,7 @@ class _ResultState extends State<ResultPage> {
   ) {
     if (mistakes.isEmpty) {
       return const Text(
-        "No spelling mistakes found.",
+        "Geen spelling fouten gevonden.",
         style: TextStyle(color: CustomColors.primary),
       );
     }
@@ -515,7 +515,7 @@ class _ResultState extends State<ResultPage> {
   Widget _buildGrammarMistakesList(List<GrammarMistake> mistakes) {
     if (mistakes.isEmpty) {
       return const Text(
-        "No grammar issues found.",
+        "Geen grammatica fouten gevonden.",
         style: TextStyle(color: CustomColors.primary),
       );
     }
@@ -536,7 +536,7 @@ class _ResultState extends State<ResultPage> {
   Widget _buildClaimsList(List<Claim> claims) {
     if (claims.isEmpty) {
       return const Text(
-        "No claims detected for verification.",
+        "Geen stellingen gedetecteerd voor verificatie.",
         style: TextStyle(color: CustomColors.primary),
       );
     }

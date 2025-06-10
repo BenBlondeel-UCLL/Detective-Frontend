@@ -1,4 +1,4 @@
-import 'package:detective/features/underlined_title.dart';
+import 'package:critify/features/underlined_title.dart';
 import 'package:flutter/material.dart';
 
 import '../constants/colors.dart';
