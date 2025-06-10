@@ -8,6 +8,7 @@ class CustomColors {
   static const Color tertiary = Color.fromARGB(255, 152, 174, 187);
 
   static const Color quaternary = Color.fromARGB(255, 209, 225, 232);
+  static const Color quinary = Color.fromARGB(255, 5, 42, 67);
 
   static const Color buttonColor = Color.fromARGB(255, 30, 140, 230);
 

@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         scaffoldBackgroundColor: const Color(0xffE6F2F5),
       ),
-      initialRoute: '/',
+      initialRoute: '/about',
       onGenerateRoute: (settings) {
         print("name: ${settings.name}");
 
