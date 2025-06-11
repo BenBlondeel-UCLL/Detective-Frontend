@@ -1,7 +1,7 @@
-import 'package:critify/domain/claim.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../domain/claim.dart';
 import '../constants/colors.dart';
 
 class ClaimCard extends StatelessWidget {

@@ -1,12 +1,13 @@
 import 'dart:convert';
 
-import 'package:critify/constants/colors.dart';
-import 'package:critify/constants/date_utils.dart';
-import 'package:critify/domain/analysis_by_id.dart';
-import 'package:critify/domain/analysis_history_response.dart';
 import 'package:flutter/material.dart';
-import 'package:critify/api/http_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../constants/colors.dart';
+import '../constants/date_utils.dart';
+import '../domain/analysis_by_id.dart';
+import '../domain/analysis_history_response.dart';
+import '../api/http_client.dart';
 
 class HistoryDrawer extends StatefulWidget {
   const HistoryDrawer({super.key});
@@ -29,22 +30,23 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
   void loadHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final responseJsonList = jsonDecode(prefs.getString('history') ?? '[]');
-    setState(() {
-      historyResponse =
-          (responseJsonList as List)
-              .map(
-                (responseJson) =>
-                    AnalysisHistoryResponse.fromJson(responseJson),
-              )
-              .toList()
-            ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    });
+    if (responseJsonList.isNotEmpty) {
+      setState(() {
+        historyResponse =
+            (responseJsonList as List)
+                .map(
+                  (responseJson) =>
+                      AnalysisHistoryResponse.fromJson(responseJson),
+                )
+                .toList()
+              ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-  return 
-    Drawer(
+    return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -57,7 +59,10 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                   radius: 50,
                 ),
                 SizedBox(height: 10),
-                Text('Geschiedenis', style: TextStyle(color: CustomColors.secondary),),
+                Text(
+                  'Geschiedenis',
+                  style: TextStyle(color: CustomColors.secondary),
+                ),
               ],
             ),
           ),
@@ -66,7 +71,7 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
             title: Text("Home"),
             onTap: () {
               Navigator.pushNamed(context, '/');
-              },
+            },
           ),
           ListTile(
             leading: Icon(Icons.info),
@@ -94,7 +99,9 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                         'response',
                         jsonEncode(response.result.toJson()),
                       );
-                      Navigator.pushNamed(context, '/result');
+                      if (context.mounted) {
+                        Navigator.pushNamed(context, '/result');
+                      }
                     },
                   ),
                 ),

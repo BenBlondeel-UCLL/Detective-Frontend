@@ -1,4 +1,4 @@
-import 'package:critify/domain/result.dart';
+import '../domain/result.dart';
 
 class AnalysisById {
   final String id;

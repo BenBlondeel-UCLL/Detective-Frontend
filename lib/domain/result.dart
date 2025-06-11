@@ -1,7 +1,8 @@
-import 'package:critify/domain/news_site.dart';
-import 'package:critify/domain/spelling_mistake.dart';
 import 'grammar_mistake.dart';
 import 'claim.dart';
+
+import '../domain/news_site.dart';
+import '../domain/spelling_mistake.dart';
 
 class Result {
   final List<SpellingMistake> spellingMistakes;

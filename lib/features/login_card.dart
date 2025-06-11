@@ -1,14 +1,14 @@
 import 'dart:convert';
-
-import 'package:critify/constants/padding_style.dart';
-import 'package:critify/constants/sizes.dart';
-import 'package:critify/constants/texts.dart';
-import 'package:critify/features/status_message.dart';
 import 'package:flutter/material.dart';
-import 'package:critify/api/http_client.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../constants/padding_style.dart';
+import '../constants/sizes.dart';
+import '../constants/texts.dart';
+import '../features/status_message.dart';
+import '../api/http_client.dart';
 import '../constants/colors.dart';
 
 class LoginCard extends StatefulWidget {
@@ -216,10 +216,15 @@ class _LoginCardState extends State<LoginCard> {
     });
     if (_status == 200) {
       final response = await client.getHistory();
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('history', jsonEncode(response.data));
+      if (response.statusCode == 200) {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString('history', jsonEncode(response.data));
+      }
       await Future.delayed(Duration(milliseconds: 2000));
-      Navigator.pushNamed(context, '/');
+
+      if(mounted) {
+        Navigator.pushNamed(context, '/');
+      }
     }
   }
 }

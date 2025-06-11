@@ -1,16 +1,16 @@
-import 'package:critify/domain/analysis_by_id.dart';
-import 'package:critify/domain/result.dart';
-import 'package:critify/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:critify/domain/login_response.dart';
 
+import '../domain/login_response.dart';
+import '../domain/analysis_by_id.dart';
+import '../domain/result.dart';
+import '../environment/env.dart';
     
 class HttpClient{
 
   final storage = FlutterSecureStorage();
 
-  Future<Result> postHttp(String article) async {
+  Future<Result> analyse(String article) async {
     final dio = Dio();
     
     final token = await storage.read(key: 'jwt');
@@ -55,7 +55,7 @@ class HttpClient{
         final jsonData = LoginResponse.fromJson(response.data);
         await storage.write(
           key: 'jwt',
-          value: jsonData.access_token,
+          value: jsonData.accessToken,
         );
         await storage.write(
           key: 'username',

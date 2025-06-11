@@ -1,4 +1,4 @@
-import 'package:critify/constants/sizes.dart';
+import '../constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class PaddingStyle {

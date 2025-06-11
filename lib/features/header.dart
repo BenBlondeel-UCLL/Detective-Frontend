@@ -1,18 +1,16 @@
 import 'dart:async';
-
-import 'package:critify/api/http_client.dart';
-import 'package:critify/constants/sizes.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:critify/constants/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-// Helper class for responsive dimensions
+import '../api/http_client.dart';
+import '../constants/sizes.dart';
+import '../constants/colors.dart';
+
 class ResponsiveSize {
   static double getHeaderHeight(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    // Scale down on smaller screens
     if (width < Sizes.mobileWidth) return Sizes.headerHeight * 0.85;
     return Sizes.headerHeight;
   }
@@ -52,7 +50,10 @@ class Header extends StatelessWidget {
       await storage.delete(key: 'username');
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.remove('history');
-      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+
+      if(context.mounted) {
+        Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+      }
     }
 
     void checkTokenExpiration(BuildContext context) async {
@@ -89,7 +90,7 @@ class Header extends StatelessWidget {
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(
                   backgroundColor: CustomColors.buttonColor,
@@ -105,7 +106,7 @@ class Header extends StatelessWidget {
               ElevatedButton(
                 key: const Key('logoutConfirmationButton'),
                 onPressed: () {
-                  Navigator.of(context).pop(); // Close the dialog
+                  Navigator.of(context).pop();
                   onConfirm();
                 },
                 style: ElevatedButton.styleFrom(
@@ -142,7 +143,6 @@ class Header extends StatelessWidget {
               ),
               child: Stack(
                 children: [
-                  // Center title absolutely regardless of other elements
                   Positioned.fill(
                     child: Center(
                       child: Text(
@@ -156,7 +156,6 @@ class Header extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Left side - Menu button
                   Positioned(
                     left: ResponsiveSize.getSpacing(context),
                     top: 0,
@@ -174,7 +173,6 @@ class Header extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // Right side - Login/Logout
                   Positioned(
                     right: ResponsiveSize.getSpacing(context),
                     top: 0,
