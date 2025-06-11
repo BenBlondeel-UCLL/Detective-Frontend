@@ -6,6 +6,7 @@ import 'package:critify/features/claim_card.dart';
 import 'package:critify/features/grammar_card.dart';
 import 'package:critify/features/header.dart';
 import 'package:critify/features/history_drawer.dart';
+import 'package:critify/features/link_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -176,7 +177,14 @@ class _ResultState extends State<ResultPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: Text("Spelling"),
+                        child: SizedBox(
+                          width: 80, // Set a max width for the label
+                          child: Text(
+                            "Spelling",
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                          ),
+                        ),
                       ),
                       Text("${_response.spellingMistakes.length}"),
                     ],
@@ -187,7 +195,14 @@ class _ResultState extends State<ResultPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: Text("Grammatica"),
+                        child: SizedBox(
+                          width: 80, // Set a max width for the label
+                          child: Text(
+                            "Grammatica",
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                          ),
+                        ),
                       ),
                       Text("${_response.grammarMistakes.length}"),
                     ],
@@ -198,13 +213,27 @@ class _ResultState extends State<ResultPage> {
                     children: [
                       Padding(
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
-                        child: Text("Stellingen"),
+                        child: SizedBox(
+                          width: 80, // Set a max width for the label
+                          child: Text(
+                            "Stellingen",
+                            overflow: TextOverflow.ellipsis,
+                            softWrap: false,
+                          ),
+                        ),
                       ),
                       Text("${_response.claims.length}"),
                     ],
                   ),
                 ),
-                Tab(child: Text("Extra")),
+                Tab(                        child: SizedBox(
+    width: 80, // Set a max width for the label
+    child: Text(
+    "Extra",
+    overflow: TextOverflow.ellipsis,
+    softWrap: false,
+    ),
+    ),),
               ],
               labelColor: CustomColors.primary,
               indicatorColor: CustomColors.primary,
@@ -457,30 +486,7 @@ class _ResultState extends State<ResultPage> {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              Row(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      final url = Uri.parse(
-                        "https://mediabiasfactcheck.com/mbfcs-data-api/",
-                      );
-                      if (await canLaunchUrl(url)) {
-                        await launchUrl(
-                          url,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
-                    },
-                    child: Text(
-                      "Media Bias/Fact Check API",
-                      style: TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              LinkText(title: "Media Bias/Fact Check API", url: "https://mediabiasfactcheck.com/mbfcs-data-api/"),
             ],
           ),
         ),
