@@ -3,6 +3,18 @@ document.addEventListener('DOMContentLoaded', async function() {
   let currentAnalysis = null;
   let originalText = '';
 
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !document.getElementById('loginContainer').classList.contains('hidden')) {
+        document.getElementById('loginBtn').click();
+      }
+    });
+
+  document.addEventListener('keydown', function(e) {
+     if (e.key === 'Enter' && !document.getElementById('selectionContainer').classList.contains('hidden')) {
+        document.getElementById('analyzeBtn').click();
+     }
+  });
+
   const {access_token, username} = await chrome.storage.session.get(['access_token', 'username']);
   if (!access_token && !username) {
       document.getElementById('loginContainer').classList.remove('hidden');

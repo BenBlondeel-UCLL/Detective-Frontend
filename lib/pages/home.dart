@@ -35,12 +35,12 @@ class _HomeState extends State<Home> {
     });
 
     try {
-      Result response = await client.analyse(textEditingController.text);
+      Result response = await client.postAnalysis(textEditingController.text);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('response', jsonEncode(response.toJson()));
       await prefs.setString('text', textEditingController.text);
-      
+
 
       // Fill in history
       final historyResponse = await client.getHistory();

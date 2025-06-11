@@ -10,7 +10,7 @@ class HttpClient{
 
   final storage = FlutterSecureStorage();
 
-  Future<Result> analyse(String article) async {
+  Future<Result> postAnalysis(String article) async {
     final dio = Dio();
     
     final token = await storage.read(key: 'jwt');
