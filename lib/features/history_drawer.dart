@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants/colors.dart';
 import '../constants/date_utils.dart';
-import '../domain/analysis_by_id.dart';
 import '../domain/analysis_history_response.dart';
 import '../api/http_client.dart';
 
@@ -74,14 +73,21 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
             leading: Icon(Icons.home),
             title: Text("Home"),
             onTap: () {
-              Navigator.pushNamed(context, '/');
-            },
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/',
+                    (route) => false,
+              );            },
           ),
           ListTile(
             leading: Icon(Icons.info),
             title: Text("Over Critify"),
             onTap: () {
-              Navigator.pushNamed(context, '/about');
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/about',
+                    (route) => false,
+              );
             },
           ),
           ...historyResponse.map(
@@ -93,15 +99,12 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                     title: Text(hist.title),
                     subtitle: Text(DateUtil.getDdMMyyyy(hist.createdAt)),
                     onTap: () async {
-                      AnalysisById response = await client.getAnalysisById(
-                        hist.id,
-                      );
+                      final response = await client.getAnalysisById(hist.id);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      await prefs.setString('text', response.article);
                       await prefs.setString(
-                        'response',
-                        jsonEncode(response.result.toJson()),
+                        'currentAnalysis',
+                        jsonEncode(response),
                       );
                       if (context.mounted) {
                         Navigator.pushNamed(context, '/result');
@@ -122,6 +125,24 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                         jsonEncode(response.data),
                       );
                       loadHistory();
+
+                      final currentAnalysisString = prefs.getString(
+                        'currentAnalysis',
+                      );
+                      if (currentAnalysisString != null) {
+                        final currentAnalysis = jsonDecode(
+                          currentAnalysisString,
+                        );
+                        if (currentAnalysis['id'] == hist.id) {
+                          if (context.mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/',
+                              (route) => false,
+                            );
+                          }
+                        }
+                      }
                     }
                   },
                 ),

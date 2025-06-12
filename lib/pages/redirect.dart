@@ -44,11 +44,9 @@ class _RedirectPageState extends State<RedirectPage> {
       final analysisResponse = await client.getAnalysisById(
         historyResponse.data.last['id'],
       );
-
-      await prefs.setString('text', analysisResponse.article);
       await prefs.setString(
-        'response',
-        jsonEncode(analysisResponse.result.toJson()),
+        'currentAnalysis',
+        jsonEncode(analysisResponse),
       );
 
       if (mounted) {

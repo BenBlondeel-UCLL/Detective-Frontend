@@ -18,4 +18,12 @@ class AnalysisById {
       result: Result.fromJson(json['result']),
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'article': article,
+      'result': result.toJson(),
+    };
+  }
 }

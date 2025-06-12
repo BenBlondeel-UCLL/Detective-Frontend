@@ -2,15 +2,13 @@ import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../domain/login_response.dart';
-import '../domain/analysis_by_id.dart';
-import '../domain/result.dart';
 import '../environment/env.dart';
     
 class HttpClient{
 
   final storage = FlutterSecureStorage();
 
-  Future<Result> postAnalysis(String article) async {
+  postAnalysis(String article) async {
     final dio = Dio();
     
     final token = await storage.read(key: 'jwt');
@@ -23,7 +21,7 @@ class HttpClient{
           headers: { 'Authorization': 'Bearer $token' }
         ),
       );
-      return Result.fromJson(response.data);
+      return response.data;
     } on DioException catch (e) {
       if (e.response?.statusCode == 422) {
         throw Exception('Unable to process the article. The text may be too long or contain unsupported characters.');
@@ -131,8 +129,7 @@ class HttpClient{
               headers: { 'Authorization': 'Bearer $token'}
           ),
         );
-        AnalysisById analysis = AnalysisById.fromJson(response.data);
-        return analysis;
+        return response.data;
       } on DioException catch (error) {
         return error.response;
       } catch (error) {

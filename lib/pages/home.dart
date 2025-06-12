@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../domain/result.dart';
 import '../features/history_drawer.dart';
 import '../features/header.dart';
 import '../features/input_field.dart';
@@ -35,16 +34,14 @@ class _HomeState extends State<Home> {
     });
 
     try {
-      Result response = await client.postAnalysis(textEditingController.text);
+      final response = await client.postAnalysis(textEditingController.text);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('response', jsonEncode(response.toJson()));
-      await prefs.setString('text', textEditingController.text);
-
+      await prefs.setString('currentAnalysis', jsonEncode(response));
 
       // Fill in history
       final historyResponse = await client.getHistory();
-      if(historyResponse.statusCode == 200) {
+      if(historyResponse != null && historyResponse.statusCode != null && historyResponse.statusCode == 200) {
         await prefs.setString('history', jsonEncode(historyResponse.data));
       }
 

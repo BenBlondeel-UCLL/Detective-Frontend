@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:critify/constants/sizes.dart';
+import 'package:critify/domain/analysis_by_id.dart';
 import 'package:critify/domain/result.dart';
 import 'package:critify/features/claim_card.dart';
 import 'package:critify/features/grammar_card.dart';
@@ -27,21 +28,18 @@ class ResultPage extends StatefulWidget {
 }
 
 class _ResultState extends State<ResultPage> {
-  Result _response = Result(
-    spellingMistakes: [],
-    grammarMistakes: [],
-    claims: [],
-    arousalScore: 0.0,
-    aiContent: false,
-    newsSite: NewsSite(
-      name: "",
-      url: "",
-      bias: "",
-      factual: "",
-      credibility: "",
+  AnalysisById _analysisById = AnalysisById(
+    id: "",
+    article: "",
+    result: Result(
+      spellingMistakes: [],
+      grammarMistakes: [],
+      claims: [],
+      aiContent: false,
+      arousalScore: 0.0,
+      newsSite: NewsSite(name: "", url: "", bias: "", factual: "", credibility: ""),
     ),
   );
-  String _text = "";
 
   @override
   void initState() {
@@ -49,11 +47,18 @@ class _ResultState extends State<ResultPage> {
     _loadSavedValue();
   }
 
+  @override
+  void dispose() {
+    SharedPreferences.getInstance().then((prefs) {
+      prefs.remove('currentAnalysis');
+    });
+    super.dispose();
+  }
+
   void _loadSavedValue() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
-      _response = Result.fromJson(jsonDecode(prefs.getString('response')!));
-      _text = prefs.getString('text') ?? "";
+      _analysisById = AnalysisById.fromJson(jsonDecode(prefs.getString('currentAnalysis')!));
     });
   }
 
@@ -121,7 +126,7 @@ class _ResultState extends State<ResultPage> {
             child: SingleChildScrollView(
               padding: const EdgeInsets.all(16),
               child: Column(
-                children: [_buildTextWithHighlights(_text, _response)],
+                children: [_buildTextWithHighlights(_analysisById.article, _analysisById.result)],
               ),
             ),
           ),
@@ -187,7 +192,7 @@ class _ResultState extends State<ResultPage> {
                           ),
                         ),
                       ),
-                      Text("${_response.spellingMistakes.length}"),
+                      Text("${_analysisById.result.spellingMistakes.length}"),
                     ],
                   ),
                 ),
@@ -206,7 +211,7 @@ class _ResultState extends State<ResultPage> {
                           ),
                         ),
                       ),
-                      Text("${_response.grammarMistakes.length}"),
+                      Text("${_analysisById.result.grammarMistakes.length}"),
                     ],
                   ),
                 ),
@@ -225,7 +230,7 @@ class _ResultState extends State<ResultPage> {
                           ),
                         ),
                       ),
-                      Text("${_response.claims.length}"),
+                      Text("${_analysisById.result.claims.length}"),
                     ],
                   ),
                 ),
@@ -264,8 +269,8 @@ class _ResultState extends State<ResultPage> {
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: _buildSpellingMistakesList(
-                        _response.spellingMistakes,
-                        _text,
+                        _analysisById.result.spellingMistakes,
+                        _analysisById.article,
                       ),
                     ),
                   ),
@@ -274,7 +279,7 @@ class _ResultState extends State<ResultPage> {
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: _buildGrammarMistakesList(
-                        _response.grammarMistakes,
+                        _analysisById.result.grammarMistakes,
                       ),
                     ),
                   ),
@@ -282,16 +287,16 @@ class _ResultState extends State<ResultPage> {
                   SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.all(16),
-                      child: _buildClaimsList(_response.claims),
+                      child: _buildClaimsList(_analysisById.result.claims),
                     ),
                   ),
                   SingleChildScrollView(
                     child: Padding(
                       padding: EdgeInsets.all(16),
                       child: _buildScoresContentsList(
-                        _response.aiContent,
-                        _response.arousalScore,
-                        _response.newsSite,
+                        _analysisById.result.aiContent,
+                        _analysisById.result.arousalScore,
+                        _analysisById.result.newsSite,
                       ),
                     ),
                   ),
