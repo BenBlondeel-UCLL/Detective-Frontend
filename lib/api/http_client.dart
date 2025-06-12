@@ -103,6 +103,8 @@ class HttpClient{
 
     getHistory() async {
       final token = await storage.read(key: 'jwt');
+      if(token == null) return;
+
       try{
         final dio = Dio();
         final response = await dio.get(

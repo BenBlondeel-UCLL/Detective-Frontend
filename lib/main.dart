@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         scaffoldBackgroundColor: const Color(0xffE6F2F5),
       ),
-      initialRoute: '/about',
+      initialRoute: '/',
       onGenerateRoute: (settings) {
         // Handle both /redirect and /#/redirect patterns
         final redirectPattern = RegExp(r'^/?#?/redirect');

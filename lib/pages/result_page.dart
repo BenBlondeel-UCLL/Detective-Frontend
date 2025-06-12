@@ -226,14 +226,16 @@ class _ResultState extends State<ResultPage> {
                     ],
                   ),
                 ),
-                Tab(                        child: SizedBox(
-    width: 80, // Set a max width for the label
-    child: Text(
-    "Extra",
-    overflow: TextOverflow.ellipsis,
-    softWrap: false,
-    ),
-    ),),
+                Tab(
+                  child: SizedBox(
+                    width: 80, // Set a max width for the label
+                    child: Text(
+                      "Extra",
+                      overflow: TextOverflow.ellipsis,
+                      softWrap: false,
+                    ),
+                  ),
+                ),
               ],
               labelColor: CustomColors.primary,
               indicatorColor: CustomColors.primary,
@@ -486,7 +488,10 @@ class _ResultState extends State<ResultPage> {
                   fontStyle: FontStyle.italic,
                 ),
               ),
-              LinkText(title: "Media Bias/Fact Check API", url: "https://mediabiasfactcheck.com/mbfcs-data-api/"),
+              LinkText(
+                title: "Media Bias/Fact Check API",
+                url: "https://mediabiasfactcheck.com/mbfcs-data-api/",
+              ),
             ],
           ),
         ),

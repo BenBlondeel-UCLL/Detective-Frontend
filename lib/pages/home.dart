@@ -44,7 +44,9 @@ class _HomeState extends State<Home> {
 
       // Fill in history
       final historyResponse = await client.getHistory();
-      await prefs.setString('history', jsonEncode(historyResponse.data));
+      if(historyResponse.statusCode == 200) {
+        await prefs.setString('history', jsonEncode(historyResponse.data));
+      }
 
       if (mounted) {
         Navigator.pushNamed(context, '/result');

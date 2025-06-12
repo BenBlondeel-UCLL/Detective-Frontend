@@ -41,6 +41,10 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                 .toList()
               ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
       });
+    } else {
+      setState(() {
+        historyResponse = [];
+      });
     }
   }
 
@@ -110,9 +114,15 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                   onPressed: () async {
                     await client.deleteAnalysisById(hist.id);
                     final response = await client.getHistory();
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.setString('history', jsonEncode(response.data));
-                    loadHistory();
+                    if (response.statusCode == 200) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString(
+                        'history',
+                        jsonEncode(response.data),
+                      );
+                      loadHistory();
+                    }
                   },
                 ),
               ],
