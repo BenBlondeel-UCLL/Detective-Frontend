@@ -179,10 +179,11 @@ class _ResultState extends State<ResultPage> {
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                         child: SizedBox(
                           width: 80, // Set a max width for the label
-                          child: Text(
-                            "Spelling",
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: false,
+                          child: Center(
+                            child : Text(
+                              "Spelling",
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ),
@@ -197,10 +198,11 @@ class _ResultState extends State<ResultPage> {
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                         child: SizedBox(
                           width: 80, // Set a max width for the label
-                          child: Text(
-                            "Grammatica",
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: false,
+                          child: Center(
+                            child : Text(
+                              "Grammatica",
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ),
@@ -215,10 +217,11 @@ class _ResultState extends State<ResultPage> {
                         padding: EdgeInsets.fromLTRB(0, 5, 0, 0),
                         child: SizedBox(
                           width: 80, // Set a max width for the label
-                          child: Text(
-                            "Stellingen",
-                            overflow: TextOverflow.ellipsis,
-                            softWrap: false,
+                          child: Center(
+                            child : Text(
+                              "Stellingen",
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
                         ),
                       ),
@@ -229,10 +232,11 @@ class _ResultState extends State<ResultPage> {
                 Tab(
                   child: SizedBox(
                     width: 80, // Set a max width for the label
-                    child: Text(
-                      "Extra",
-                      overflow: TextOverflow.ellipsis,
-                      softWrap: false,
+                    child: Center(
+                      child : Text(
+                        "Extra",
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                 ),
