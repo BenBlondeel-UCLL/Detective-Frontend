@@ -1,17 +1,16 @@
 import 'dart:convert';
-
-import 'package:critify/constants/sizes.dart';
-import 'package:critify/domain/analysis_by_id.dart';
-import 'package:critify/domain/result.dart';
-import 'package:critify/features/claim_card.dart';
-import 'package:critify/features/grammar_card.dart';
-import 'package:critify/features/header.dart';
-import 'package:critify/features/history_drawer.dart';
-import 'package:critify/features/link_text.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../constants/sizes.dart';
+import '../domain/analysis_by_id.dart';
+import '../domain/result.dart';
+import '../features/claim_card.dart';
+import '../features/grammar_card.dart';
+import '../features/header.dart';
+import '../features/history_drawer.dart';
+import '../features/link_text.dart';
 import '../constants/colors.dart';
 import '../domain/claim.dart';
 import '../domain/grammar_mistake.dart';
