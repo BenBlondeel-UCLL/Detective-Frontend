@@ -4,6 +4,17 @@ A new Flutter project.
 
 ## Getting Started
 
+stappen om de front-end te draaien:
+
+1. ga naar de repo en clone de front-end
+2. Zorg ervoor dat je de flutter sdk hebt geïnstalleerd en dat deze in je $PATH staat voordat je de applicatie draait  
+```https://docs.flutter.dev/get-started/install```
+3. open de front-end map met vsc
+4. open een terminal en doe ```flutter pub get```
+5. opnieuw in de terminal doe ```flutter run --debug --web-port=5234```
+6. het systeem zal vragen hoe je het systeem wilt draaien. Wij raden chrome aan.
+7. gebruik de app
+
 This project is a starting point for a Flutter application.
 
 A few resources to get you started if this is your first Flutter project:
