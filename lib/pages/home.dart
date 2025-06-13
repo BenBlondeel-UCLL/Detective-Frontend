@@ -1,15 +1,14 @@
 import 'dart:convert';
-
-import 'package:critify/domain/result.dart';
-import 'package:critify/features/history_drawer.dart';
-import 'package:critify/features/header.dart';
-import 'package:critify/features/input_field.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import '../api/http_client.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../features/history_drawer.dart';
+import '../features/header.dart';
+import '../features/input_field.dart';
+import '../api/http_client.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';
-import 'package:flutter/services.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -35,19 +34,22 @@ class _HomeState extends State<Home> {
     });
 
     try {
-      Result response = await client.postHttp(textEditingController.text);
+      final response = await client.postAnalysis(textEditingController.text);
 
-      final historyResponse = await client.getHistory();
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('response', jsonEncode(response.toJson()));
-      await prefs.setString('history', jsonEncode(historyResponse.data));
-      await prefs.setString('text', textEditingController.text);
+      await prefs.setString('currentAnalysis', jsonEncode(response));
 
-      if (context.mounted) {
+      // Fill in history
+      final historyResponse = await client.getHistory();
+      if(historyResponse != null && historyResponse.statusCode != null && historyResponse.statusCode == 200) {
+        await prefs.setString('history', jsonEncode(historyResponse.data));
+      }
+
+      if (mounted) {
         Navigator.pushNamed(context, '/result');
       }
     } catch (e) {
-      if (context.mounted) {
+      if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Failed to analyze: ${e.toString()}')),
         );

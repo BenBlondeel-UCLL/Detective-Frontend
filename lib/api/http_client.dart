@@ -1,16 +1,14 @@
-import 'package:critify/domain/analysis_by_id.dart';
-import 'package:critify/domain/result.dart';
-import 'package:critify/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:critify/domain/login_response.dart';
 
+import '../domain/login_response.dart';
+import '../environment/env.dart';
     
 class HttpClient{
 
   final storage = FlutterSecureStorage();
 
-  Future<Result> postHttp(String article) async {
+  postAnalysis(String article) async {
     final dio = Dio();
     
     final token = await storage.read(key: 'jwt');
@@ -23,7 +21,7 @@ class HttpClient{
           headers: { 'Authorization': 'Bearer $token' }
         ),
       );
-      return Result.fromJson(response.data);
+      return response.data;
     } on DioException catch (e) {
       if (e.response?.statusCode == 422) {
         throw Exception('Unable to process the article. The text may be too long or contain unsupported characters.');
@@ -55,7 +53,7 @@ class HttpClient{
         final jsonData = LoginResponse.fromJson(response.data);
         await storage.write(
           key: 'jwt',
-          value: jsonData.access_token,
+          value: jsonData.accessToken,
         );
         await storage.write(
           key: 'username',
@@ -103,6 +101,8 @@ class HttpClient{
 
     getHistory() async {
       final token = await storage.read(key: 'jwt');
+      if(token == null) return;
+
       try{
         final dio = Dio();
         final response = await dio.get(
@@ -129,8 +129,7 @@ class HttpClient{
               headers: { 'Authorization': 'Bearer $token'}
           ),
         );
-        AnalysisById analysis = AnalysisById.fromJson(response.data);
-        return analysis;
+        return response.data;
       } on DioException catch (error) {
         return error.response;
       } catch (error) {

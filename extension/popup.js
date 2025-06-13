@@ -3,6 +3,18 @@ document.addEventListener('DOMContentLoaded', async function() {
   let currentAnalysis = null;
   let originalText = '';
 
+  document.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' && !document.getElementById('loginContainer').classList.contains('hidden')) {
+        document.getElementById('loginBtn').click();
+      }
+    });
+
+  document.addEventListener('keydown', function(e) {
+     if (e.key === 'Enter' && !document.getElementById('selectionContainer').classList.contains('hidden')) {
+        document.getElementById('analyzeBtn').click();
+     }
+  });
+
   const {access_token, username} = await chrome.storage.session.get(['access_token', 'username']);
   if (!access_token && !username) {
       document.getElementById('loginContainer').classList.remove('hidden');
@@ -72,25 +84,19 @@ document.addEventListener('DOMContentLoaded', async function() {
       return;
     }
 
-    originalText = text;
-
     // Show loading
     document.getElementById('selectionContainer').classList.add('hidden');
     document.getElementById('loadingContainer').classList.remove('hidden');
 
     try {
       const result = await apiService.postAnalysis(text);
-      currentAnalysis = result;
 
       // Hide loading, show results
       document.getElementById('loadingContainer').classList.add('hidden');
       document.getElementById('resultContainer').classList.remove('hidden');
 
       // Update the UI with results
-      console.log(result);
-      console.log(result.extraContent);
-      console.log(text);
-      displayResults(text, result);
+      displayResults(result.article, result.result);
     } catch (error) {
       document.getElementById('loadingContainer').classList.add('hidden');
       document.getElementById('selectionContainer').classList.remove('hidden');

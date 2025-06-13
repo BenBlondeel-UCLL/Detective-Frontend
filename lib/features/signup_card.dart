@@ -1,11 +1,11 @@
-import 'package:critify/api/http_client.dart';
-import 'package:critify/constants/padding_style.dart';
-import 'package:critify/constants/sizes.dart';
-import 'package:critify/constants/texts.dart';
-import 'package:critify/features/status_message.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../api/http_client.dart';
+import '../constants/padding_style.dart';
+import '../constants/sizes.dart';
+import '../constants/texts.dart';
+import '../features/status_message.dart';
 import '../constants/colors.dart';
 
 class SignupCard extends StatefulWidget {
@@ -263,7 +263,10 @@ class _SignupCardState extends State<SignupCard> {
     }
     if (_status == 200) {
       await Future.delayed(Duration(milliseconds: 2000));
-      Navigator.pushNamed(context, '/login');
+
+      if (mounted) {
+        Navigator.pushNamed(context, '/login');
+      }
     }
   }
 }

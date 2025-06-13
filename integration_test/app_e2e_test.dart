@@ -1,10 +1,11 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
-import 'package:critify/main.dart' as app;
 import 'package:flutter/material.dart';
 import 'package:mockito/mockito.dart';
-import '../test/mocks.mocks.dart';
 import 'package:dio/dio.dart';
+
+import 'package:critify/main.dart' as app;
+import '../test/mocks.mocks.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();

@@ -1,6 +1,6 @@
-import 'package:critify/features/underlined_title.dart';
 import 'package:flutter/material.dart';
 
+import '../features/underlined_title.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';
 

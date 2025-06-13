@@ -1,12 +1,13 @@
-import 'package:critify/api/http_client.dart';
-import 'package:critify/pages/about.dart';
-import 'package:critify/pages/redirect.dart';
-import 'package:critify/pages/result_page.dart';
-import 'package:critify/pages/login.dart';
-import 'package:critify/pages/signup.dart';
-import 'package:critify/pages/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+
+import '../api/http_client.dart';
+import '../pages/about.dart';
+import '../pages/redirect.dart';
+import '../pages/result_page.dart';
+import '../pages/login.dart';
+import '../pages/signup.dart';
+import '../pages/home.dart';
 
 // Only import web packages when targeting web
 import 'package:flutter_web_plugins/url_strategy.dart' if (dart.library.html) 'package:flutter_web_plugins/flutter_web_plugins.dart';
@@ -33,7 +34,7 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.red),
         scaffoldBackgroundColor: const Color(0xffE6F2F5),
       ),
-      initialRoute: '/about',
+      initialRoute: '/',
       onGenerateRoute: (settings) {
         // Handle both /redirect and /#/redirect patterns
         final redirectPattern = RegExp(r'^/?#?/redirect');

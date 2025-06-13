@@ -1,4 +1,4 @@
-import 'package:critify/constants/news_site_translation.dart';
+import '../constants/news_site_translation.dart';
 
 class NewsSite {
   final String name;

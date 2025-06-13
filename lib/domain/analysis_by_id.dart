@@ -1,4 +1,4 @@
-import 'package:critify/domain/result.dart';
+import '../domain/result.dart';
 
 class AnalysisById {
   final String id;
@@ -17,5 +17,13 @@ class AnalysisById {
       article: json['article'] ?? '',
       result: Result.fromJson(json['result']),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'article': article,
+      'result': result.toJson(),
+    };
   }
 }

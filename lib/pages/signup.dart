@@ -1,8 +1,9 @@
-import 'package:critify/features/header.dart';
-import 'package:critify/features/history_drawer.dart';
-import 'package:critify/features/signup_card.dart';
 import 'package:flutter/material.dart';
-import 'package:critify/api/http_client.dart';
+
+import '../features/header.dart';
+import '../features/history_drawer.dart';
+import '../features/signup_card.dart';
+import '../api/http_client.dart';
 
 class Signup extends StatelessWidget {
   final HttpClient? httpClient;

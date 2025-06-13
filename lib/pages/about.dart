@@ -1,10 +1,11 @@
-import 'package:critify/features/history_drawer.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../features/history_drawer.dart';
 import '../constants/colors.dart';
 import '../constants/sizes.dart';
 import '../features/header.dart';
 import '../features/info_card.dart';
+import '../features/link_text.dart';
 import '../features/underlined_title.dart';
 
 class About extends StatelessWidget {
@@ -82,11 +83,6 @@ class About extends StatelessWidget {
                   width: double.infinity,
                   color: CustomColors.primary,
                   alignment: Alignment.center,
-                  child: Padding(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: isMobile ? 8 : 24,
-                      vertical: isMobile ? 12 : 24,
-                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -110,7 +106,8 @@ class About extends StatelessWidget {
                                 ),
                                 child: Text(
                                   "Fake news, oftewel nepnieuws, verwijst naar valse of misleidende informatie die wordt verspreid als nieuws. "
-                                  "\nHet kan bewust worden gecreëerd om te misleiden, te manipuleren of om bepaalde overtuigingen te versterken. (Bron: World Economic Forum, Europese Unie, UGent)",
+                                  "\nHet kan bewust worden gecreëerd om te misleiden, te manipuleren of om bepaalde overtuigingen te versterken. "
+                                      "\n(Bron: World Economic Forum, Europese Unie, UGent)",
                                   style: TextStyle(color: Colors.white),
                                   textAlign: TextAlign.center,
                                 ),
@@ -118,33 +115,37 @@ class About extends StatelessWidget {
                               const SizedBox(
                                 height: Sizes.spaceBetweenSectionsBig,
                               ),
-                              isMobile
-                                  ? Column(
-                                      children: [
-                                        _FakeNewsSection1(isMobile: true),
-                                        SizedBox(height: 12),
-                                        _FakeNewsSection2(isMobile: true),
-                                        SizedBox(height: 12),
-                                        _FakeNewsSection3(isMobile: true),
-                                      ],
-                                    )
-                                  : Row(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Flexible(flex: 3, child: _FakeNewsSection1()),
-                                        const SizedBox(width: Sizes.spaceBetweenSections),
-                                        Flexible(flex: 4, child: _FakeNewsSection2()),
-                                        const SizedBox(width: Sizes.spaceBetweenSections),
-                                        Flexible(flex: 3, child: _FakeNewsSection3()),
-                                      ],
-                                    ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: isMobile ? 16 : 48
+                                ),
+                                child: isMobile
+                                    ? Column(
+                                  children: [
+                                    _FakeNewsSection1(isMobile: true),
+                                    SizedBox(height: 12),
+                                    _FakeNewsSection2(isMobile: true),
+                                    SizedBox(height: 12),
+                                    _FakeNewsSection3(isMobile: true),
+                                  ],
+                                )
+                                    : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(flex: 3, child: _FakeNewsSection1()),
+                                    const SizedBox(width: Sizes.spaceBetweenSections),
+                                    Flexible(flex: 4, child: _FakeNewsSection2()),
+                                    const SizedBox(width: Sizes.spaceBetweenSections),
+                                    Flexible(flex: 3, child: _FakeNewsSection3()),
+                                  ],
+                                ),
+                              )
                             ],
                           ),
                         ),
                       ],
                     ),
                   ),
-                ),
               ],
             ),
           ),
@@ -338,43 +339,43 @@ class _FakeNewsSection3 extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              _LinkText(
+              LinkText(
                 title: "World Economic Forum: AI tegen desinformatie",
                 url: "https://www.weforum.org/stories/2024/06/ai-combat-online-misinformation-disinformation/",
               ),
-              _LinkText(
+              LinkText(
                 title: "EU Studie over fake news",
                 url: "https://www.europarl.europa.eu/RegData/etudes/STUD/2019/624278/EPRS_STU(2019)624278_EN.pdf",
               ),
-              _LinkText(
+              LinkText(
                 title: "Ground News",
                 url: "https://ground.news/",
               ),
-              _LinkText(
+              LinkText(
                 title: "Coursera: Fake News Detector",
                 url: "https://www.coursera.org/projects/nlp-fake-news-detector",
               ),
-              _LinkText(
+              LinkText(
                 title: "GitHub: Fake News Detection",
                 url: "https://github.com/alihassanml/fake-news-detection",
               ),
-              _LinkText(
+              LinkText(
                 title: "arXiv: Detecting Fake News with AI",
                 url: "https://arxiv.org/html/2409.17416v1",
               ),
-              _LinkText(
+              LinkText(
                 title: "UGent: Onderzoek naar desinformatie",
                 url: "https://backoffice.biblio.ugent.be/download/01HSV6D56D8T9AJFS1WG933FSY/01HSV6FBG1VM2K76BMQQY6P8QE",
               ),
-              _LinkText(
+              LinkText(
                 title: "UGent Publicatie 1",
                 url: "https://biblio.ugent.be/publication/8743302",
               ),
-              _LinkText(
+              LinkText(
                 title: "UGent Publicatie 2",
                 url: "https://biblio.ugent.be/publication/01JJKDBK1W5RZ2VQ47Y54BV2DD",
               ),
-              _LinkText(
+              LinkText(
                 title: "OSF: Dataset en tools",
                 url: "https://osf.io/9htuv/files/osfstorage",
               ),
@@ -382,38 +383,6 @@ class _FakeNewsSection3 extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _LinkText extends StatelessWidget {
-  final String title;
-  final String url;
-
-  const _LinkText({required this.title, required this.url});
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        InkWell(
-          onTap: () async {
-            final url = Uri.parse(
-              this.url.startsWith('http') ? this.url : 'https://${this.url}',
-            );
-            if (await canLaunchUrl(url)) {
-              await launchUrl(url, mode: LaunchMode.externalApplication);
-            }
-          },
-          child: Text(
-            title,
-            style: TextStyle(
-              color: Colors.blue,
-              decoration: TextDecoration.underline,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

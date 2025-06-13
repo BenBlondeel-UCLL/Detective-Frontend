@@ -1,7 +1,8 @@
-import 'package:critify/features/header.dart';
-import 'package:critify/features/history_drawer.dart';
-import 'package:critify/features/login_card.dart';
 import 'package:flutter/material.dart';
+
+import '../features/header.dart';
+import '../features/history_drawer.dart';
+import '../features/login_card.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});

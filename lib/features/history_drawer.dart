@@ -1,12 +1,12 @@
 import 'dart:convert';
 
-import 'package:critify/constants/colors.dart';
-import 'package:critify/constants/date_utils.dart';
-import 'package:critify/domain/analysis_by_id.dart';
-import 'package:critify/domain/analysis_history_response.dart';
 import 'package:flutter/material.dart';
-import 'package:critify/api/http_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../constants/colors.dart';
+import '../constants/date_utils.dart';
+import '../domain/analysis_history_response.dart';
+import '../api/http_client.dart';
 
 class HistoryDrawer extends StatefulWidget {
   const HistoryDrawer({super.key});
@@ -29,22 +29,27 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
   void loadHistory() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     final responseJsonList = jsonDecode(prefs.getString('history') ?? '[]');
-    setState(() {
-      historyResponse =
-          (responseJsonList as List)
-              .map(
-                (responseJson) =>
-                    AnalysisHistoryResponse.fromJson(responseJson),
-              )
-              .toList()
-            ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    });
+    if (responseJsonList.isNotEmpty) {
+      setState(() {
+        historyResponse =
+            (responseJsonList as List)
+                .map(
+                  (responseJson) =>
+                      AnalysisHistoryResponse.fromJson(responseJson),
+                )
+                .toList()
+              ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+      });
+    } else {
+      setState(() {
+        historyResponse = [];
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-  return 
-    Drawer(
+    return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
         children: [
@@ -57,7 +62,10 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                   radius: 50,
                 ),
                 SizedBox(height: 10),
-                Text('Geschiedenis', style: TextStyle(color: CustomColors.secondary),),
+                Text(
+                  'Geschiedenis',
+                  style: TextStyle(color: CustomColors.secondary),
+                ),
               ],
             ),
           ),
@@ -65,14 +73,21 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
             leading: Icon(Icons.home),
             title: Text("Home"),
             onTap: () {
-              Navigator.pushNamed(context, '/');
-              },
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/',
+                    (route) => false,
+              );            },
           ),
           ListTile(
             leading: Icon(Icons.info),
             title: Text("Over Critify"),
             onTap: () {
-              Navigator.pushNamed(context, '/about');
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/about',
+                    (route) => false,
+              );
             },
           ),
           ...historyResponse.map(
@@ -84,17 +99,16 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                     title: Text(hist.title),
                     subtitle: Text(DateUtil.getDdMMyyyy(hist.createdAt)),
                     onTap: () async {
-                      AnalysisById response = await client.getAnalysisById(
-                        hist.id,
-                      );
+                      final response = await client.getAnalysisById(hist.id);
                       SharedPreferences prefs =
                           await SharedPreferences.getInstance();
-                      await prefs.setString('text', response.article);
                       await prefs.setString(
-                        'response',
-                        jsonEncode(response.result.toJson()),
+                        'currentAnalysis',
+                        jsonEncode(response),
                       );
-                      Navigator.pushNamed(context, '/result');
+                      if (context.mounted) {
+                        Navigator.pushNamed(context, '/result');
+                      }
                     },
                   ),
                 ),
@@ -103,9 +117,33 @@ class _HistoryDrawerState extends State<HistoryDrawer> {
                   onPressed: () async {
                     await client.deleteAnalysisById(hist.id);
                     final response = await client.getHistory();
-                    SharedPreferences prefs = await SharedPreferences.getInstance();
-                    await prefs.setString('history', jsonEncode(response.data));
-                    loadHistory();
+                    if (response.statusCode == 200) {
+                      SharedPreferences prefs =
+                          await SharedPreferences.getInstance();
+                      await prefs.setString(
+                        'history',
+                        jsonEncode(response.data),
+                      );
+                      loadHistory();
+
+                      final currentAnalysisString = prefs.getString(
+                        'currentAnalysis',
+                      );
+                      if (currentAnalysisString != null) {
+                        final currentAnalysis = jsonDecode(
+                          currentAnalysisString,
+                        );
+                        if (currentAnalysis['id'] == hist.id) {
+                          if (context.mounted) {
+                            Navigator.pushNamedAndRemoveUntil(
+                              context,
+                              '/',
+                              (route) => false,
+                            );
+                          }
+                        }
+                      }
+                    }
                   },
                 ),
               ],
