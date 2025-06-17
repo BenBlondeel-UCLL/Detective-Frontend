@@ -55,11 +55,11 @@ class MockHttpClient extends _i1.Mock implements _i4.HttpClient {
           as _i2.FlutterSecureStorage);
 
   @override
-  _i5.Future<_i3.Result> postHttp(String? article) =>
+  _i5.Future<_i3.Result> postAnalysis(String? article) =>
       (super.noSuchMethod(
-            Invocation.method(#postHttp, [article]),
+            Invocation.method(#postAnalysis, [article]),
             returnValue: _i5.Future<_i3.Result>.value(
-              _FakeResult_1(this, Invocation.method(#postHttp, [article])),
+              _FakeResult_1(this, Invocation.method(#postAnalysis, [article])),
             ),
           )
           as _i5.Future<_i3.Result>);

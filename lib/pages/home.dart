@@ -83,7 +83,7 @@ class _HomeState extends State<Home> {
             children: [
               Header(title: "Critify"),
               Padding(
-                padding: const EdgeInsets.only(top: 100),
+                padding: const EdgeInsets.only(top: 20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
