@@ -1,7 +1,7 @@
-import 'package:detective/domain/claim.dart';
+import 'package:critify/features/link_text.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
 
+import '../domain/claim.dart';
 import '../constants/colors.dart';
 
 class ClaimCard extends StatelessWidget {
@@ -11,59 +11,23 @@ class ClaimCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color borderColor;
-
-    switch (claim.verificationResult) {
-      case VerificationResult.TRUE:
-        borderColor = Colors.green;
-        break;
-      case VerificationResult.UNCERTAIN:
-        borderColor = Colors.orange;
-        break;
-      case VerificationResult.FALSE:
-        borderColor = Colors.red;
-        break;
-    }
-
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          border: Border.all(color: borderColor),
+          border: Border.all(color: CustomColors.primary),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
-              children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 2,
-                  ),
-                  decoration: BoxDecoration(
-                    color: borderColor,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    claim.verificationResult.name,
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Expanded(
-                  child: Text(
-                    claim.target,
-                    style: TextStyle(
-                      color: CustomColors.primary,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ],
+            Text(
+              claim.target,
+              style: TextStyle(
+                color: CustomColors.primary,
+                fontWeight: FontWeight.bold,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
@@ -73,34 +37,14 @@ class ClaimCard extends StatelessWidget {
             if (claim.url.isNotEmpty) ...[
               const SizedBox(height: 4),
               Text(
-                "Sources:",
+                "Bronnen:",
                 style: TextStyle(
                   color: CustomColors.primary,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               ...claim.url.map(
-                (url) => Padding(
-                  padding: const EdgeInsets.only(top: 2),
-                  child: InkWell(
-                    onTap: () async {
-                      final uri = Uri.parse(url);
-                      if (await canLaunchUrl(uri)) {
-                        await launchUrl(
-                          uri,
-                          mode: LaunchMode.externalApplication,
-                        );
-                      }
-                    },
-                    child: Text(
-                      url,
-                      style: TextStyle(
-                        color: Colors.blue,
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
+                (url) => LinkText(title: url, url: url)
               ),
             ],
           ],

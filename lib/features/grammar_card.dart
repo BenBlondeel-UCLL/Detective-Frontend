@@ -1,6 +1,6 @@
-import 'package:detective/domain/grammar_mistake.dart';
 import 'package:flutter/material.dart';
 
+import '../domain/grammar_mistake.dart';
 import '../constants/colors.dart';
 
 class GrammarCard extends StatelessWidget {

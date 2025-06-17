@@ -1,6 +1,8 @@
-import 'package:detective/features/header.dart';
-import 'package:detective/features/login_card.dart';
 import 'package:flutter/material.dart';
+
+import '../features/header.dart';
+import '../features/history_drawer.dart';
+import '../features/login_card.dart';
 
 class Login extends StatelessWidget {
   const Login({super.key});
@@ -8,10 +10,15 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HistoryDrawer(),
       body: Column(
         children: [
-          const Header(title: "login"),
-          const LoginCard()
+          Header(title: "Aanmelden"), // Fixed at the top
+          Expanded(
+            child: SingleChildScrollView(
+              child: LoginCard(),
+            ),
+          ),
         ],
       ),
     );

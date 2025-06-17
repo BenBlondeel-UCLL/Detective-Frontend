@@ -1,22 +1,27 @@
-import 'package:detective/domain/analysis.dart';
-import 'package:detective/enviorement/env.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:detective/domain/login_response.dart';
 
+import '../domain/login_response.dart';
+import '../environment/env.dart';
+    
 class HttpClient{
 
   final storage = FlutterSecureStorage();
 
-  Future<Analysis> postHttp(String article) async {
+  postAnalysis(String article) async {
     final dio = Dio();
+    
+    final token = await storage.read(key: 'jwt');
 
     try {
       final response = await dio.post(
         '${Env.apiBasedUrl}/analyse',
         data: {'text': article},
+        options: Options(
+          headers: { 'Authorization': 'Bearer $token' }
+        ),
       );
-      return Analysis.fromJson(response.data);
+      return response.data;
     } on DioException catch (e) {
       if (e.response?.statusCode == 422) {
         throw Exception('Unable to process the article. The text may be too long or contain unsupported characters.');
@@ -48,7 +53,7 @@ class HttpClient{
         final jsonData = LoginResponse.fromJson(response.data);
         await storage.write(
           key: 'jwt',
-          value: jsonData.access_token,
+          value: jsonData.accessToken,
         );
         await storage.write(
           key: 'username',
@@ -93,4 +98,60 @@ class HttpClient{
         return error;
       }
     }
+
+    getHistory() async {
+      final token = await storage.read(key: 'jwt');
+      if(token == null) return;
+
+      try{
+        final dio = Dio();
+        final response = await dio.get(
+          '${Env.apiBasedUrl}/analyse/history',
+          options: Options(
+            headers: { 'Authorization': 'Bearer $token' }
+          ),
+        );
+        return response;
+      } on DioException catch (error) {
+        return error.response;
+      } catch (error) {
+        return error;
+      }
+    }
+
+    getAnalysisById(String id) async {
+      final token = await storage.read(key: 'jwt');
+      try {
+        final dio = Dio();
+        final response = await dio.get(
+          '${Env.apiBasedUrl}/analyse/analysis/$id',
+          options: Options(
+              headers: { 'Authorization': 'Bearer $token'}
+          ),
+        );
+        return response.data;
+      } on DioException catch (error) {
+        return error.response;
+      } catch (error) {
+        return error;
+      }
+    }
+
+  deleteAnalysisById(String id) async {
+    final token = await storage.read(key: 'jwt');
+    try {
+      final dio = Dio();
+      await dio.delete(
+        '${Env.apiBasedUrl}/analyse/analysis/$id',
+        options: Options(
+          headers: { 'Authorization': 'Bearer $token' }
+        ),
+      );
+    } on DioException catch (error) {
+      return error.response;
+    } catch (error) {
+      return error;
+    }
+  }
+
 }

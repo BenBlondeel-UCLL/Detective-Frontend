@@ -1,6 +1,6 @@
-import 'package:detective/domain/spelling_mistake.dart';
 import 'package:flutter/material.dart';
 
+import '../domain/spelling_mistake.dart';
 import '../constants/colors.dart';
 
 class SpellingCard extends StatelessWidget {

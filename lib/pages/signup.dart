@@ -1,17 +1,26 @@
-import 'package:detective/features/header.dart';
-import 'package:detective/features/signup_card.dart';
 import 'package:flutter/material.dart';
 
+import '../features/header.dart';
+import '../features/history_drawer.dart';
+import '../features/signup_card.dart';
+import '../api/http_client.dart';
+
 class Signup extends StatelessWidget {
-  const Signup({super.key});
+  final HttpClient? httpClient;
+  const Signup({super.key, this.httpClient});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: HistoryDrawer(),
       body: Column(
         children: [
-          const Header(title: "signup"),
-          SignupCard(),
+          Header(title: "Registratie"), // Fixed at the top
+          Expanded(
+            child: SingleChildScrollView(
+              child: SignupCard(httpClient: httpClient),
+            ),
+          ),
         ],
       ),
     );

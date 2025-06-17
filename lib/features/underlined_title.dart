@@ -5,8 +5,9 @@ import '../constants/sizes.dart';
 
 class UnderlinedTitle extends StatelessWidget {
   final String title;
+  final Color color;
 
-  const UnderlinedTitle({super.key, required this.title});
+  const UnderlinedTitle({super.key, required this.title, this.color = CustomColors.primary});
 
   @override
   Widget build(BuildContext context) {
@@ -16,16 +17,16 @@ class UnderlinedTitle extends StatelessWidget {
         children: [
           Text(
             title,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: Sizes.fontSizeBig,
               fontWeight: FontWeight.w900,
-              color: CustomColors.primary,
+              color: color,
             ),
           ),
           const SizedBox(height: Sizes.spaceBetweenTextAndUnderline),
           Container(
             height: 2,
-            color: CustomColors.primary,
+            color: color,
           ),
         ],
       ),
